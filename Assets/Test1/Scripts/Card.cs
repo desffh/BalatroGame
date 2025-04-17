@@ -10,9 +10,16 @@ using UnityEngine.Events;
 using System;
 using TMPro;
 
+using UnityEngine.Pool;
+
+
 // Card에 들어갈 스크립트
 public class Card : CardComponent
 {
+    private IObjectPool<Card> ManagedPool;
+
+    // |------------------------------
+
     private Transform cardPrefabs;
      
     [SerializeField] SpriteRenderer card; // 앞면
@@ -40,12 +47,9 @@ public class Card : CardComponent
     // 카드가 눌렸는지 확인
     [SerializeField] private bool checkCard = false;
 
-    [SerializeField] GameObject popup;
     // |-----------------------------------------------
 
-    [SerializeField] TextMeshPro suitText;
-    [SerializeField] TextMeshPro rankText;
-
+    [SerializeField] CardPopup cardPopup;
 
     private void Awake()
     {
@@ -55,29 +59,26 @@ public class Card : CardComponent
 
     }
 
-
-
-
     private void Start()
     {
         Collider2D.enabled = true;
 
-        popup.SetActive(false);
+        cardPopup.gameObject.SetActive(false);
 
         string idColored = $"<color=#0000FF>+{itemdata.id}칩</color>";
 
-        suitText.text = itemdata.name;
-        rankText.text = idColored;
+        cardPopup.suitText.text = itemdata.name;
+        cardPopup.rankText.text = idColored;
     }
 
     private void OnMouseEnter()
     {
-        popup.SetActive(true);
+        cardPopup.MouseEnter();
     }
 
     private void OnMouseExit()
     {
-        popup.SetActive(false);
+        cardPopup.MouseExit();
     }
     public void Setup(ItemData item)
     {
@@ -187,5 +188,20 @@ public class Card : CardComponent
             KardManager.Instance.myCards[i].Collider2D.enabled = true;  
         }
     }
+
+    // |-----------------------------
+
+    // 매개변수로 받은 Card 타입의 pool을 저장
+    public void SetManagedPool(IObjectPool<Card> pool)
+    {
+        ManagedPool = pool;
+    }
+
+    //// 호출되면 카드가 풀에 반환 
+    //public void DestroyCard()
+    //{
+    //    ManagedPool.Release(this);
+    //}
+
 
 }

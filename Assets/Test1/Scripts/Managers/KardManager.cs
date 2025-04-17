@@ -5,9 +5,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
 
+using UnityEngine.Pool;
 
 public class KardManager : Singleton<KardManager>
 {
+    private IObjectPool<Card> pools;
+
+    // |------------------------------
+
     // 참조
     [SerializeField] ItemDataReader ItemDataReader;
     [SerializeField] public Card card;
@@ -32,9 +37,49 @@ public class KardManager : Singleton<KardManager>
     // 부모 게임 오브젝트 할당 (배치될 위치)
     [SerializeField] GameObject ParentCardPrefab;
 
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize:52);  
+    }
+
+    // 카드가 생성될 때 호출 될 함수
+    private Card CreateCard()
+    {
+        Card cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI).GetComponent<Card>(); // 게임 오브젝트 타입
+        cardObject.SetManagedPool(pools);
+        return cardObject;
+    }
+
+    // 풀에서 오브젝트를 빌릴 때 사용되는 함수
+    private void OnGetCard(Card card)
+    {
+        card.gameObject.SetActive(true);
+    }
+
+    // 풀에 오브젝트를 반납할 때 사용되는 함수
+    private void OnReleaseCard(Card card)
+    {
+        card.gameObject.SetActive(false);
+    }
+
+    // 풀에서 오브젝트 파괴 시 호출 될 함수
+    private void OnDestroyCard(Card card)
+    {
+        Destroy(card.gameObject);
+    }
+
+
+
+
+
     // 버퍼에 카드 넣기
     void SetupItemBuffer()
     {
+        
+
         // 크기 동적할당
         itemBuffer = new List<ItemData>(52);
 
@@ -74,7 +119,9 @@ public class KardManager : Singleton<KardManager>
     {
         if(myCards.Count < 8)
         {
-            var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
+            //var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
+
+            var cardObject = pools.Get();
 
             // 부모의 아래에 생성 (하이라키창 계층구조)
             cardObject.transform.SetParent(ParentCardPrefab.transform);
@@ -182,6 +229,9 @@ public class KardManager : Singleton<KardManager>
 
     public void SetupNextStage()
     {
+
+        ReturnAllCardsToPool(); // 기존 카드 반환
+
         ScoreManager.Instance.TotalScore = 0;
 
         // 리스트 초기화
@@ -234,6 +284,15 @@ public class KardManager : Singleton<KardManager>
             myCards[i].transform.
                 DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.2f);
         }
+    }
+
+    public void ReturnAllCardsToPool()
+    {
+        foreach (var card in myCards)
+        {
+            pools.Release(card); // 풀에 카드 반환
+        }
+        myCards.Clear(); // 리스트 비우기
     }
 
 }

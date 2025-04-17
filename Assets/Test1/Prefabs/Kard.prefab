@@ -68,9 +68,7 @@ MonoBehaviour:
     suit: 
     front: 
   checkCard: 0
-  popup: {fileID: 7810117335962359606}
-  suitText: {fileID: 403871707557775641}
-  rankText: {fileID: 399637750599587991}
+  cardPopup: {fileID: 4610209607889900206}
 --- !u!114 &-982333530242807510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,6 +647,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4020636692856989458}
   - component: {fileID: 7805100977850708711}
+  - component: {fileID: 4610209607889900206}
   m_Layer: 0
   m_Name: InforPopup
   m_TagString: Untagged
@@ -725,3 +724,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4610209607889900206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810117335962359606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db15b40dd9ab70446a6d92ed30ca7a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popup: {fileID: 7810117335962359606}
+  suitText: {fileID: 403871707557775641}
+  rankText: {fileID: 399637750599587991}
