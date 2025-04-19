@@ -45,7 +45,7 @@ public class Card : CardComponent
     public ItemData itemdata;
     
     // 카드가 눌렸는지 확인
-    [SerializeField] private bool checkCard = false;
+    [SerializeField] public bool checkCard = false;
 
     // |-----------------------------------------------
 
@@ -65,6 +65,14 @@ public class Card : CardComponent
 
         cardPopup.gameObject.SetActive(false);
 
+        string idColored = $"<color=#0000FF>+{itemdata.id}칩</color>";
+
+        cardPopup.suitText.text = itemdata.name;
+        cardPopup.rankText.text = idColored;
+    }
+
+    public void PopupText()
+    {
         string idColored = $"<color=#0000FF>+{itemdata.id}칩</color>";
 
         cardPopup.suitText.text = itemdata.name;

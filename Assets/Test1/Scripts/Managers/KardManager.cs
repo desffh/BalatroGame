@@ -24,8 +24,14 @@ public class KardManager : Singleton<KardManager>
     // Card 타입을 담을 리스트 (내 카드)
     [SerializeField] public List<Card> myCards;
 
+    // 사용한 카드들 (풀링 반환용도)
+    [SerializeField] public List<Card> usedCards;
+
+
+    // |----------------------------------------
+
     // 카드 생성위치
-    [SerializeField] Transform cardSpawnPoint; 
+    [SerializeField] public Transform cardSpawnPoint; 
 
     // 카드 정렬 시작, 끝 위치
     [SerializeField] Transform myCardLeft;
@@ -45,9 +51,51 @@ public class KardManager : Singleton<KardManager>
         pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize:52);  
     }
 
+
+    private void Start()
+    {
+
+    }
+
+    // 사용한 카드들
+    public void OnCardUsed(Card card)
+    {
+        if (!usedCards.Contains(card))
+        {
+            usedCards.Add(card);
+        }
+    }
+
+    public void TransCard()
+    {
+        for (int i = 0; i < usedCards.Count; i++)
+        {
+            usedCards[i].GetComponent<Transform>().gameObject.transform.position = cardSpawnPoint.transform.position;
+            usedCards[i].GetComponent<Transform>().gameObject.transform.rotation = cardSpawnPoint.transform.rotation;
+
+        }
+    }
+
+    public void CheckCards()
+    {
+        for (int i = 0; i < usedCards.Count; i++)
+        {
+            usedCards[i].GetComponent<Card>().checkCard = false;
+        }
+    }
+
+    public void CheckTexts()
+    {
+        for(int i = 0;i < myCards.Count;i++)
+        {
+            myCards[i].GetComponent<Card>().PopupText();
+        }
+    }
+
     // 카드가 생성될 때 호출 될 함수
     private Card CreateCard()
     {
+        Debug.Log("카드 생성됨");
         Card cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI).GetComponent<Card>(); // 게임 오브젝트 타입
         cardObject.SetManagedPool(pools);
         return cardObject;
@@ -56,12 +104,14 @@ public class KardManager : Singleton<KardManager>
     // 풀에서 오브젝트를 빌릴 때 사용되는 함수
     private void OnGetCard(Card card)
     {
+        Debug.Log("카드 꺼냄");
         card.gameObject.SetActive(true);
     }
 
     // 풀에 오브젝트를 반납할 때 사용되는 함수
     private void OnReleaseCard(Card card)
     {
+        Debug.Log("카드 반환됨");
         card.gameObject.SetActive(false);
     }
 
@@ -78,10 +128,10 @@ public class KardManager : Singleton<KardManager>
     // 버퍼에 카드 넣기
     void SetupItemBuffer()
     {
-        
-
         // 크기 동적할당
         itemBuffer = new List<ItemData>(52);
+
+        Debug.Log(itemBuffer.Capacity);
 
         for (int i = 0; i < 52; i++)
         {
@@ -98,6 +148,7 @@ public class KardManager : Singleton<KardManager>
             itemBuffer[i] = itemBuffer[rand];
             itemBuffer[rand] = temp;
         }
+        
     }
 
     // 버퍼에서 카드 뽑기
@@ -113,6 +164,8 @@ public class KardManager : Singleton<KardManager>
         itemBuffer.RemoveAt(0); // 리스트 메서드 (0번째 요소 제거)
         return item;
     }
+
+    public int totalSpawnedCount = 0; // 카드 뿌린 총 개수
 
     // 8장의 배치될 카드 추가 
     void AddCard()
@@ -132,10 +185,15 @@ public class KardManager : Singleton<KardManager>
 
             // 동적 생성된 카드 오브젝트는 Card 스크립트를 가지고 있어서 Card타입 리스트에 담을 수 있다
             myCards.Add(card);
+            totalSpawnedCount++;
         }
+        CheckTexts();
+
+        TextManager.Instance.BufferUpdate(); // 항상 텍스트 갱신
         // 카드 정렬
         SetOriginOrder();
         CardAlignment();
+
     }
 
     // 리스트 전체 정렬 (먼저 추가한 카드가 제일 뒷쪽에 보임)
@@ -209,13 +267,21 @@ public class KardManager : Singleton<KardManager>
         return results;
     }
 
+
+
+
     // 나중에 수정
     public void AddCardSpawn()
     {
+
+        TextManager.Instance.BufferUpdate();        
+
         for (int i = myCards.Count; i < 8; i++) // 8장까지의 카드를 생성
         {
             AddCard(); // 카드 생성 함수 호출
         }
+
+        
     }
 
     public void Allignment()
@@ -229,8 +295,18 @@ public class KardManager : Singleton<KardManager>
 
     public void SetupNextStage()
     {
+        deleteCards();
 
         ReturnAllCardsToPool(); // 기존 카드 반환
+
+        StartCoroutine(Settings());
+    }
+
+    // |-------------------------
+
+    public IEnumerator Settings()
+    {
+        yield return CoroutineCache.WaitForSeconds(1.0f);
 
         ScoreManager.Instance.TotalScore = 0;
 
@@ -240,6 +316,7 @@ public class KardManager : Singleton<KardManager>
 
         // 카드 채우기
         SetupItemBuffer();
+
 
         // 카드 뿌리기
         AddCardSpawn();
@@ -258,8 +335,8 @@ public class KardManager : Singleton<KardManager>
         HoldManager.Instance.CheckReset();
 
         HoldManager.Instance.RefillActionQueue();
+    }    
 
-    }
 
     // 배치된 카드 & 계산중인 카드 콜라이더 비활성화
     public void ColliderQuit()
@@ -268,31 +345,31 @@ public class KardManager : Singleton<KardManager>
         PokerManager.Instance.QuitCollider2();
     }
 
-    public IEnumerator DeleteCards()
-    {
-        yield return CoroutineCache.WaitForSeconds(3.0f);
-        deleteCards();
-    }
 
     public void deleteCards()
     {
-        for(int i = 0; i< myCards.Count; i++)
+        for (int i = 0; i < myCards.Count; i++)
         {
-            myCards[i].transform.
-                DOMove(deleteSpawn.transform.position, 1).SetDelay(i * 0.2f);
-
-            myCards[i].transform.
-                DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.2f);
+            OnCardUsed(myCards[i]);
         }
     }
 
     public void ReturnAllCardsToPool()
     {
-        foreach (var card in myCards)
-        {
-            pools.Release(card); // 풀에 카드 반환
-        }
-        myCards.Clear(); // 리스트 비우기
-    }
+        TransCard();
 
+        CheckCards();
+         
+        // 중복 제거한 다음 반환
+        var distinctUsedCards = usedCards.Distinct().ToList();
+
+        foreach (var card in distinctUsedCards)
+        {
+            pools.Release(card);
+        }
+
+        usedCards.Clear();
+        myCards.Clear();
+    }
+    
 }

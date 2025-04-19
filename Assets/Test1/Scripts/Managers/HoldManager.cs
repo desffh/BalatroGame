@@ -129,8 +129,6 @@ public class HoldManager : Singleton<HoldManager>
 
     public void Setting()
     {
-        
-
         // 계산 다 하고 리스트 초기화
         pokerManager.CardIDdata.Clear();
         pokerManager.saveNum.Clear();

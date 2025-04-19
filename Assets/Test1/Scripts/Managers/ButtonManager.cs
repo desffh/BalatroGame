@@ -52,7 +52,7 @@ public class ButtonManager : Singleton<ButtonManager>
     // 핸드버튼을 클릭했을 때
     public void OnHandButtonClick()
     {
-            for (int i  = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        for (int i  = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
             {
                 // 저장된 카드의 스크립트 가져오기
                 Card selectedCard =  PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
@@ -83,8 +83,9 @@ public class ButtonManager : Singleton<ButtonManager>
 
     // 버리기 버튼을 클릭했을 때
     public void OnDeleteButtonClick()
-    {    
-            isButtonActive = false;
+    {
+
+        isButtonActive = false;
 
             for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
             {
@@ -99,6 +100,8 @@ public class ButtonManager : Singleton<ButtonManager>
 
                 PokerManager.Instance.CardIDdata[i].gameObject.transform.
                     DORotate(new Vector3(58, 122, 71), 3);
+
+                KardManager.Instance.OnCardUsed(selectedCard);
 
                 // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
                 if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))

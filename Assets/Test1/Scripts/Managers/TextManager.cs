@@ -52,21 +52,28 @@ public class TextManager : Singleton<TextManager>
 
    private void Start()
    {
-   
        // 일단 한번 호출해서 UI 싹 갱신
-       BufferUpdate();
        HandCardUpdate();
+       BufferUpdate();
    }
 
     private void Update()
     {
         HandCardUpdate();
+
+
     }
 
+
+
+    // 카드 뿌릴때만 호출해도 될듯
     public void BufferUpdate()
     {
-        TotalCards.text = KardManager.Instance.itemBuffer.Count.ToString()
-            + " / "+ KardManager.Instance.itemBuffer.Capacity.ToString();
+        int total = 52;
+        int used = KardManager.Instance.totalSpawnedCount;
+        int remaining = total - used;
+
+        TotalCards.text = $"{remaining} / {total}";
     }
 
     public void HandCardUpdate()

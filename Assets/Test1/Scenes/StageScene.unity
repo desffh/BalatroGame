@@ -486,6 +486,7 @@ MonoBehaviour:
   deleteSpawn: {fileID: 409935967}
   itemBuffer: []
   myCards: []
+  usedCards: []
   cardSpawnPoint: {fileID: 773965599}
   myCardLeft: {fileID: 1195458377}
   myCardRight: {fileID: 888227813}

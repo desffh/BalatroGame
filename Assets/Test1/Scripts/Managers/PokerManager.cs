@@ -136,7 +136,10 @@ public class PokerManager : Singleton<PokerManager>
 
             CardIDdata[i].transform.
                 DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.2f);
+
+            KardManager.Instance.OnCardUsed(CardIDdata[i]);
         }
+
     }
 
     public void DelaySetActive()
