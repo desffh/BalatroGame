@@ -15,7 +15,7 @@ public class straightFlush : IsStrightPlush, IPokerHandle
         {
             if (isStraight(cards) && isFlush(cards))
             {
-                Debug.Log("스트레이트 플러쉬");
+                //Debug.Log("스트레이트 플러쉬");
 
                 //스트레이트 플러쉬
                 for (int i = 0; i < cards.Count; i++)

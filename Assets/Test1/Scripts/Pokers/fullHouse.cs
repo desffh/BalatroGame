@@ -17,7 +17,7 @@ public class fullHouse : IsStrightPlush, IPokerHandle
             //풀 하우스, 포카드 처리
             if (cardCount.Count() == 2)
             {
-                Debug.Log("풀 하우스");
+                //Debug.Log("풀 하우스");
                 var lastElement = cardCount.LastOrDefault(); // 마지막 요소
                 var firstElement = cardCount.FirstOrDefault(); // 처음 요소
 

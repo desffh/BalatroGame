@@ -68,7 +68,7 @@ public class PokerManager : Singleton<PokerManager>
             if (tempSaveNum.Count > 0) // 첫 번째로 매칭되는 족보만 저장
             {
                 saveNum = tempSaveNum;
-                Debug.Log($"족보 선택됨: {hand.pokerName}");
+                //Debug.Log($"족보 선택됨: {hand.pokerName}");
                 break;
             }
         }
@@ -101,6 +101,11 @@ public class PokerManager : Singleton<PokerManager>
         if (CardIDdata.Count > 0)
         {
             EvaluatePokerHands(CardIDdata);
+
+            TextManager.Instance.UpdateText(1, plus);
+            TextManager.Instance.UpdateText(2, multiple);
+
+            TextManager.Instance.stringUpdateText(0, pokerName);
         }
         else
         {

@@ -25,4 +25,13 @@ public class CardPopup : MonoBehaviour
     {
         popup.SetActive(false);
     }
+
+    public void Initialize(string name, int id)
+    {
+        string idColored = $"<color=#0000FF>+{id}Ĩ</color>";
+
+        suitText.text = name;
+        rankText.text = idColored;
+    }
+
 }

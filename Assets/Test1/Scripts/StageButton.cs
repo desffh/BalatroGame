@@ -11,9 +11,11 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] Button nextEnty;
 
-    [SerializeField] Canvas stagecanvas;
+    [SerializeField] Canvas stagecanvas; // 엔티3개 나오는 캔버스
 
-    [SerializeField] Canvas Entycanvas;
+    [SerializeField] Canvas Entycanvas; // 결과창 캔버스
+
+    [SerializeField] GameObject ShopPanel; // 상점 캔버스
 
     private void Awake()
     {
@@ -57,10 +59,10 @@ public class StageButton : MonoBehaviour
 
     // -------------------- 캐시 아웃 버튼 -----------------------
 
-    public void NextEntyOn()
+    public void NextEntyOn() // 캐시 아웃 버튼을 누르면 상점 나오게
     {
         Entycanvas.gameObject.SetActive(false);
-        stagecanvas.gameObject.SetActive(true);
+        ShopPanel.gameObject.SetActive(true);
 
         if(Round.Instance.CurrentScores == Round.Instance.stages[2])
         {
@@ -73,5 +75,13 @@ public class StageButton : MonoBehaviour
     public void NextEntyOff()
     {
         nextEnty.interactable = false;
+    }
+
+
+    // 상점의 다음 라운드 버튼
+    public void NextEnty()
+    {
+        ShopPanel.gameObject.SetActive(false);
+        stagecanvas.gameObject.SetActive(true);
     }
 }

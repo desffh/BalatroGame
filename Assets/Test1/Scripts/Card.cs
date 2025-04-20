@@ -65,18 +65,12 @@ public class Card : CardComponent
 
         cardPopup.gameObject.SetActive(false);
 
-        string idColored = $"<color=#0000FF>+{itemdata.id}칩</color>";
-
-        cardPopup.suitText.text = itemdata.name;
-        cardPopup.rankText.text = idColored;
+        PopupText();
     }
 
     public void PopupText()
     {
-        string idColored = $"<color=#0000FF>+{itemdata.id}칩</color>";
-
-        cardPopup.suitText.text = itemdata.name;
-        cardPopup.rankText.text = idColored;
+        cardPopup.Initialize(itemdata.name, itemdata.id);
     }
 
     private void OnMouseEnter()
@@ -204,12 +198,6 @@ public class Card : CardComponent
     {
         ManagedPool = pool;
     }
-
-    //// 호출되면 카드가 풀에 반환 
-    //public void DestroyCard()
-    //{
-    //    ManagedPool.Release(this);
-    //}
 
 
 }

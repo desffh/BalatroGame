@@ -12,5 +12,6 @@ public class JokerDataSO : ScriptableObject
     public int cost;
     public int multiple;
     public string require;
+
 }
 

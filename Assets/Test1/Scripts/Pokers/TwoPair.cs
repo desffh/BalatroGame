@@ -15,7 +15,7 @@ public class TwoPair : IPokerHandle
         // 투페어 처리
         if (cardCount.Values.Count(v => v == 2) == 2)
         {
-            Debug.Log("투페어");
+            //Debug.Log("투페어");
 
             foreach (var item in cardCount.Where(x => x.Value == 2))
             {

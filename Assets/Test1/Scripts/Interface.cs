@@ -70,5 +70,10 @@ public interface IPokerJoker
 }
 
 
+// |------------------------------------------------------
 
+public interface IPopupText
+{
+    void Initialize(string name, string info, int multiple);
+}
 

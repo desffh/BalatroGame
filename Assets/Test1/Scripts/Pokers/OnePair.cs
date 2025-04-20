@@ -14,7 +14,7 @@ public class OnePair : IPokerHandle
 
         if (cardCount.Values.Contains(2))
         {
-            Debug.Log("원페어");
+            //Debug.Log("원페어");
             foreach (var item in cardCount.Where(x => x.Value == 2))
             {
                 

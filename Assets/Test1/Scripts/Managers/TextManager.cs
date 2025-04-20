@@ -65,8 +65,7 @@ public class TextManager : Singleton<TextManager>
     }
 
 
-
-    // 카드 뿌릴때만 호출해도 될듯
+    // 시작 시, 카드 뿌릴때, 셋팅 할 때 호출
     public void BufferUpdate()
     {
         int total = 52;

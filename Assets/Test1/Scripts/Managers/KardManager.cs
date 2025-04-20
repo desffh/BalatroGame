@@ -9,9 +9,6 @@ using UnityEngine.Pool;
 
 public class KardManager : Singleton<KardManager>
 {
-    private IObjectPool<Card> pools;
-
-    // |------------------------------
 
     // 참조
     [SerializeField] ItemDataReader ItemDataReader;
@@ -43,6 +40,9 @@ public class KardManager : Singleton<KardManager>
     // 부모 게임 오브젝트 할당 (배치될 위치)
     [SerializeField] GameObject ParentCardPrefab;
 
+    // |------------------------------
+
+    private IObjectPool<Card> pools;
 
     protected override void Awake()
     {
@@ -51,11 +51,6 @@ public class KardManager : Singleton<KardManager>
         pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize:52);  
     }
 
-
-    private void Start()
-    {
-
-    }
 
     // 사용한 카드들
     public void OnCardUsed(Card card)
@@ -66,6 +61,7 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
+    // 사용한 카드들의 위치&회전 변경 (cardSpawnPoint로 이동) 
     public void TransCard()
     {
         for (int i = 0; i < usedCards.Count; i++)
@@ -76,6 +72,7 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
+    // 카드가 클릭되었는지 확인하는 bool 변수 초기화
     public void CheckCards()
     {
         for (int i = 0; i < usedCards.Count; i++)
@@ -84,6 +81,7 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
+    // 셔플 후 새로운 카드로 배치되면 팝업의 텍스트도 초기화 
     public void CheckTexts()
     {
         for(int i = 0;i < myCards.Count;i++)
@@ -95,7 +93,6 @@ public class KardManager : Singleton<KardManager>
     // 카드가 생성될 때 호출 될 함수
     private Card CreateCard()
     {
-        Debug.Log("카드 생성됨");
         Card cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI).GetComponent<Card>(); // 게임 오브젝트 타입
         cardObject.SetManagedPool(pools);
         return cardObject;
@@ -104,14 +101,12 @@ public class KardManager : Singleton<KardManager>
     // 풀에서 오브젝트를 빌릴 때 사용되는 함수
     private void OnGetCard(Card card)
     {
-        Debug.Log("카드 꺼냄");
         card.gameObject.SetActive(true);
     }
 
     // 풀에 오브젝트를 반납할 때 사용되는 함수
     private void OnReleaseCard(Card card)
     {
-        Debug.Log("카드 반환됨");
         card.gameObject.SetActive(false);
     }
 
@@ -129,9 +124,16 @@ public class KardManager : Singleton<KardManager>
     void SetupItemBuffer()
     {
         // 크기 동적할당
-        itemBuffer = new List<ItemData>(52);
+        if (itemBuffer == null)
+        {
+            itemBuffer = new List<ItemData>(52);
+        }
+        else
+        {
+            itemBuffer.Clear();
+        }
 
-        Debug.Log(itemBuffer.Capacity);
+        // 왜 Capacity 크기가 64지?
 
         for (int i = 0; i < 52; i++)
         {
@@ -149,16 +151,17 @@ public class KardManager : Singleton<KardManager>
             itemBuffer[rand] = temp;
         }
         
+        //Debug.Log("itemBuffer Count" + itemBuffer.Count);
     }
 
     // 버퍼에서 카드 뽑기
     public ItemData PopItem()
     {
-        // 다 뽑았으면 다시 버퍼 채우기 
-        if (itemBuffer.Count == 0)
-        {
-            SetupItemBuffer();
-        }
+        //// 다 뽑았으면 다시 버퍼 채우기 
+        //if (itemBuffer.Count == 0)
+        //{
+        //    SetupItemBuffer();
+        //}
 
         ItemData item = itemBuffer[0];
         itemBuffer.RemoveAt(0); // 리스트 메서드 (0번째 요소 제거)
@@ -190,6 +193,7 @@ public class KardManager : Singleton<KardManager>
         CheckTexts();
 
         TextManager.Instance.BufferUpdate(); // 항상 텍스트 갱신
+
         // 카드 정렬
         SetOriginOrder();
         CardAlignment();
@@ -228,6 +232,7 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
+    // 카드 원형 정렬
     List<PRS> RoundAlignment(Transform leftTr, Transform rightTr, int objCount, float height, Vector3 scale)
     {
         float[] objLerps = new float[objCount];
@@ -273,15 +278,10 @@ public class KardManager : Singleton<KardManager>
     // 나중에 수정
     public void AddCardSpawn()
     {
-
-        TextManager.Instance.BufferUpdate();        
-
         for (int i = myCards.Count; i < 8; i++) // 8장까지의 카드를 생성
         {
             AddCard(); // 카드 생성 함수 호출
-        }
-
-        
+        }  
     }
 
     public void Allignment()
@@ -290,7 +290,6 @@ public class KardManager : Singleton<KardManager>
         SetOriginOrder();
         CardAlignment();
     }
-
 
 
     public void SetupNextStage()
@@ -316,7 +315,6 @@ public class KardManager : Singleton<KardManager>
 
         // 카드 채우기
         SetupItemBuffer();
-
 
         // 카드 뿌리기
         AddCardSpawn();
@@ -354,8 +352,11 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
+    // 풀에 반환하기 (모두 초기화 후 풀에 반환)
     public void ReturnAllCardsToPool()
     {
+        totalSpawnedCount = 0; // 카드 뿌린 총 개수 초기화
+
         TransCard();
 
         CheckCards();

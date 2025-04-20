@@ -18,21 +18,38 @@ public class JokerCard : CardComponent
 
     public int unlockRound; // 이 카드가 등장 가능한 최소 라운드
 
+    // |--------------------------------
+    [SerializeField] private MonoBehaviour popupComponent;
+
+    private IPopupText jokerPopup;
+
     private void Awake()
     {
-        jokerName = dataSO.name;
+        jokerName = dataSO.jokerName;
         cost = dataSO.cost;
         multiple = dataSO.multiple;
         require = dataSO.require;
 
         jokerimage = GetComponent<Image>();
 
+        jokerPopup = popupComponent as IPopupText;
+
     }
 
     private void Start()
     {
-
+        if (jokerPopup != null)
+        {
+            jokerPopup.Initialize(jokerName, require, multiple);
+        }
+        else
+        {
+            Debug.LogWarning("jokerPopup이 할당되지 않았습니다!");
+        }
     }
+
+
+
 
 
     public override void OffCollider()
@@ -45,10 +62,22 @@ public class JokerCard : CardComponent
         jokerimage.raycastTarget = true;
     }
 
+    [SerializeField] bool checkClick = false;
+
     // 마우스 클릭이 발생했을 때
     public override void OnMouse()
     {
-        OnClickCard();
+        if (checkClick == false)
+        {
+            OnClickCard();
+            checkClick = true;
+        }
+
+        else if (checkClick == true)
+        {
+            OffClickCard();
+            checkClick = false;
+        }
     }
 
     public void ButtonOff()
@@ -70,6 +99,17 @@ public class JokerCard : CardComponent
         Shop shop = FindAnyObjectByType<Shop>();
 
         shop.ShowBuyButton(this);
+    }
+
+    public void OffClickCard()
+    { 
+        Shop shop = FindAnyObjectByType<Shop>();
+
+        if(shop != null)
+        {
+            shop.OffBuyButton();
+        }
+
     }
 
 }

@@ -10,6 +10,8 @@ public class Shop : MonoBehaviour
     // 조커 카드 타입 -> 라운드가 증가할수록 높은 조커가 나오도록
     [SerializeField] List<JokerCard> jokerCards;
 
+    [SerializeField] List<JokerCard> shopjokerCards;
+
     // 조커가 생성될 위치 
     [SerializeField] GameObject jokerTransform;
 
@@ -35,12 +37,19 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
-        GenerateShopJokers();
     }
 
+    private void OnEnable()
+    {
+        // 상점에 조커 생성
+        //GenerateShopJokers();        
+    }
 
     public void GenerateShopJokers()
     {
+        // 비우기
+        shopjokerCards.Clear();
+
         // 현재 라운드에서 등장 가능한 조커만 필터링
         List<JokerCard> available = jokerCards.FindAll(card => card.unlockRound <= currentRound);
 
@@ -63,6 +72,8 @@ public class Shop : MonoBehaviour
         for (int i = 0; i < maxCount && i < available.Count; i++)
         {
             Instantiate(available[i], jokerTransform.transform);
+
+            shopjokerCards.Add(available[i]);
         }
     }
 
@@ -70,8 +81,10 @@ public class Shop : MonoBehaviour
     // | --------------------------------------------------
 
     public Button buyButton; // 인스펙터에 연결
+
     private JokerCard currentTarget;
 
+    [SerializeField] GameObject jokerPacksTransform;
 
     public void ShowBuyButton(JokerCard target)
     {
@@ -84,6 +97,11 @@ public class Shop : MonoBehaviour
         buyButton.gameObject.SetActive(true);
     }
 
+    public void OffBuyButton()
+    {
+        buyButton.gameObject.SetActive(false);
+    }
+
     void Buy()
     {
         if (currentTarget != null)
@@ -91,7 +109,11 @@ public class Shop : MonoBehaviour
             Debug.Log($"구매한 조커: {currentTarget.dataSO.name}");
             // 구매 로직 실행
             myJokerCards.AddJokerCard(currentTarget);
+
+            currentTarget.transform.SetParent(jokerPacksTransform.transform, false);
         }
         buyButton.gameObject.SetActive(false);
+
+
     }
 }

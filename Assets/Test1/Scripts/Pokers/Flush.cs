@@ -18,7 +18,7 @@ public class Flush : IsStrightPlush, IPokerHandle
         {
             if (isFlush(cards))
             {
-                Debug.Log("플러쉬");
+                //Debug.Log("플러쉬");
                 for (int i = 0; i < cards.Count; i++)
                 {
                     saveNum.Add(cards[i].itemdata.id);

@@ -16,7 +16,7 @@ public class straight : IsStrightPlush, IPokerHandle
         {
             if (isStraight(cards))
             {
-                Debug.Log("스트레이트");
+                //Debug.Log("스트레이트");
 
                 //스트레이트
                 for (int i = 0; i < cards.Count; i++)

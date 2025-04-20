@@ -34,7 +34,7 @@ public class FourCard : IsStrightPlush, IPokerHandle
                             saveNum.Add(lastElement.Key);  // 포카드
                         }
 
-                        Debug.Log("포카드");
+                        //Debug.Log("포카드");
 
                     }
                     else if (firstElement.Value == 4)
@@ -44,7 +44,7 @@ public class FourCard : IsStrightPlush, IPokerHandle
                             saveNum.Add(firstElement.Key);  // 포카드
                         }
 
-                        Debug.Log("포카드");
+                        //Debug.Log("포카드");
                     }
 
                 }
@@ -52,7 +52,7 @@ public class FourCard : IsStrightPlush, IPokerHandle
         }
         else if (cardCount.Values.Contains(4))
         {
-            Debug.Log("포카드");
+            //Debug.Log("포카드");
 
             // 4과 똑같은 벨류값을 가진애 찾기
             foreach (var item in cardCount.Where(x => x.Value == 4))
