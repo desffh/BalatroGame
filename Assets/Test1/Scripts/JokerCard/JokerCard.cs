@@ -2,30 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 
 public class JokerCard : CardComponent
 {
     // 이 조커에 할당된 전체 데이터 정보
-    private JokerTotalData currentData;
+    [SerializeField] private JokerTotalData currentData;
 
     // UI 요소
     [SerializeField] private Image jokerImage;
     [SerializeField] private Text nameText;
     [SerializeField] private Text costText;
     [SerializeField] private Text abilityText;
-    [SerializeField] private Button buyButton;
 
-    [SerializeField] Shop shop;
-
-    // 저장 된 요소
-    private string jokername;
-    private int jokercost;
-    private int jokermultiple;
-    private string jokerrequire;
-    
     // |--------------------------------
+
+    private JokerData data;
+    private Sprite sprite;
 
     public int unlockRound; // 이 카드가 등장 가능한 최소 라운드
 
@@ -45,31 +40,40 @@ public class JokerCard : CardComponent
 
     private void Start()
     {
-        if (jokerPopup != null)
-        {
-            jokerPopup.Initialize(currentData.baseData.name, 
-                currentData.baseData.require, currentData.baseData.multiple);
-        }
-        else
-        {
-            Debug.LogWarning("jokerPopup이 할당되지 않았습니다!");
-        }
+
     }
 
     // |-------------------------------------
 
-    public void SetJokerData(JokerTotalData data)
+    public JokerData GetData() => data;
+    public Sprite GetSprite() => sprite;
+
+    public void SetJokerData(JokerTotalData joker)
     {
-        currentData = data;
+        currentData = new JokerTotalData(
+    new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require),
+    joker.image);
 
-        if (data.image != null)
-            jokerImage.sprite = data.image;
+        data = currentData.baseData;
+        sprite = currentData.image;
 
-        buyButton.onClick.RemoveAllListeners();
-        buyButton.onClick.AddListener(() => shop.ShowBuyButton(this));
+        PopupSetting();
     }
 
+    public void PopupSetting()
+    {
+        if (jokerPopup != null)
+        {
+        jokerPopup.Initialize(currentData.baseData.name,
+        currentData.baseData.require,
+        currentData.baseData.multiple);
+        }
+    }
+
+
     public JokerTotalData GetCurrentData() => currentData;
+
+
 
     public void DisableCard() => gameObject.SetActive(false);
 
@@ -103,16 +107,6 @@ public class JokerCard : CardComponent
         }
     }
 
-    public void ButtonOff()
-    {
-
-    }
-
-    public void ButtonOn()
-    {
-
-    }
-
     // |-------------------------------
 
     //public JokerData data; // 조커 카드 정보
@@ -122,9 +116,9 @@ public class JokerCard : CardComponent
         Shop shop = FindAnyObjectByType<Shop>();
 
         shop.ShowBuyButton(this);
-
-        gameObject.SetActive(false);
     }
+
+
 
     public void OffClickCard()
     { 

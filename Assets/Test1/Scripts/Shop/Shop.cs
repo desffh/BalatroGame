@@ -38,18 +38,13 @@ public class Shop : MonoBehaviour
 
         // |------------------------
         buyButton.gameObject.SetActive(false);
-        buyButton.onClick.AddListener(Buy);
     }
 
     private void Start()
     {
+        
     }
 
-    private void OnEnable()
-    {
-        // 상점에 조커 생성
-        //GenerateShopJokers();        
-    }
 
     [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
 
@@ -103,12 +98,14 @@ public class Shop : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        JokerTotalData data = currentTarget.GetCurrentData();
+        // 데이터 복사
+        JokerData data = currentTarget.GetData();
+        Sprite sprite = currentTarget.GetSprite();
 
         // 내 조커 영역에 생성
         GameObject newCard = Instantiate(myJokerPrefab, jokerTransform.transform);
         JokerCard cardScript = newCard.GetComponent<JokerCard>();
-        cardScript.SetJokerData(data);
+        cardScript.SetJokerData(new JokerTotalData(data, sprite));
 
         // 상점 카드 비활성화
         currentTarget.DisableCard();
@@ -116,5 +113,15 @@ public class Shop : MonoBehaviour
         // 버튼 숨김
         buyButton.gameObject.SetActive(false);
         currentTarget = null;
+    }
+
+    private void OnEnable()
+    {
+        ShopPanel.OnShopOpened += OpenShop;
+    }
+
+    private void OnDisable()
+    {
+        ShopPanel.OnShopOpened -= OpenShop;
     }
 }

@@ -168,12 +168,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b8ce01e16ac794db09306db11545bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataSO: {fileID: 11400000, guid: dca79f1118e06b44aa21ceccc27d347f, type: 2}
-  jokerName: 
-  cost: 0
-  multiple: 0
-  require: 
-  jokerimage: {fileID: 0}
+  jokerImage: {fileID: 4172849092802093500}
+  nameText: {fileID: 0}
+  costText: {fileID: 0}
+  abilityText: {fileID: 0}
+  buyButton: {fileID: 0}
   unlockRound: 0
   popupComponent: {fileID: 5268390486812566554}
   checkClick: 0
