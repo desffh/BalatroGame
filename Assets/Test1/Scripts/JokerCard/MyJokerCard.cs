@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class MyJokerCard : MonoBehaviour
 {
     [SerializeField] List<JokerCard> myCards;
+
 
     public List<JokerCard> Cards
     {
@@ -22,4 +25,6 @@ public class MyJokerCard : MonoBehaviour
         Debug.Log($"{newCard.name} 조커를 내 조커 리스트에 추가했습니다!");
     }
 
+    [SerializeField] Button sellButton;
+    
 }

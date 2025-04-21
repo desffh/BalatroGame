@@ -57,6 +57,8 @@ public class JokerCard : CardComponent
         data = currentData.baseData;
         sprite = currentData.image;
 
+        jokerImage.sprite = sprite;
+
         PopupSetting();
     }
 
@@ -70,8 +72,6 @@ public class JokerCard : CardComponent
         }
     }
 
-
-    public JokerTotalData GetCurrentData() => currentData;
 
 
 
@@ -113,21 +113,55 @@ public class JokerCard : CardComponent
 
     public void OnClickCard()
     {
-        Shop shop = FindAnyObjectByType<Shop>();
-
-        shop.ShowBuyButton(this);
-    }
-
-
-
-    public void OffClickCard()
-    { 
-        Shop shop = FindAnyObjectByType<Shop>();
-
-        if(shop != null)
+        if (IsInShop())
         {
-            shop.OffBuyButton();
+            FindAnyObjectByType<Shop>().ShowBuyButton(this);
+        }
+        else if (IsInMyJokerPanel())
+        {
+            FindAnyObjectByType<Shop>()?.ONSellButton();
+            Debug.Log("판매하기");
         }
     }
+
+    public void OffClickCard()
+    {
+        if (IsInShop())
+        {
+            FindAnyObjectByType<Shop>().OffBuyButton();
+        }
+        else if (IsInMyJokerPanel())
+        {
+            FindAnyObjectByType<Shop>().OffSellButton();
+            Debug.Log("판매하기 종료");
+
+        }
+    }
+
+    private bool IsInShop()
+    {
+        GameObject obj = GameObject.Find("ShopCanvas");
+        if (obj == null)
+        {
+            Debug.LogError("'JokerPanel' 오브젝트를 찾을 수 없습니다!");
+            return false;
+        }
+
+        return transform.IsChildOf(obj.transform);
+    }
+
+    private bool IsInMyJokerPanel()
+    {
+        GameObject parent = GameObject.Find("JokersPanel");
+        if (parent == null)
+        {
+            Debug.LogError("Joker' 오브젝트를 찾을 수 없습니다.");
+            return false;
+        }
+
+        return transform.IsChildOf(parent.transform);
+    }
+
+
 
 }

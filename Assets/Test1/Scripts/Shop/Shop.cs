@@ -92,7 +92,20 @@ public class Shop : MonoBehaviour
     public void OffBuyButton()
     {
         buyButton.gameObject.SetActive(false);
+        // 위치는 오프셋 정하기
     }
+
+    [SerializeField] Button sellButton;
+
+    public void ONSellButton()
+    {
+        sellButton.gameObject.SetActive(true);
+    }
+    public void OffSellButton()
+    {
+        sellButton.gameObject.SetActive(false);
+    }
+
 
     public void Buy()
     {

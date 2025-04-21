@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 
 // 포커 족보 인터페이스
 public interface IPokerHandle
@@ -77,3 +78,4 @@ public interface IPopupText
     void Initialize(string name, string info, int multiple);
 }
 
+// |------------------------------------------------------
