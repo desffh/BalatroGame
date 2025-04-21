@@ -9,7 +9,8 @@ public class ShopPanel : MonoBehaviour
         var parent = GetComponentInParent<Shop>();
         if (parent != null)
         {
-            parent.GenerateShopJokers();
+            // 상점이 활성화되면 실행 할 함수 호출
+            //parent.
         }
     }
 }

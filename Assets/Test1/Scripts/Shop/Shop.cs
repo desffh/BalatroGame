@@ -24,6 +24,12 @@ public class Shop : MonoBehaviour
 
     public int currentRound;
 
+    // |---------------------------------------------------------
+
+    [SerializeField] JokerManager jokerManager;
+
+    [SerializeField] private GameObject myJokerPrefab; // 내 조커 카드 프리팹
+
     private void Awake()
     {
         maxCount = 2;
@@ -45,38 +51,29 @@ public class Shop : MonoBehaviour
         //GenerateShopJokers();        
     }
 
-    public void GenerateShopJokers()
+    [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
+
+    public void OpenShop()
     {
-        // 비우기
-        shopjokerCards.Clear();
-
-        // 현재 라운드에서 등장 가능한 조커만 필터링
-        List<JokerCard> available = jokerCards.FindAll(card => card.unlockRound <= currentRound);
-
-        if (available.Count == 0)
+        for (int i = 0; i < shopJokers.Count; i++)
         {
-            Debug.LogWarning("등장 가능한 조커 카드가 없습니다.");
-            return;
-        }
+            if (jokerManager.jokerBuffer.Count == 0)
+            {
+                shopJokers[i].gameObject.SetActive(false);
+                continue;
+            }
 
-        // 리스트를 섞기
-        for (int i = 0; i < available.Count; i++)
-        {
-            int randIndex = Random.Range(i, available.Count);
-            var temp = available[i];
-            available[i] = available[randIndex];
-            available[randIndex] = temp;
-        }
+            // 1. 조커 정보 가져오기
+            JokerTotalData selected = jokerManager.jokerBuffer[0];
+            jokerManager.jokerBuffer.RemoveAt(0);
 
-        // maxCount 만큼 중복 없이 뽑아서 생성
-        for (int i = 0; i < maxCount && i < available.Count; i++)
-        {
-            Instantiate(available[i], jokerTransform.transform);
+            // 2. 조커 오브젝트에 데이터 적용
+            shopJokers[i].SetJokerData(selected);
 
-            shopjokerCards.Add(available[i]);
+            // 3. UI 활성화
+            shopJokers[i].gameObject.SetActive(true);
         }
     }
-
 
     // | --------------------------------------------------
 
@@ -102,18 +99,22 @@ public class Shop : MonoBehaviour
         buyButton.gameObject.SetActive(false);
     }
 
-    void Buy()
+    public void Buy()
     {
-        if (currentTarget != null)
-        {
-            Debug.Log($"구매한 조커: {currentTarget.dataSO.name}");
-            // 구매 로직 실행
-            myJokerCards.AddJokerCard(currentTarget);
+        if (currentTarget == null) return;
 
-            currentTarget.transform.SetParent(jokerPacksTransform.transform, false);
-        }
+        JokerTotalData data = currentTarget.GetCurrentData();
+
+        // 내 조커 영역에 생성
+        GameObject newCard = Instantiate(myJokerPrefab, jokerTransform.transform);
+        JokerCard cardScript = newCard.GetComponent<JokerCard>();
+        cardScript.SetJokerData(data);
+
+        // 상점 카드 비활성화
+        currentTarget.DisableCard();
+
+        // 버튼 숨김
         buyButton.gameObject.SetActive(false);
-
-
+        currentTarget = null;
     }
 }

@@ -15,6 +15,7 @@ public struct JokerData
     public int cost;
     public int multiple;
     public string require;
+
     public JokerData(string name, int cost, int multiple, string require)
     {
         this.name = name;

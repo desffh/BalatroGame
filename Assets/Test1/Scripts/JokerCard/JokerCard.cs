@@ -7,14 +7,25 @@ using UnityEngine.UI;
 
 public class JokerCard : CardComponent
 {
-    [SerializeField] public JokerDataSO dataSO;
+    // 이 조커에 할당된 전체 데이터 정보
+    private JokerTotalData currentData;
 
-    [SerializeField] private string jokerName;
-    [SerializeField] private int cost;
-    [SerializeField] private int multiple;
-    [SerializeField] private string require;
+    // UI 요소
+    [SerializeField] private Image jokerImage;
+    [SerializeField] private Text nameText;
+    [SerializeField] private Text costText;
+    [SerializeField] private Text abilityText;
+    [SerializeField] private Button buyButton;
 
-    [SerializeField] Image jokerimage;
+    [SerializeField] Shop shop;
+
+    // 저장 된 요소
+    private string jokername;
+    private int jokercost;
+    private int jokermultiple;
+    private string jokerrequire;
+    
+    // |--------------------------------
 
     public int unlockRound; // 이 카드가 등장 가능한 최소 라운드
 
@@ -23,14 +34,10 @@ public class JokerCard : CardComponent
 
     private IPopupText jokerPopup;
 
+
     private void Awake()
     {
-        jokerName = dataSO.jokerName;
-        cost = dataSO.cost;
-        multiple = dataSO.multiple;
-        require = dataSO.require;
-
-        jokerimage = GetComponent<Image>();
+        jokerImage = GetComponent<Image>();
 
         jokerPopup = popupComponent as IPopupText;
 
@@ -40,7 +47,8 @@ public class JokerCard : CardComponent
     {
         if (jokerPopup != null)
         {
-            jokerPopup.Initialize(jokerName, require, multiple);
+            jokerPopup.Initialize(currentData.baseData.name, 
+                currentData.baseData.require, currentData.baseData.multiple);
         }
         else
         {
@@ -48,18 +56,33 @@ public class JokerCard : CardComponent
         }
     }
 
+    // |-------------------------------------
 
+    public void SetJokerData(JokerTotalData data)
+    {
+        currentData = data;
 
+        if (data.image != null)
+            jokerImage.sprite = data.image;
 
+        buyButton.onClick.RemoveAllListeners();
+        buyButton.onClick.AddListener(() => shop.ShowBuyButton(this));
+    }
+
+    public JokerTotalData GetCurrentData() => currentData;
+
+    public void DisableCard() => gameObject.SetActive(false);
+
+    // |-------------------------------------
 
     public override void OffCollider()
     {
-        jokerimage.raycastTarget = false;
+        jokerImage.raycastTarget = false;
     }
 
     public override void OnCollider()
     {
-        jokerimage.raycastTarget = true;
+        jokerImage.raycastTarget = true;
     }
 
     [SerializeField] bool checkClick = false;
@@ -99,6 +122,8 @@ public class JokerCard : CardComponent
         Shop shop = FindAnyObjectByType<Shop>();
 
         shop.ShowBuyButton(this);
+
+        gameObject.SetActive(false);
     }
 
     public void OffClickCard()
@@ -109,7 +134,6 @@ public class JokerCard : CardComponent
         {
             shop.OffBuyButton();
         }
-
     }
 
 }
