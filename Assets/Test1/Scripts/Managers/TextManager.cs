@@ -46,9 +46,11 @@ public class TextManager : Singleton<TextManager>
     private RectTransform plusTextPosition;
     private RectTransform MultiTextPosition;
 
+    // |-------------------------------------------------
 
     [SerializeField] TextMeshProUGUI TotalCards;
     [SerializeField] TextMeshProUGUI HandCards;
+    [SerializeField] TextMeshProUGUI TotalJokerCards;
 
    private void Start()
    {
@@ -79,6 +81,14 @@ public class TextManager : Singleton<TextManager>
     {
         HandCards.text = (KardManager.Instance.myCards.Capacity - PokerManager.Instance.CardIDdata.Count).ToString() + " / "
             + KardManager.Instance.myCards.Capacity.ToString();
+    }
+
+    // 조커 텍스트 업데이트
+    public void UpdateJokerCards(int count)
+    {
+        int total = 5;
+
+        TotalJokerCards.text = count.ToString() + " / " + total; 
     }
 
 }

@@ -75,7 +75,7 @@ public interface IPokerJoker
 
 public interface IPopupText
 {
-    void Initialize(string name, string info, int multiple);
+    void Initialize(string name, string info, int multiple, int cost);
 }
 
 // |------------------------------------------------------

@@ -50,6 +50,7 @@ public class JokerCard : CardComponent
 
     public void SetJokerData(JokerTotalData joker)
     {
+        // 조커 정보 셋팅
         currentData = new JokerTotalData(
     new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require),
     joker.image);
@@ -68,7 +69,8 @@ public class JokerCard : CardComponent
         {
         jokerPopup.Initialize(currentData.baseData.name,
         currentData.baseData.require,
-        currentData.baseData.multiple);
+        currentData.baseData.multiple,
+        currentData.baseData.cost);
         }
     }
 
@@ -119,7 +121,7 @@ public class JokerCard : CardComponent
         }
         else if (IsInMyJokerPanel())
         {
-            FindAnyObjectByType<Shop>()?.ONSellButton();
+            FindAnyObjectByType<Shop>()?.ONSellButton(this);
             Debug.Log("판매하기");
         }
     }

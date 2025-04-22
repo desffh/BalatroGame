@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class Shop : MonoBehaviour
@@ -91,14 +92,21 @@ public class Shop : MonoBehaviour
 
     public void OffBuyButton()
     {
+       
         buyButton.gameObject.SetActive(false);
         // 위치는 오프셋 정하기
     }
 
+    // |------------------------------------
+
     [SerializeField] Button sellButton;
 
-    public void ONSellButton()
+    public void ONSellButton(JokerCard target)
     {
+        // 위치를 조커 카드 위로 이동
+        RectTransform buttonRect = sellButton.GetComponent<RectTransform>();
+        buttonRect.position = target.transform.position + new Vector3(165, 50, 0); // 원하는 오프셋
+
         sellButton.gameObject.SetActive(true);
     }
     public void OffSellButton()
@@ -111,6 +119,13 @@ public class Shop : MonoBehaviour
     {
         if (currentTarget == null) return;
 
+        // 조커가 5개 이상이라면 구매 불가능
+        if(myJokerCards.Cards.Count >= 5)
+        {
+            Debug.Log("더 이상 구매할 수 없음");
+            return;
+        }
+
         // 데이터 복사
         JokerData data = currentTarget.GetData();
         Sprite sprite = currentTarget.GetSprite();
@@ -118,7 +133,12 @@ public class Shop : MonoBehaviour
         // 내 조커 영역에 생성
         GameObject newCard = Instantiate(myJokerPrefab, jokerTransform.transform);
         JokerCard cardScript = newCard.GetComponent<JokerCard>();
+        
+        // 생성된 조커의 JokerCard 내부에 데이터 저장
         cardScript.SetJokerData(new JokerTotalData(data, sprite));
+
+        // 내 조커 카드에 담기(정보만)
+        myJokerCards.AddJokerCard(cardScript);
 
         // 상점 카드 비활성화
         currentTarget.DisableCard();
