@@ -28,7 +28,7 @@ public class CardPopup : MonoBehaviour
 
     public void Initialize(string name, int id)
     {
-        string idColored = $"<color=#0000FF>+{id}Ĩ</color>";
+        string idColored = $"<color=#0000FF>+{id}칩</color>";
 
         suitText.text = name;
         rankText.text = idColored;

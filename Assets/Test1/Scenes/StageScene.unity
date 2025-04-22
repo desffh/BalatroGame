@@ -6637,7 +6637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &869159938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9956,7 +9956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1327408104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11738,7 +11738,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4a3b3d60665889243a793790d0d72bcb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14984,7 +14984,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -15737,6 +15737,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -380
       objectReference: {fileID: 0}
+    - target: {fileID: 1850200393032659242, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_UseGraphicAlpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2108746574443002916, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15933,6 +15937,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -590
       objectReference: {fileID: 0}
+    - target: {fileID: 5502882945437912623, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5502882945437912623, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4a3b3d60665889243a793790d0d72bcb, type: 3}
+    - target: {fileID: 5502882945437912623, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5502882945437912623, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5548262547267102865, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16017,6 +16037,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7082763292675315484, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8054118230482427072, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
       propertyPath: m_text
       value: "\uD3EC \uCE74\uB4DC"
@@ -16056,6 +16080,14 @@ PrefabInstance:
     - target: {fileID: 8982930590725085703, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005393797053524700, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -189.99998
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005393797053524700, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9154582002163559977, guid: b7029fa2ecb94734a9d4925a326df8bc, type: 3}
       propertyPath: m_Pivot.x
