@@ -31,6 +31,10 @@ public class Shop : MonoBehaviour
 
     [SerializeField] private GameObject myJokerPrefab; // 내 조커 카드 프리팹
 
+    // |---------------------------------------------------------
+
+    [SerializeField] Money money;
+
     private void Awake()
     {
         maxCount = 2;

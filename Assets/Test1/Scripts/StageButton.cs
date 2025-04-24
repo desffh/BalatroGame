@@ -45,7 +45,9 @@ public class StageButton : MonoBehaviour
 
         // 현재 스테이지 목표 점수 설정
         Round.Instance.Score(stage);
-        
+
+        Round.Instance.ScoreTextSetting();
+
         // 스테이지 플레이 시작
         GameManager.Instance.PlayOn();
         

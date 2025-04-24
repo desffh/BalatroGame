@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class Round : Singleton<Round>
 {
+    // 전체 스코어 컴포넌트
+    [SerializeField] ScoreUISet scoreUiSet;
+
     // 큰 스테이지
     [SerializeField] Queue<int> currentStages = new Queue<int>();
 
@@ -134,4 +137,11 @@ public class Round : Singleton<Round>
     {
         isStageUpdated = false;
     }
+
+    // |-------------------------------------
+    public void ScoreTextSetting()
+    {
+        scoreUiSet.EntyTextSetting("스몰 블라인드", currentScores, "$$$");
+    }
+
 }
