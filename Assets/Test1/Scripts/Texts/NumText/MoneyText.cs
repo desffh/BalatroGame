@@ -11,6 +11,7 @@ public class MoneyText : NumTextUpdater
     {
 
     }
+
     public override void UpdateText(int text)
     {
         moneyText.text = "$" + text.ToString();

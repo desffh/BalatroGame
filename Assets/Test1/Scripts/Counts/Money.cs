@@ -6,15 +6,11 @@ public class Money : MonoBehaviour
 {
     [SerializeField] int totalMoney;
 
+    [SerializeField] MoneyText moneyText;
+
     public int TotalMoney
     {
         get { return totalMoney; }
-        
-        // 라운드 클리어 시 머니 추가
-        set
-        {
-            totalMoney += value;
-        }
     }
 
     private void Awake()
@@ -32,4 +28,24 @@ public class Money : MonoBehaviour
         totalMoney = 0;
     }
 
+    // 스테이지 클리어 시 머니 획득
+    public void AddMoney(int money)
+    {
+        totalMoney += money;
+    }
+
+    // 상점에서 구매 시 머니 차감 
+    public void MinusMoney(int money)
+    {
+        if (totalMoney < 0)
+        {
+            totalMoney = 0;
+        }
+        totalMoney -= money;
+    }
+
+    public void MoneyUpdate()
+    {
+        moneyText.UpdateText(totalMoney);
+    }
 }

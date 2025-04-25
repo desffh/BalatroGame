@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class JokerCard : CardComponent
 {
     // 이 조커에 할당된 전체 데이터 정보
-    [SerializeField] private JokerTotalData currentData;
+    [SerializeField] public JokerTotalData currentData;
 
     // UI 요소
     [SerializeField] private Image jokerImage;

@@ -16,11 +16,8 @@ public class Shop : MonoBehaviour
     // 조커가 생성될 위치 
     [SerializeField] GameObject jokerTransform;
 
-    // 상점에 나올 조커 수 (라운드가 증가하면 최대 3개까지)
-    [SerializeField] int maxCount;
-
     // |---------------------------------------------------------
-
+    
     [SerializeField] MyJokerCard myJokerCards;
 
     public int currentRound;
@@ -37,19 +34,11 @@ public class Shop : MonoBehaviour
 
     private void Awake()
     {
-        maxCount = 2;
-
         currentRound = Round.Instance.Enty;
 
         // |------------------------
         buyButton.gameObject.SetActive(false);
     }
-
-    private void Start()
-    {
-        
-    }
-
 
     [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
 
@@ -79,7 +68,7 @@ public class Shop : MonoBehaviour
 
     public Button buyButton; // 인스펙터에 연결
 
-    private JokerCard currentTarget;
+    [SerializeField] private JokerCard currentTarget;
 
     [SerializeField] GameObject jokerPacksTransform;
 
@@ -123,12 +112,18 @@ public class Shop : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        // 조커가 5개 이상이라면 구매 불가능
-        if(myJokerCards.Cards.Count >= 5)
+        // 조커가 5개 이상 & 현재 조커 금액 미만 이면 구매 불가능 
+        if(myJokerCards.Cards.Count >= 5 || money.TotalMoney < currentTarget.currentData.baseData.cost)
         {
             Debug.Log("더 이상 구매할 수 없음");
             return;
         }
+        
+        // 현재 머니에서 차감
+        money.MinusMoney(currentTarget.currentData.baseData.cost);
+
+        // UI업데이트
+        money.MoneyUpdate();
 
         // 데이터 복사
         JokerData data = currentTarget.GetData();
@@ -146,6 +141,7 @@ public class Shop : MonoBehaviour
 
         // 상점 카드 비활성화
         currentTarget.DisableCard();
+
 
         // 버튼 숨김
         buyButton.gameObject.SetActive(false);

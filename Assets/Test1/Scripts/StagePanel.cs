@@ -10,6 +10,4 @@ public class StagePanel : MonoBehaviour
     {
         stagePanel = GetComponent<GameObject>();
     }
-
-
 }

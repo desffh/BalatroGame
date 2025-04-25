@@ -40,10 +40,19 @@ public class ScoreUISet : MonoBehaviour
         scoreText.text = score.ToString();
         rewardText.text = reward;
     }
-
-    public void EntyImageSetting(Image blind, string color, string namecolor)
+    
+    public void EntyImageSetting(Sprite blind, Color color)
     {
-        blindImage.sprite = blind.sprite;
+        blindImage.sprite = blind;
+
+        backgroundColor.color = color;
+
+        color.g = 0.5f;
+
+        entynameColor.color = color;
+
+        // 캔버스를 강제로 갱신
+        Canvas.ForceUpdateCanvases();
     }
 
 } 

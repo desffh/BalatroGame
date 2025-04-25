@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoStage : MonoBehaviour
+public class GoTitle : MonoBehaviour
 {
     public void MoveStage()
     {
-        SceneLoaderUI.Instance.LoadSceneWithLoadingScreen("StageScene");
+        SceneLoaderUI.Instance.LoadSceneWithLoadingScreen("TitleScene");
     }
 }

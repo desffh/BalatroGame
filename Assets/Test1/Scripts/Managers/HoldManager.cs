@@ -21,7 +21,6 @@ public class HoldManager : Singleton<HoldManager>
 
     public Action ActionSetting;
 
-
     WaitForSeconds waitForSeconds;
 
     // 숫자를 담고 하나씩 빼기 위한 큐
@@ -53,10 +52,6 @@ public class HoldManager : Singleton<HoldManager>
         RefillActionQueue();
     }
 
-    private void Update()
-    {
- 
-    }
 
     public void RefillActionQueue()
     {
@@ -68,26 +63,17 @@ public class HoldManager : Singleton<HoldManager>
         actionQueue.Enqueue(() => DelayedTotalScoreCal()); // 전체 스코어에 갱신
         actionQueue.Enqueue(() => DelayedMove()); // 하나씩 삭제 존으로 이동
         actionQueue.Enqueue(() => DelayActive()); // 비활성화
-        
-
-        // 새로운 카드들이 나오도록 추가
-        // 예: PokerManager.Instance.NewCardsSpawn(); (필요한 로직 추가)
     }
 
-    public void StageEnd()
+    public bool StageEnd()
     {
         if (totalScore < Round.Instance.CurrentScores && HandDelete.Instance.Hand <= 0)
         {
+            Round.Instance.GameOverText();
             gameOverPopUp.GameOver();
+            return true;
         }
-
-        //          Debug.Log("스테이지 종료");
-        //        Application.Quit();
-        //
-        //#if UNITY_EDITOR
-        //        UnityEditor.EditorApplication.isPlaying = false; // 에디터에서 플레이 모드를 종료
-        //#endif
-        //
+        return false;
     }
 
 
@@ -137,13 +123,20 @@ public class HoldManager : Singleton<HoldManager>
 
         CheckReset();
 
-        KardManager.Instance.AddCardSpawn();
+        // 만약 엔티를 다 썼다면 종료
+        StageEnd();
 
-        // 다시 콜라이더 활성화
-        KardManager.Instance.card.OnCollider();
-        ButtonManager.Instance.ButtonInactive();
+        if(StageEnd() == false)
+        {
+            KardManager.Instance.AddCardSpawn();
 
-        RefillActionQueue();
+            // 다시 콜라이더 활성화
+            KardManager.Instance.card.OnCollider();
+            ButtonManager.Instance.ButtonInactive();
+
+            RefillActionQueue();
+        }
+
     }
 
     // 계산이 끝나는 곳 & 다시 카드가 배치되는 곳

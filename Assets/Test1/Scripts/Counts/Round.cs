@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -32,6 +34,11 @@ public class Round : Singleton<Round>
 
     [SerializeField] int round = 0;
 
+    public int Rounds
+    {
+        get { return round; }
+    }
+
     [SerializeField] int [] stageMoney;
 
     public int[] stages
@@ -54,18 +61,42 @@ public class Round : Singleton<Round>
 
 
     // |---------------------------------------------------
-
     // 각 스테이지 별 획득 머니 수
     [SerializeField] public int[] moneys;
 
     // 각 스테이지 별 블라인드 이름
     [SerializeField] public string[] blindNames;
 
+    // 각 스테이지 별 블라인드 색상
+    [SerializeField] public UnityEngine.Color[] moneyNames;
 
-    // 나중에 프로퍼티로 바꾸기 
-    public int money;
+    // 각 스테이지 별 블라인드 이미지
+    [SerializeField] public Sprite [] blindImages;
 
-    public string blindName;
+    // |---------------------------------------------------
+
+    [SerializeField] GameOverText gameOverText;
+
+    private int money;
+
+    public int Money
+    {
+        get { return money; }
+        set { money = value; }
+    }
+
+
+    private string blindName;
+
+    public string BlindName
+    {
+        get { return blindName; }
+        set { blindName = value; }
+    }
+
+    public Sprite blindimage;
+
+
 
     protected override void Awake()
     {
@@ -115,7 +146,6 @@ public class Round : Singleton<Round>
         isStageUpdated = true; 
     }
 
-
     public void Score(int stage)
     {
         currentScores = stageScores[stage];
@@ -152,13 +182,31 @@ public class Round : Singleton<Round>
     }
 
     // |-------------------------------------
-    public void ScoreTextSetting(int moneys, int blindcount)
+    public void ScoreTextSetting(int count)
     {
-        string moneytexts = new string('$', moneys); // '$'를 count만큼 반복
+        blindName = blindNames[count];
 
-        string blindnames = blindNames[blindcount];
+        // 아니 이런 실수를... count는 인덱스 값이야 ㅠㅠㅠ
+        Money = moneys[count];
 
-        scoreUiSet.EntyTextSetting(blindnames, currentScores, moneytexts);
+        string moneytexts = new string('$', Money); // '$'를 count만큼 반복
+
+        scoreUiSet.EntyTextSetting(blindName, currentScores, moneytexts);
     }
 
+    public void ImageSetting(int count)
+    {
+        blindimage = blindImages[count];
+
+        scoreUiSet.EntyImageSetting(blindimage, moneyNames[count]);
+    }
+
+    // 게임 오버 팝업 업데이트|-------------------------------------
+
+    public void GameOverText()
+    {
+        gameOverText.EntyUpdate(Enty);
+        gameOverText.RoundUpdate(Rounds);
+        gameOverText.BlindUpdate(BlindName, blindimage);
+    }
 }

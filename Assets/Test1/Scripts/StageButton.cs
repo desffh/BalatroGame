@@ -47,10 +47,16 @@ public class StageButton : MonoBehaviour
         Round.Instance.Score(stage);
 
         // 현재 스테이지 블라인드 이름 설정 
-        Round.Instance.blindName = Round.Instance.blindNames[stage];
+        Round.Instance.BlindName = Round.Instance.blindNames[stage];
         
-        // 현재 스ㅔ이지 머니 갯수 설정 
-        Round.Instance.money = Round.Instance.moneys[stage];
+        // 현재 스테이지 머니 갯수 설정 
+        Round.Instance.Money = Round.Instance.moneys[stage];
+
+        // 현재 스테이지 텍스트 설정
+        Round.Instance.ScoreTextSetting(stage);
+
+        // 현재 스테이지 색상 & 블라인드 이미지 설정
+        Round.Instance.ImageSetting(stage);
 
         // 스테이지 플레이 시작
         GameManager.Instance.PlayOn();
@@ -75,7 +81,6 @@ public class StageButton : MonoBehaviour
             Round.Instance.isStage();
             Round.Instance.ScoreSetting();
         }
-
     }
 
     public void NextEntyOff()

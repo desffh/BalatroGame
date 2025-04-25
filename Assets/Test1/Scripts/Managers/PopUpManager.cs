@@ -8,8 +8,6 @@ public class PopUpManager : Singleton<PopUpManager>
 {
     [SerializeField] GameObject clearPopUp;
 
-    
-
     protected override void Awake()
     {
         base.Awake();
