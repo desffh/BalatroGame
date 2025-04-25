@@ -23,8 +23,15 @@ public class ScoreUISet : MonoBehaviour
 
     private void Start()
     {
-        scoreText.text = "";
-        rewardText.text = "";
+        if(scoreText != null)
+        {
+            scoreText.text = "";
+        }
+
+        if (rewardText != null)
+        {
+            rewardText.text = "";
+        }
     }
 
     public void EntyTextSetting(string entyname, int score, string reward)

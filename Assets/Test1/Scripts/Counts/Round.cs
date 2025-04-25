@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -49,10 +50,22 @@ public class Round : Singleton<Round>
 
     // ----------- 활성화 할 패널 ---------------------------
 
-    [SerializeField] GameObject[] stagepanels; 
+    [SerializeField] GameObject[] stagepanels;
 
 
-    
+    // |---------------------------------------------------
+
+    // 각 스테이지 별 획득 머니 수
+    [SerializeField] public int[] moneys;
+
+    // 각 스테이지 별 블라인드 이름
+    [SerializeField] public string[] blindNames;
+
+
+    // 나중에 프로퍼티로 바꾸기 
+    public int money;
+
+    public string blindName;
 
     protected override void Awake()
     {
@@ -139,9 +152,13 @@ public class Round : Singleton<Round>
     }
 
     // |-------------------------------------
-    public void ScoreTextSetting()
+    public void ScoreTextSetting(int moneys, int blindcount)
     {
-        scoreUiSet.EntyTextSetting("스몰 블라인드", currentScores, "$$$");
+        string moneytexts = new string('$', moneys); // '$'를 count만큼 반복
+
+        string blindnames = blindNames[blindcount];
+
+        scoreUiSet.EntyTextSetting(blindnames, currentScores, moneytexts);
     }
 
 }

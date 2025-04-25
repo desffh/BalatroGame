@@ -46,7 +46,11 @@ public class StageButton : MonoBehaviour
         // 현재 스테이지 목표 점수 설정
         Round.Instance.Score(stage);
 
-        Round.Instance.ScoreTextSetting();
+        // 현재 스테이지 블라인드 이름 설정 
+        Round.Instance.blindName = Round.Instance.blindNames[stage];
+        
+        // 현재 스ㅔ이지 머니 갯수 설정 
+        Round.Instance.money = Round.Instance.moneys[stage];
 
         // 스테이지 플레이 시작
         GameManager.Instance.PlayOn();

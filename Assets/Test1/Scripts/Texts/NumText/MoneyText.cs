@@ -9,7 +9,7 @@ public class MoneyText : NumTextUpdater
 
     private void Awake()
     {
-        moneyText = GetComponent<TextMeshProUGUI>();
+
     }
     public override void UpdateText(int text)
     {
