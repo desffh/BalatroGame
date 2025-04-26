@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    [SerializeField] TextManager textManager;
-
     // 현재 전체 점수
     [SerializeField] private int totalScore;
 

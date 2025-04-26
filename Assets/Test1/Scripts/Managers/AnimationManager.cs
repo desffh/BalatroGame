@@ -22,7 +22,25 @@ public class AnimationManager : Singleton<AnimationManager>
             DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize, 0.1f);
         });
     }
-    
+
+    public void ShowTextAnime(TextMeshPro scoreText)
+    {
+        // 원래 폰트 크기 저장
+        float originalFontSize = scoreText.fontSize;
+
+        // 글씨 크기를 키우는 애니메이션
+        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize * 1.3f, 0.2f)
+        .OnComplete(() =>
+        {
+            // 글씨 크기를 다시 원래 크기로 줄이는 애니메이션
+            DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.gameObject.SetActive(false);
+            });
+        });
+    }
+
     // 핸드 플레이 시 카드 이동
     public void PlayCardAnime(GameObject cardPrefabs)
     {

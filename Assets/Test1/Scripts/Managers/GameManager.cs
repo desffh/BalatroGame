@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -49,5 +50,13 @@ public class GameManager : Singleton<GameManager>
         // 수정!!!!!!!! 결과 팝업이 뜨고 계산한 뒤 머니 추가로 
         money.AddMoney(Round.Instance.Money);
         money.MoneyUpdate();
+    }
+
+    protected override void InitializeReferences()
+    {
+        if (money == null)
+            money = GameObject.Find("MoneyManager")?.GetComponent<Money>();
+
+        
     }
 }

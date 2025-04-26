@@ -16,6 +16,8 @@ public class GameOverPopUp : MonoBehaviour
     // 핸드가 0이고 종료되었을때,
     public void GameOver()
     {
+        SoundManager.Instance.StageFail();
+
         GameOverPanel.SetActive(true);
 
         Time.timeScale = 1.0f;
@@ -23,6 +25,7 @@ public class GameOverPopUp : MonoBehaviour
 
     public void GameOverExit()
     {
-        GameOverPanel.SetActive(false );
+
+        GameOverPanel.SetActive(false);
     }
 }

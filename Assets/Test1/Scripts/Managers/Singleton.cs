@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
@@ -29,12 +30,44 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = this as T; // instance가 없으면 현재 오브젝트를 싱글톤으로 설정
+            instance = this as T;
             DontDestroyOnLoad(gameObject);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;  // 여기서 자동 등록
         }
-        else
+        else if (instance != this)
         {
-            Destroy(gameObject); // 이미 존재하면 중복 방지를 위해 삭제
+            Destroy(gameObject);
+        }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;  //  자동 해제
+            instance = null;
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        InitializeReferences();
+    }
+
+    //  자식 클래스가 override 하는 부분
+    protected virtual void InitializeReferences()
+    {
+        // 기본은 아무것도 안 함
+    }
+
+    // 추가: 싱글톤 스스로 제거하는 함수
+    public static void DestroySelf()
+    {
+        if (instance != null)
+        {
+            Destroy(instance.gameObject);
+            instance = null;
         }
     }
 }

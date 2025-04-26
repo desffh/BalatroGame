@@ -75,6 +75,7 @@ public class Card : CardComponent
 
     private void OnMouseEnter()
     {
+        SoundManager.Instance.PlayCardEnter();
         cardPopup.MouseEnter();
     }
 
@@ -111,21 +112,26 @@ public class Card : CardComponent
     }
 
     // 카드 정렬 애니메이션
-    public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)
+    public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0, System.Action onComplete = null)
     {
         if (useDotween)
         {
             transform.DOMove(prs.pos, dotweenTime).SetDelay(0.2f);
             transform.DORotateQuaternion(prs.rot, dotweenTime).SetDelay(0.2f);
-            transform.DOScale(prs.scale, dotweenTime).SetDelay(0.2f);
+            transform.DOScale(prs.scale, dotweenTime).SetDelay(0.2f)
+                .OnComplete(() => {
+                    onComplete?.Invoke(); // 스케일 애니메이션이 끝나고 콜백 실행
+                });
         }
         else
         {
             transform.position = prs.pos;
             transform.rotation = prs.rot;
             transform.localScale = prs.scale;
+            onComplete?.Invoke(); // 도트윈 안 썼을 때도 바로 호출
         }
     }
+
 
     // |--------------------------------------------------------------
 
@@ -133,6 +139,7 @@ public class Card : CardComponent
     // 마우스로 클릭하면 CardIDdata 리스트에 카드 넣기 (최대5개)
     public void OnMouseDown()
     {
+        SoundManager.Instance.PlayCardClick();
         OnMouse();
     }
 
@@ -176,19 +183,16 @@ public class Card : CardComponent
     // 배치된 카드 콜라이더 비활성화
     public override void OffCollider()
     {
-        for (int i = 0; i < KardManager.Instance.myCards.Count; i++)
-        {
-            KardManager.Instance.myCards[i].Collider2D.enabled = false;
-        }
+
+        Collider2D.enabled = false;
+        
     }
 
     // 배치된 카드 콜라이더 활성화
+    // -> 나중에 본인 카드만 끄도록 바꾸자 
     public override void OnCollider()
     {
-        for(int i = 0; i < KardManager.Instance.myCards.Count; i++)
-        {
-            KardManager.Instance.myCards[i].Collider2D.enabled = true;  
-        }
+        Collider2D.enabled = true;     
     }
 
     // |-----------------------------

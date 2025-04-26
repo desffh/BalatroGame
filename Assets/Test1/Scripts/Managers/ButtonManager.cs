@@ -52,71 +52,110 @@ public class ButtonManager : Singleton<ButtonManager>
     // 핸드버튼을 클릭했을 때
     public void OnHandButtonClick()
     {
-        for (int i  = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        SoundManager.Instance.ButtonClick();
+        StartCoroutine(CardDeletePoint());
+        StartCoroutine(CardDeleteSound());  
+    }
+
+
+    IEnumerator CardDeleteSound()
+    {
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        {
+            SoundManager.Instance.PlayCardSpawn();
+            yield return new WaitForSeconds(0.12f);
+        }
+
+    }
+
+    IEnumerator CardDeletePoint()
+    {
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        {
+            // 저장된 카드의 스크립트 가져오기
+            Card selectedCard = PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
+
+            // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
+            PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
+
+            // 위치를 HandCardPoints로 이동
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.
+                DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.5f);
+            // 회전 0
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.rotation = Quaternion.identity;
+
+            // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
+            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
             {
-                // 저장된 카드의 스크립트 가져오기
-                Card selectedCard =  PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
-
-                // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-                PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
-            
-                // 위치를 HandCardPoints로 이동
-                PokerManager.Instance.CardIDdata[i].gameObject.transform.
-                    DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.5f);
-               // 회전 0
-                PokerManager.Instance.CardIDdata[i].gameObject.transform.rotation = Quaternion.identity;
-
-                // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
-                if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
-                {
-                    KardManager.Instance.myCards.Remove(selectedCard);
-                }
+                KardManager.Instance.myCards.Remove(selectedCard);
             }
-            // 남은 카드들 재정렬 되기
-            KardManager.Instance.SetOriginOrder();
-            KardManager.Instance.CardAlignment();
 
-            // 더하기 계산
-            HoldManager.Instance.Calculation();
-        
+            yield return new WaitForSeconds(0.15f);
+        }
+        // 남은 카드들 재정렬 되기
+        KardManager.Instance.SetOriginOrder();
+        KardManager.Instance.CardAlignment();
+
+        // 더하기 계산
+        HoldManager.Instance.Calculation();
     }
 
     // 버리기 버튼을 클릭했을 때
     public void OnDeleteButtonClick()
     {
+        SoundManager.Instance.ButtonClick();
 
         isButtonActive = false;
 
-            for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        // 카드 클릭 비활성화
+        KardManager.Instance.TurnOffAllCardColliders();
+
+        int cardCount = PokerManager.Instance.CardIDdata.Count;
+        int completeCount = 0;
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Card selectedCard = PokerManager.Instance.CardIDdata[i].GetComponent<Card>();
+
+            PokerManager.Instance.CardIDdata[i].transform
+                .DOMove(HandCardPoints.DeleteCardpos.position, 0.5f)
+                .OnComplete(() => {
+                    completeCount++;
+
+                    if (completeCount >= cardCount)
+                    {
+                        // 모든 카드 이동이 끝난 다음에 실행
+                        AfterDeleteAnimationComplete();
+                    }
+                });
+
+            PokerManager.Instance.CardIDdata[i].transform
+                .DORotate(new Vector3(58, 122, 71), 3);
+
+            KardManager.Instance.OnCardUsed(selectedCard);
+
+            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
             {
-                // 저장된 카드의 스크립트 가져오기
-                Card selectedCard = PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
-
-                // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-                PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
-                // 위치를 HandCardPoints로 이동
-                PokerManager.Instance.CardIDdata[i].gameObject.transform.
-                    DOMove(HandCardPoints.DeleteCardpos.transform.position, 0.5f);
-
-                PokerManager.Instance.CardIDdata[i].gameObject.transform.
-                    DORotate(new Vector3(58, 122, 71), 3);
-
-                KardManager.Instance.OnCardUsed(selectedCard);
-
-                // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
-                if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
-                {
-                    KardManager.Instance.myCards.Remove(selectedCard);
-                }
+                KardManager.Instance.myCards.Remove(selectedCard);
             }
 
-            HoldManager.Instance.StartDeleteCard();
+            StartCoroutine(CardDeleteSound());
+        }
 
-            // 남은 카드들 재정렬 되기
-            KardManager.Instance.SetOriginOrder();
-            KardManager.Instance.CardAlignment();
-        
+        HoldManager.Instance.StartDeleteCard();
     }
+
+    private void AfterDeleteAnimationComplete()
+    {
+        // 남은 카드들 정렬
+        KardManager.Instance.SetOriginOrder();
+
+        // 정렬 후 애니메이션 완료됐을 때 콜라이더 다시 켜기
+        KardManager.Instance.CardAlignment(() => {
+            KardManager.Instance.TurnOnAllCardColliders();
+        });
+    }
+
 
     // 이벤트에 들어갈 함수 -> 계산이 시작되면 버튼 상호작용 비활성화
     public void ButtonActive()
@@ -135,12 +174,15 @@ public class ButtonManager : Singleton<ButtonManager>
 
     public void RunOnClick()
     {
+        SoundManager.Instance.ButtonClick();
         PopUpCanvas.SetActive(true);
+        Time.timeScale = 0.0f;
     }
 
     public void RunDeleteClick()
     {
         PopUpCanvas.SetActive(false);
+        Time.timeScale = 1.0f;
     }
 
     // |-----------------------------------------

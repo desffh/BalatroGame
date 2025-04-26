@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using DG.Tweening;
 
 using UnityEngine.Pool;
+using TMPro;
+using Unity.VisualScripting;
 
 public class KardManager : Singleton<KardManager>
 {
@@ -101,12 +103,14 @@ public class KardManager : Singleton<KardManager>
     // 풀에서 오브젝트를 빌릴 때 사용되는 함수
     private void OnGetCard(Card card)
     {
+        card.OffCollider();
         card.gameObject.SetActive(true);
     }
 
     // 풀에 오브젝트를 반납할 때 사용되는 함수
     private void OnReleaseCard(Card card)
     {
+        card.OffCollider();
         card.gameObject.SetActive(false);
     }
 
@@ -186,9 +190,13 @@ public class KardManager : Singleton<KardManager>
             var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
             card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
 
+            card.OffCollider();
+
             // 동적 생성된 카드 오브젝트는 Card 스크립트를 가지고 있어서 Card타입 리스트에 담을 수 있다
             myCards.Add(card);
             totalSpawnedCount++;
+
+            SoundManager.Instance.PlayCardSpawn();
         }
         CheckTexts();
 
@@ -196,7 +204,7 @@ public class KardManager : Singleton<KardManager>
 
         // 카드 정렬
         SetOriginOrder();
-        CardAlignment();
+        //CardAlignment();
 
     }
 
@@ -213,24 +221,28 @@ public class KardManager : Singleton<KardManager>
             targetCard?.GetComponent<Order>().SetOriginOrder(i);
         }
     }
-    
     // 카드 정렬
-    public void CardAlignment()
+    public void CardAlignment(System.Action onAllComplete = null)
     {
-        List<PRS> originCardPRSs = new List<PRS>();
+        List<PRS> originCardPRSs = RoundAlignment(myCardLeft, myCardRight, myCards.Count, 0.5f, Vector3.one * 0.7f);
 
-        originCardPRSs = RoundAlignment(myCardLeft, myCardRight, myCards.Count, 0.5f, Vector3.one * 0.7f);
+        int completeCount = 0;
 
-        var targetCards = myCards;
-
-        for (int i = 0; i < targetCards.Count; i++)
+        for (int i = 0; i < myCards.Count; i++)
         {
-            var targetCard = targetCards[i];
-
+            var targetCard = myCards[i];
             targetCard.originPRS = originCardPRSs[i];
-            targetCard.MoveTransform(targetCard.originPRS, true, 0.7f);
+            targetCard.MoveTransform(targetCard.originPRS, true, 0.7f, () => {
+                completeCount++;
+                if (completeCount >= myCards.Count)
+                {
+                    onAllComplete?.Invoke(); // 카드 이동 애니메이션 전부 끝난 다음 호출
+                }
+            });
         }
     }
+
+
 
     // 카드 원형 정렬
     List<PRS> RoundAlignment(Transform leftTr, Transform rightTr, int objCount, float height, Vector3 scale)
@@ -273,16 +285,30 @@ public class KardManager : Singleton<KardManager>
     }
 
 
-
-
-    // 나중에 수정
-    public void AddCardSpawn()
+    public void AddCardSpawn(System.Action onComplete = null)
     {
-        for (int i = myCards.Count; i < 8; i++) // 8장까지의 카드를 생성
-        {
-            AddCard(); // 카드 생성 함수 호출
-        }  
+        StartCoroutine(SpawnCardsSequentially(onComplete));
     }
+
+    private IEnumerator SpawnCardsSequentially(System.Action onComplete = null)
+    {
+        for (int i = myCards.Count; i < 8; i++)
+        {
+            AddCard();
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // 카드 다 뿌리고 정렬 시작
+        CardAlignment(() => {
+            // 카드 정렬 애니메이션이 전부 끝났을 때 호출
+            TurnOnAllCardColliders(); // 여기서 콜라이더 켜야 함
+            onComplete?.Invoke(); // 그리고 Settings()로 돌아감
+        });
+    }
+
+
+
+
 
     public void Allignment()
     {
@@ -298,9 +324,29 @@ public class KardManager : Singleton<KardManager>
 
         ReturnAllCardsToPool(); // 기존 카드 반환
 
+        StartSettings();
+    }
+
+    public void StartSettings()
+    {
         StartCoroutine(Settings());
     }
 
+    public void TurnOnAllCardColliders()
+    {
+        for (int i = 0; i < myCards.Count; i++)
+        {
+            myCards[i].OnCollider();
+        }
+    }
+
+    public void TurnOffAllCardColliders()
+    {
+        for (int i = 0; i < myCards.Count; i++)
+        {
+            myCards[i].OffCollider();
+        }
+    }
     // |-------------------------
 
     public IEnumerator Settings()
@@ -316,12 +362,15 @@ public class KardManager : Singleton<KardManager>
         // 카드 채우기
         SetupItemBuffer();
 
-        // 카드 뿌리기
-        AddCardSpawn();
+        // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
+        AddCardSpawn(() => {
+            TurnOnAllCardColliders();
+        });
 
-        // 콜라이더 활성화
-        card.OnCollider();
         ButtonManager.Instance.ButtonInactive();
+
+        // 랭크 정렬 버튼 활성화
+        HoldManager.Instance.interactable.OnButton();
 
         // 핸드 & 버리기 카운트 초기화 
         HandDelete.Instance.Counting();
@@ -338,8 +387,8 @@ public class KardManager : Singleton<KardManager>
 
     // 배치된 카드 & 계산중인 카드 콜라이더 비활성화
     public void ColliderQuit()
-    {   
-        card.OffCollider();
+    {
+        TurnOffAllCardColliders();
         PokerManager.Instance.QuitCollider2();
     }
 
@@ -372,5 +421,5 @@ public class KardManager : Singleton<KardManager>
         usedCards.Clear();
         myCards.Clear();
     }
-    
+
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Money : MonoBehaviour
@@ -7,6 +8,8 @@ public class Money : MonoBehaviour
     [SerializeField] int totalMoney;
 
     [SerializeField] MoneyText moneyText;
+
+    
 
     public int TotalMoney
     {
@@ -26,12 +29,14 @@ public class Money : MonoBehaviour
     public void ReSetting()
     {
         totalMoney = 0;
+        MoneyUpdate();
     }
 
     // 스테이지 클리어 시 머니 획득
     public void AddMoney(int money)
     {
         totalMoney += money;
+        moneyText.UpdatecashText(money);
     }
 
     // 상점에서 구매 시 머니 차감 

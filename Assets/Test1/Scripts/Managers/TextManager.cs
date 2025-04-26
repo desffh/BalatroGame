@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TextManager : Singleton<TextManager>
@@ -24,6 +25,7 @@ public class TextManager : Singleton<TextManager>
         }
     }
 
+    // 포커 텍스트 갱신
     public void stringUpdateText(int index, string value = "")
     {
         if (index >= 0 && index < numTextUpdaters.Length)
@@ -52,18 +54,18 @@ public class TextManager : Singleton<TextManager>
     [SerializeField] TextMeshProUGUI HandCards;
     [SerializeField] TextMeshProUGUI TotalJokerCards;
 
-   private void Start()
+
+    private void Start()
    {
        // 일단 한번 호출해서 UI 싹 갱신
        HandCardUpdate();
        BufferUpdate();
    }
 
+
     private void Update()
     {
         HandCardUpdate();
-
-
     }
 
 

@@ -15,6 +15,10 @@ public class HoldManager : Singleton<HoldManager>
 
     [SerializeField] GameOverPopUp gameOverPopUp;
 
+    // 랭크 정렬 버튼 참조
+    [SerializeField] public Interactable interactable;
+
+
 
     // 계산 이벤트
     public UnityEvent calculation;
@@ -76,7 +80,6 @@ public class HoldManager : Singleton<HoldManager>
         return false;
     }
 
-
     // 이벤트 : 1. 큐에 값 다 넣기 2. 계산 후 텍스트 누적 3. 카드 날라간 뒤 비활성화
     public void Calculation()
     {
@@ -113,6 +116,7 @@ public class HoldManager : Singleton<HoldManager>
         }
     }
 
+    // 다시 셋팅
     public void Setting()
     {
         // 계산 다 하고 리스트 초기화
@@ -123,8 +127,10 @@ public class HoldManager : Singleton<HoldManager>
 
         CheckReset();
 
+
         // 만약 엔티를 다 썼다면 종료
         StageEnd();
+        
 
         if(StageEnd() == false)
         {
@@ -134,9 +140,11 @@ public class HoldManager : Singleton<HoldManager>
             KardManager.Instance.card.OnCollider();
             ButtonManager.Instance.ButtonInactive();
 
+            // 정렬 버튼 활성화
+            interactable.OnButton();
+
             RefillActionQueue();
         }
-
     }
 
     // 계산이 끝나는 곳 & 다시 카드가 배치되는 곳
@@ -173,6 +181,8 @@ public class HoldManager : Singleton<HoldManager>
     {
         yield return waitForSeconds;
         pokerManager.DeleteMove();
+
+        SoundManager.Instance.ResetSFXPitch();
     }
     
 
@@ -182,6 +192,7 @@ public class HoldManager : Singleton<HoldManager>
     IEnumerator deleteCard()
     {
         yield return waitForSeconds;
+
         pokerManager.DelaySetActive();
 
         // 리스트 초기화
@@ -194,6 +205,10 @@ public class HoldManager : Singleton<HoldManager>
         // 다시 콜라이더 활성화
         KardManager.Instance.card.OnCollider();
         ButtonManager.Instance.ButtonInactive();
+
+        // 정렬 버튼 활성화
+        interactable.OnButton();
+
         yield break;
     }
 
@@ -226,6 +241,7 @@ public class HoldManager : Singleton<HoldManager>
     {
         TextManager.Instance.UpdateText(0);
     }
+
     
     public void Calculate()
     {
@@ -237,10 +253,14 @@ public class HoldManager : Singleton<HoldManager>
 
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
+           
         }
         TextManager.Instance.UpdateText(1, PlusSum);
+        
     }
     
+    [SerializeField] ShowRankText ShowRankText;
+
     // 애니메이션을 호출하기 위해 사용
     private GameObject game;
 
@@ -254,8 +274,14 @@ public class HoldManager : Singleton<HoldManager>
                 game = pokerManager.CardIDdata[i].gameObject;
 
                 savenumberCheck[i] = true;
-                // 리스트에서 제거해버리면 deleteZone으로 이동할 수 없음
-                //PokerManager.Instance.SuitIDdata.RemoveAt(i);
+
+                ShowRankText = PokerManager.Instance.CardIDdata[i].GetComponent<ShowRankText>();
+                ShowRankText.OnSettingRank(saveNumber);
+
+                // 여기서 효과음 재생하고 피치 올리기
+                SoundManager.Instance.sfxSource.pitch += 0.04f;
+                SoundManager.Instance.PlayCardCountSFX();  // 별도 함수로 관리
+
                 break;
             }
         }
@@ -289,6 +315,8 @@ public class HoldManager : Singleton<HoldManager>
     {
         // 버리는 동안 카드의 콜라이더 비활성화               
         KardManager.Instance.card.OffCollider();
+
+        interactable.OffButton();
 
         // 카드 비활성화 & 콜라이더 활성화 
         StartCoroutine(deleteCard());

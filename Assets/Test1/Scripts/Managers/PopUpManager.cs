@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -26,5 +27,11 @@ public class PopUpManager : Singleton<PopUpManager>
         
         yield return null;
     }
-    
+
+    protected override void InitializeReferences()
+    {
+        if (clearPopUp == null)
+            clearPopUp = GameObject.Find("EndCanvas")?.GetComponent<GameObject>();
+
+    }
 }

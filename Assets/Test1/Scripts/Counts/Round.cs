@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -102,13 +103,24 @@ public class Round : Singleton<Round>
     {
         base.Awake();
 
+        QueueSetting();
+
+        ScoreSetting();
+
+        MoneySetting();
+    }
+
+    public void QueueSetting()
+    {
         // 큐 점수 셋팅
         currentStages.Enqueue(300); // 300 450 600
         currentStages.Enqueue(800); // 800 1200 1600
         currentStages.Enqueue(1800);// 1800 2700 3600
-        
-        ScoreSetting();
+    }
 
+    // 가림판 & 머니 셋팅
+    public void MoneySetting()
+    {
         for (int i = 0; i < stagepanels.Length; i++)
         {
             stagepanels[i].SetActive(true);
@@ -120,7 +132,6 @@ public class Round : Singleton<Round>
         {
             stageMoney[i] = i + 3;
         }
-
     }
 
     private bool isStageUpdated = false;
@@ -208,5 +219,31 @@ public class Round : Singleton<Round>
         gameOverText.EntyUpdate(Enty);
         gameOverText.RoundUpdate(Rounds);
         gameOverText.BlindUpdate(BlindName, blindimage);
+    }
+
+    // 라운드 리셋 |----------------------------------------------
+    
+    public void RoundReset()
+    {
+        QueueSetting();
+
+        ScoreSetting();
+
+        MoneySetting();
+
+        enty = 0;
+        round = 0;
+        currentStage = 0;
+        currentScores = 0;
+    }
+
+    protected override void InitializeReferences()
+    {
+        if (scoreUiSet == null)
+            scoreUiSet = GameObject.Find("ScoreSet")?.GetComponent<ScoreUISet>();
+
+        if (gameOverText == null)
+            gameOverText = GameObject.Find("GameOverCanvas")?.GetComponent<GameOverText>();
+
     }
 }

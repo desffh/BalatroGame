@@ -14,5 +14,6 @@ public class NumText : NumTextUpdater
     public override void UpdateText(int text)
     {
         numText.text = text.ToString();
+        AnimationManager.Instance.CaltransformAnime(numText);
     }
 }

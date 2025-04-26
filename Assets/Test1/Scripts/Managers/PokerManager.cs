@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -137,14 +138,25 @@ public class PokerManager : Singleton<PokerManager>
             CardIDdata[i].transform.GetComponent<Transform>();
 
             CardIDdata[i].transform.
-                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.2f);
+                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.15f);
 
             CardIDdata[i].transform.
-                DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.2f);
+                DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.15f);
+
+            StartCoroutine(CardDeleteSound());
+
 
             KardManager.Instance.OnCardUsed(CardIDdata[i]);
         }
+    }
 
+    IEnumerator CardDeleteSound()
+    {
+        for (int i = 0; i < CardIDdata.Count; i++)
+        {
+            SoundManager.Instance.PlayCardSpawn();
+            yield return new WaitForSeconds(0.12f);
+        }
     }
 
     public void DelaySetActive()
@@ -153,5 +165,11 @@ public class PokerManager : Singleton<PokerManager>
         {
             CardIDdata[i].gameObject.SetActive(false);
         }
+    }
+
+    protected override void InitializeReferences()
+    {
+        if (deleteCardPoint == null)
+            deleteCardPoint = GameObject.Find("HandCardPoints")?.GetComponent<HandCardPoints>();
     }
 }

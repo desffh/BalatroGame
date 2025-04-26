@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
+
 public class PokerText : StringTextUpdater
 {
     [SerializeField] TextMeshProUGUI stringText;
@@ -16,5 +18,6 @@ public class PokerText : StringTextUpdater
     public override void UpdateText(string text = "")
     {
         stringText.text = text;
+        AnimationManager.Instance.CaltransformAnime(stringText);
     }
 }

@@ -6,6 +6,18 @@ public class GoStage : MonoBehaviour
 {
     public void MoveStage()
     {
+        ButtonManager.DestroySelf();
+        HoldManager.DestroySelf();
+        KardManager.DestroySelf();
+        TextManager.DestroySelf();
+        Round.DestroySelf();
+        AnimationManager.DestroySelf();
+        GameManager.DestroySelf();
+        PokerManager.DestroySelf();
+        PopUpManager.DestroySelf();
+        ScoreManager.DestroySelf();
+        HandDelete.DestroySelf();
+
         SceneLoaderUI.Instance.LoadSceneWithLoadingScreen("StageScene");
     }
 }

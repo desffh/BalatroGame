@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,14 +25,23 @@ public class StageButton : MonoBehaviour
 
     public void OnClick1()
     {
+        SoundManager.Instance.ButtonClick();
+
+        SoundManager.Instance.PlayGameBGM();
         Stage1Click(0);
     }
     public void OnClick2()
     {
+        SoundManager.Instance.ButtonClick();
+
+        SoundManager.Instance.PlayGameBGM();
         Stage1Click(1);
     }
     public void OnClick3()
-    {
+    {      
+        SoundManager.Instance.ButtonClick();
+
+        SoundManager.Instance.OnBossStageStart();
         Stage1Click(2);
     }
     public void Stage1Click(int stage)
@@ -73,8 +83,11 @@ public class StageButton : MonoBehaviour
 
     public void NextEntyOn() // 캐시 아웃 버튼을 누르면 상점 나오게
     {
+        SoundManager.Instance.ButtonClick();
+
         Entycanvas.gameObject.SetActive(false);
         ShopPanel.gameObject.SetActive(true);
+        SoundManager.Instance.OnShopStart();
 
         if(Round.Instance.CurrentScores == Round.Instance.stages[2])
         {
@@ -88,11 +101,19 @@ public class StageButton : MonoBehaviour
         nextEnty.interactable = false;
     }
 
-
     // 상점의 다음 라운드 버튼
     public void NextEnty()
     {
+        SoundManager.Instance.ButtonClick();
+
         ShopPanel.gameObject.SetActive(false);
         stagecanvas.gameObject.SetActive(true);
     }
+
+    public void OnEntyCanvas()
+    {
+        stagecanvas.gameObject.SetActive(true);
+    }
+
+
 }
