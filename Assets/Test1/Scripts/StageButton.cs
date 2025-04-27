@@ -27,14 +27,12 @@ public class StageButton : MonoBehaviour
     {
         SoundManager.Instance.ButtonClick();
 
-        SoundManager.Instance.PlayGameBGM();
         Stage1Click(0);
     }
     public void OnClick2()
     {
         SoundManager.Instance.ButtonClick();
 
-        SoundManager.Instance.PlayGameBGM();
         Stage1Click(1);
     }
     public void OnClick3()
@@ -49,6 +47,7 @@ public class StageButton : MonoBehaviour
         if(stage == 0)
         {
             Round.Instance.EntyUp();
+            SoundManager.Instance.PlayGameBGM();
         }
 
         Round.Instance.RoundUp();
@@ -105,6 +104,7 @@ public class StageButton : MonoBehaviour
     public void NextEnty()
     {
         SoundManager.Instance.ButtonClick();
+        SoundManager.Instance.ResumePreviousBGM();
 
         ShopPanel.gameObject.SetActive(false);
         stagecanvas.gameObject.SetActive(true);

@@ -112,6 +112,7 @@ public class Round : Singleton<Round>
 
     public void QueueSetting()
     {
+        currentStages.Clear();
         // 큐 점수 셋팅
         currentStages.Enqueue(300); // 300 450 600
         currentStages.Enqueue(800); // 800 1200 1600
@@ -225,6 +226,8 @@ public class Round : Singleton<Round>
     
     public void RoundReset()
     {
+        isStageUpdated = false;
+
         QueueSetting();
 
         ScoreSetting();

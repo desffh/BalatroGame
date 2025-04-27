@@ -929,6 +929,7 @@ MonoBehaviour:
   checkCard: {fileID: 8300000, guid: 86113be1b1d98eb4cbd352e66b0e1338, type: 3}
   buttonClick: {fileID: 8300000, guid: 09230bcb71e2a904c98b54fa6f77e5fa, type: 3}
   failure: {fileID: 8300000, guid: cbcd22348c966a846acd84b91e55bce3, type: 3}
+  bgmDefaultVolume: 0.3
 --- !u!4 &619089593
 Transform:
   m_ObjectHideFlags: 0
@@ -1357,7 +1358,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 80240671d2348004b8f6976da7634127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b8c661467b626e14cb1ddaab87a2ce68, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2316,7 +2317,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b8c661467b626e14cb1ddaab87a2ce68, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 80240671d2348004b8f6976da7634127, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

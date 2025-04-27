@@ -232,7 +232,7 @@ public class KardManager : Singleton<KardManager>
         {
             var targetCard = myCards[i];
             targetCard.originPRS = originCardPRSs[i];
-            targetCard.MoveTransform(targetCard.originPRS, true, 0.7f, () => {
+            targetCard.MoveTransform(targetCard.originPRS, true, 0.6f, () => {
                 completeCount++;
                 if (completeCount >= myCards.Count)
                 {
@@ -292,19 +292,32 @@ public class KardManager : Singleton<KardManager>
 
     private IEnumerator SpawnCardsSequentially(System.Action onComplete = null)
     {
+        bool lastMoveDone = false;
+
         for (int i = myCards.Count; i < 8; i++)
         {
             AddCard();
-            yield return new WaitForSeconds(0.1f);
+
+            if (i == 7)
+            {
+                CardAlignment(() => { lastMoveDone = true; });
+            }
+            else
+            {
+                CardAlignment();
+            }
+
+            yield return new WaitForSeconds(0.12f);
         }
 
-        // 카드 다 뿌리고 정렬 시작
-        CardAlignment(() => {
-            // 카드 정렬 애니메이션이 전부 끝났을 때 호출
-            TurnOnAllCardColliders(); // 여기서 콜라이더 켜야 함
-            onComplete?.Invoke(); // 그리고 Settings()로 돌아감
-        });
+        yield return new WaitUntil(() => lastMoveDone);
+
+        TurnOnAllCardColliders();
+        onComplete?.Invoke();
     }
+
+
+
 
 
 

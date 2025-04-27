@@ -32,6 +32,19 @@ public class SoundManager : Singleton<SoundManager>
 
     private Coroutine fadeCoroutine;
 
+    // |-------------------------------------
+
+    private AudioClip previousClip;    // 전에 재생되던 BGM
+    private float previousTime;        // 전에 재생되던 시간
+    private bool hasPrevious = false;  // 복귀 가능한지 여부
+
+    // |-------------------------------------
+
+    [Header("Volume Settings")]
+    public float bgmDefaultVolume = 0.3f;  
+
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -42,6 +55,8 @@ public class SoundManager : Singleton<SoundManager>
 
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
+
+        bgmSource.volume = bgmDefaultVolume;
     }
 
     protected override void InitializeReferences()
@@ -72,24 +87,60 @@ public class SoundManager : Singleton<SoundManager>
     }
 
     // BGM 재생
-    public void PlayBGMs(AudioClip Clip)
+    public void PlayBGMs(AudioClip clip, float fadeDuration = 0.5f)
     {
-        PlayBGM(Clip);
+        PlayBGM(clip, fadeDuration);
     }
 
 
 
-    private void PlayBGM(AudioClip clip)
+
+    private void PlayBGM(AudioClip clip, float fadeDuration = 0.5f)
     {
         if (clip == null) return;
+
+        if (bgmSource.clip == clip)
+        {
+            if (!bgmSource.isPlaying)
+            {
+                bgmSource.Play();
+            }
+
+            return;
+        }
+
+        if (bgmSource.isPlaying)
+        {
+            previousClip = bgmSource.clip;
+            previousTime = bgmSource.time;
+            hasPrevious = true;
+        }
 
         if (fadeCoroutine != null)
         {
             StopCoroutine(fadeCoroutine);
         }
 
-        fadeCoroutine = StartCoroutine(FadeOutInBGM(clip));
+        fadeCoroutine = StartCoroutine(FadeOutInBGM(clip, fadeDuration)); // 여기!
     }
+
+
+
+
+
+    public void ResumePreviousBGM()
+    {
+        if (hasPrevious && previousClip != null)
+        {
+            if (fadeCoroutine != null)
+            {
+                StopCoroutine(fadeCoroutine);
+            }
+            fadeCoroutine = StartCoroutine(FadeOutInBGM(previousClip, 0.5f)); // 복귀도 부드럽게
+        }
+    }
+
+
 
     public void StopBGM()
     {
@@ -97,33 +148,36 @@ public class SoundManager : Singleton<SoundManager>
     }
 
     // |-------------------------------------
-    private IEnumerator FadeOutInBGM(AudioClip newClip)
+    private IEnumerator FadeOutInBGM(AudioClip newClip, float fadeDuration = 0.5f)
     {
-        float fadeDuration = 0.05f;  // 페이드 시간 (초 단위)
-        float startVolume = 0.3f;
+        float startVolume = bgmSource.volume;
+        float timer = 0f;
 
-        // 1. 현재 BGM 페이드 아웃
-        while (bgmSource.volume > 0)
+        // Fade Out
+        while (timer < fadeDuration)
         {
-            bgmSource.volume -= startVolume * Time.deltaTime / fadeDuration;
+            timer += Time.deltaTime;
+            bgmSource.volume = Mathf.Lerp(startVolume, 0f, timer / fadeDuration);
             yield return null;
         }
 
-        bgmSource.Stop();
-        bgmSource.clip = newClip;
         bgmSource.volume = 0f;
+        bgmSource.clip = newClip;
+        bgmSource.Play();
 
-        bgmSource.Play();  // 새 Clip 처음부터 Play
-
-        // 2. 새 BGM 페이드 인
-        while (bgmSource.volume < startVolume)
+        // Fade In
+        timer = 0f;
+        while (timer < fadeDuration)
         {
-            bgmSource.volume += startVolume * Time.deltaTime / fadeDuration;
+            timer += Time.deltaTime;
+            bgmSource.volume = Mathf.Lerp(0f, startVolume, timer / fadeDuration);
             yield return null;
         }
 
-        bgmSource.volume = startVolume;  // 정확히 맞추기
+        bgmSource.volume = startVolume;
     }
+
+
 
     // |-------------------------------------
 
@@ -175,8 +229,9 @@ public class SoundManager : Singleton<SoundManager>
     // 상점 스테이지 시작
     public void OnShopStart()
     {
-        PlayBGMs(shopBGM);
+        PlayBGMs(shopBGM, 0.3f); // 상점 입장할 때 빠른 페이드 (0.3초)
     }
+
 
     public void ButtonClick()
     {

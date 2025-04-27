@@ -70,6 +70,10 @@ public class ButtonManager : Singleton<ButtonManager>
 
     IEnumerator CardDeletePoint()
     {
+
+        // 카드 클릭 비활성화
+        KardManager.Instance.TurnOffAllCardColliders();
+
         for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
