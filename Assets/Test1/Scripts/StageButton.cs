@@ -74,7 +74,7 @@ public class StageButton : MonoBehaviour
         stagecanvas.gameObject.SetActive(false);
 
         // √ ±‚»≠
-        KardManager.Instance.SetupNextStage();
+        CardManager.Instance.SetupNextStage();
     }
 
 

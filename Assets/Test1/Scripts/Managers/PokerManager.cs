@@ -6,6 +6,13 @@ using System.Linq;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+public class PokerResult
+{
+    public List<int> SaveNum = new();
+    public int Plus;
+    public int Multiple;
+    public string PokerName;
+}
 
 public class PokerManager : Singleton<PokerManager>
 {
@@ -18,8 +25,10 @@ public class PokerManager : Singleton<PokerManager>
 
     [SerializeField] HandCardPoints deleteCardPoint;
 
-    // 카드 타입을 담을 리스트 (최대 5개)
-    [SerializeField] public List<Card> CardIDdata = new List<Card>(5);
+
+
+
+    [SerializeField] public CardData cardData;
 
     protected override void Awake()
     {
@@ -75,84 +84,81 @@ public class PokerManager : Singleton<PokerManager>
         }
     }
 
-    // 값을 가져오고 리스트에 저장 (순차적으로) / Card 타입을 받기
-    public void SaveSuitIDdata(Card card)
+    public void SelectCard(Card card)
     {
-        CardIDdata.Add(card);
-    
-        // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
-        CardIDdata = CardIDdata.OrderBy(x => x.itemdata.id).ToList();
-    
-        if (CardIDdata.Count >= 0)
-        {
-            EvaluatePokerHands(CardIDdata);
-            TextManager.Instance.UpdateText(1,plus);
-            TextManager.Instance.UpdateText(2, multiple);
-        
-            TextManager.Instance.stringUpdateText(0, pokerName);
-    
-        }
+        if (cardData.SelectCards.Count >= 5 || cardData.SelectCards.Contains(card))
+            return;
+
+        cardData.AddSelectCard(card);
+        EvaluateAndUpdateUI();
     }
-    
-    public void RemoveSuitIDdata(Card card)
+
+    public void DeselectCard(Card card)
     {
-        // 리스트에서 제거 
-        CardIDdata.Remove(card);
-    
-        if (CardIDdata.Count > 0)
+        cardData.RemoveSelectCard(card);
+        EvaluateAndUpdateUI();
+    }
+
+    public void ClearSelection()
+    {
+        cardData.ClearSelectCard();
+        EvaluateAndUpdateUI();
+    }
+    private void EvaluateAndUpdateUI()
+    {
+        var selected = cardData.SelectCards;
+
+        if (selected.Count > 0)
         {
-            EvaluatePokerHands(CardIDdata);
-    
+            
+
+            EvaluatePokerHands(selected.ToList());
+
             TextManager.Instance.UpdateText(1, plus);
             TextManager.Instance.UpdateText(2, multiple);
-    
             TextManager.Instance.stringUpdateText(0, pokerName);
         }
         else
         {
-            // 카드가 다 제거된 경우에도 saveNum 초기화
             saveNum.Clear();
-            Debug.Log("모든 카드가 제거되어 saveNum 초기화됨.");
-            TextManager.Instance.UpdateText(1);
+
+            TextManager.Instance.UpdateText(1);       // 기본값 초기화
             TextManager.Instance.UpdateText(2);
-    
             TextManager.Instance.stringUpdateText(0);
         }
-    
     }
 
-    
     public void QuitCollider2()
     {
-        for (int i = 0; i < CardIDdata.Count; i++)
+        for (int i = 0; i < cardData.SelectCards.Count; i++)
         {
-            CardIDdata[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            cardData.SelectCards[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
     // 다 판별하고 버리기
     public void DeleteMove()
     {
-        for (int i = 0; i < CardIDdata.Count; i++)
+        for (int i = 0; i < cardData.SelectCards.Count; i++)
         {
-            CardIDdata[i].transform.GetComponent<Transform>();
+            cardData.SelectCards[i].transform.GetComponent<Transform>();
 
-            CardIDdata[i].transform.
+            cardData.SelectCards[i].transform.
                 DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.15f);
 
-            CardIDdata[i].transform.
+            cardData.SelectCards[i].transform.
                 DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.15f);
 
             StartCoroutine(CardDeleteSound());
 
 
-            KardManager.Instance.OnCardUsed(CardIDdata[i]);
+            CardManager.Instance.OnCardUsed(cardData.SelectCards[i]);
         }
     }
 
     IEnumerator CardDeleteSound()
     {
-        for (int i = 0; i < CardIDdata.Count; i++)
+        for (int i = 0; i < cardData.SelectCards.Count; i++)
         {
             SoundManager.Instance.PlayCardSpawn();
             yield return new WaitForSeconds(0.12f);
@@ -161,11 +167,38 @@ public class PokerManager : Singleton<PokerManager>
 
     public void DelaySetActive()
     {
-        for (int i = 0; i <CardIDdata.Count; i++)
+        for (int i = 0; i <cardData.SelectCards.Count; i++)
         {
-            CardIDdata[i].gameObject.SetActive(false);
+            cardData.SelectCards[i].gameObject.SetActive(false);
         }
     }
 
+    public PokerResult GetPokerResult()
+    {
+        var result = new PokerResult();
+        var selected = cardData.SelectCards.OrderBy(c => c.itemdata.id).ToList();
+
+        foreach (var hand in pokerHands)
+        {
+            List<int> temp = new();
+            hand.PokerHandle(selected, temp);
+
+            if (temp.Count > 0)
+            {
+                result.SaveNum = temp.OrderBy(x => x).ToList();
+                result.Plus = hand.plus;
+                result.Multiple = hand.multiple;
+                result.PokerName = hand.pokerName;
+                return result;
+            }
+        }
+
+        // 족보가 없으면 하이카드
+        result.SaveNum.Add(selected.Max(c => c.itemdata.id));
+        result.Plus = 0;
+        result.Multiple = 1;
+        result.PokerName = "하이카드";
+        return result;
+    }
 
 }

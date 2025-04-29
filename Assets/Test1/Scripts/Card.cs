@@ -146,21 +146,23 @@ public class Card : CardComponent
     public override void OnCardClicked()
     {
         // 리스트가 꽉 찼다면
-        if (checkCard && PokerManager.Instance.CardIDdata.Count <= 5)
+        if (checkCard && PokerManager.Instance.cardData.SelectCards.Count <= 5)
         {
             // 이 스크립트가 달린 Card를 매개변수로 전달
-            PokerManager.Instance.RemoveSuitIDdata(this);
-
+            //PokerManager.Instance.RemoveSuitIDdata(this);
+            PokerManager.Instance.DeselectCard(this);
 
             AnimationManager.Instance.CardAnime(cardPrefabs);
 
             checkCard = false;
         }
         // 리스트가 덜 찼다면
-        else if(PokerManager.Instance.CardIDdata.Count < 5)
+        else if(PokerManager.Instance.cardData.SelectCards.Count < 5)
         {
-            PokerManager.Instance.SaveSuitIDdata(this);
+            //PokerManager.Instance.SaveSuitIDdata(this);
             
+            PokerManager.Instance.SelectCard(this);
+
             AnimationManager.Instance.ReCardAnime(cardPrefabs);
 
             checkCard = true;
@@ -168,15 +170,7 @@ public class Card : CardComponent
         else
         {
             AnimationManager.Instance.NoCardAnime(cardPrefabs);
-        }   
-             
-        // 족보 확인
-        if (PokerManager.Instance.CardIDdata.Count >= 0)
-        {
-            //PokerManager.Instance.Hand();
-            //PokerManager.Instance.getHandType();
-        }
-        
+        }           
     }
 
     // |--------------------------------------------------------------

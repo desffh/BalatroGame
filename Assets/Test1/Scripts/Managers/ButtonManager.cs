@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
+
 public class ButtonManager : Singleton<ButtonManager>
 {
     [SerializeField] Button Handbutton; // 핸드 플레이
@@ -30,7 +32,7 @@ public class ButtonManager : Singleton<ButtonManager>
 
     private void Update()
     {
-       if(isButtonActive == true && HandDelete.Instance.Hand > 0 && PokerManager.Instance.CardIDdata.Count > 0) 
+       if(isButtonActive == true && HandDelete.Instance.Hand > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0) 
        {
             Handbutton.interactable = true;
        }
@@ -38,7 +40,7 @@ public class ButtonManager : Singleton<ButtonManager>
        {
             Handbutton.interactable = false;
        }
-       if(isButtonActive == true && HandDelete.Instance.Delete > 0 && PokerManager.Instance.CardIDdata.Count > 0)
+       if(isButtonActive == true && HandDelete.Instance.Delete > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0)
         {
             Treshbutton.interactable = true;
         }
@@ -60,7 +62,7 @@ public class ButtonManager : Singleton<ButtonManager>
 
     IEnumerator CardDeleteSound()
     {
-        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.cardData.SelectCards.Count; i++)
         {
             SoundManager.Instance.PlayCardSpawn();
             yield return new WaitForSeconds(0.12f);
@@ -72,33 +74,33 @@ public class ButtonManager : Singleton<ButtonManager>
     {
 
         // 카드 클릭 비활성화
-        KardManager.Instance.TurnOffAllCardColliders();
+        CardManager.Instance.TurnOffAllCardColliders();
 
-        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.cardData.SelectCards.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
-            Card selectedCard = PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
+            Card selectedCard = PokerManager.Instance.cardData.SelectCards[i].gameObject.GetComponent<Card>();
 
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-            PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
+            PokerManager.Instance.cardData.SelectCards[i].gameObject.GetComponent<Transform>();
 
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.CardIDdata[i].gameObject.transform.
+            PokerManager.Instance.cardData.SelectCards[i].gameObject.transform.
                 DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.5f);
             // 회전 0
-            PokerManager.Instance.CardIDdata[i].gameObject.transform.rotation = Quaternion.identity;
+            PokerManager.Instance.cardData.SelectCards[i].gameObject.transform.rotation = Quaternion.identity;
 
             // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
-            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
+            if (selectedCard != null && CardManager.Instance.myCards.Contains(selectedCard))
             {
-                KardManager.Instance.myCards.Remove(selectedCard);
+                CardManager.Instance.myCards.Remove(selectedCard);
             }
 
             yield return new WaitForSeconds(0.15f);
         }
         // 남은 카드들 재정렬 되기
-        KardManager.Instance.SetOriginOrder();
-        KardManager.Instance.CardAlignment();
+        CardManager.Instance.SetOriginOrder();
+        CardManager.Instance.CardAlignment();
 
         // 더하기 계산
         HoldManager.Instance.Calculation();
@@ -112,16 +114,16 @@ public class ButtonManager : Singleton<ButtonManager>
         isButtonActive = false;
 
         // 카드 클릭 비활성화
-        KardManager.Instance.TurnOffAllCardColliders();
+        CardManager.Instance.TurnOffAllCardColliders();
 
-        int cardCount = PokerManager.Instance.CardIDdata.Count;
+        int cardCount = PokerManager.Instance.cardData.SelectCards.Count;
         int completeCount = 0;
 
         for (int i = 0; i < cardCount; i++)
         {
-            Card selectedCard = PokerManager.Instance.CardIDdata[i].GetComponent<Card>();
+            Card selectedCard = PokerManager.Instance.cardData.SelectCards[i].GetComponent<Card>();
 
-            PokerManager.Instance.CardIDdata[i].transform
+            PokerManager.Instance.cardData.SelectCards[i].transform
                 .DOMove(HandCardPoints.DeleteCardpos.position, 0.5f)
                 .OnComplete(() => {
                     completeCount++;
@@ -133,14 +135,14 @@ public class ButtonManager : Singleton<ButtonManager>
                     }
                 });
 
-            PokerManager.Instance.CardIDdata[i].transform
+            PokerManager.Instance.cardData.SelectCards[i].transform
                 .DORotate(new Vector3(58, 122, 71), 3);
 
-            KardManager.Instance.OnCardUsed(selectedCard);
+            CardManager.Instance.OnCardUsed(selectedCard);
 
-            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
+            if (selectedCard != null && CardManager.Instance.myCards.Contains(selectedCard))
             {
-                KardManager.Instance.myCards.Remove(selectedCard);
+                CardManager.Instance.myCards.Remove(selectedCard);
             }
 
             StartCoroutine(CardDeleteSound());
@@ -152,11 +154,11 @@ public class ButtonManager : Singleton<ButtonManager>
     private void AfterDeleteAnimationComplete()
     {
         // 남은 카드들 정렬
-        KardManager.Instance.SetOriginOrder();
+        CardManager.Instance.SetOriginOrder();
 
         // 정렬 후 애니메이션 완료됐을 때 콜라이더 다시 켜기
-        KardManager.Instance.CardAlignment(() => {
-            KardManager.Instance.TurnOnAllCardColliders();
+        CardManager.Instance.CardAlignment(() => {
+            CardManager.Instance.TurnOnAllCardColliders();
         });
     }
 

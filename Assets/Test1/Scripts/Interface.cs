@@ -11,6 +11,7 @@ public interface IPokerHandle
     int multiple { get;}
 }
 
+// |------------------------------------------------------
 
 // 추상 클래스
 public abstract class IsStrightPlush
@@ -64,7 +65,7 @@ public interface IColorJoker
     void ColorJoker(List<Card> cards, List<Card> saveSuit);
 }
 
-
+// 족보가 있다면 배수 점수 추가
 public interface IPokerJoker
 {
     void PokerJoker(List<Card> cards, int saveMultiple);
@@ -73,9 +74,17 @@ public interface IPokerJoker
 
 // |------------------------------------------------------
 
+// 팝업 텍스트 인터페이스 
 public interface IPopupText
 {
     void Initialize(string name, string info, int multiple, int cost);
 }
 
 // |------------------------------------------------------
+
+// 게임 상태 인터페이스
+public interface IGameState
+{
+    void Enter();
+    void Exit();
+}

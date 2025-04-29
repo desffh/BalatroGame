@@ -17,7 +17,7 @@ public class Interactable : MonoBehaviour
     private void Update()
     {
         // 이것도 나중에 카드가 클릭 되었을때만 판별하도록 하면 Update()에서 사용안해도됨
-        if (PokerManager.Instance.CardIDdata.Count > 0)
+        if (PokerManager.Instance.cardData.SelectCards.Count > 0)
         {
             OffButton();
         }

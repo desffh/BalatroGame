@@ -73,7 +73,7 @@ public class TextManager : Singleton<TextManager>
     public void BufferUpdate()
     {
         int total = 52;
-        int used = KardManager.Instance.totalSpawnedCount;
+        int used = CardManager.Instance.totalSpawnedCount;
         int remaining = total - used;
 
         TotalCards.text = $"{remaining} / {total}";
@@ -81,8 +81,8 @@ public class TextManager : Singleton<TextManager>
 
     public void HandCardUpdate()
     {
-        HandCards.text = (KardManager.Instance.myCards.Capacity - PokerManager.Instance.CardIDdata.Count).ToString() + " / "
-            + KardManager.Instance.myCards.Capacity.ToString();
+        HandCards.text = (CardManager.Instance.myCards.Capacity - PokerManager.Instance.cardData.SelectCards.Count).ToString() + " / "
+            + CardManager.Instance.myCards.Capacity.ToString();
     }
 
     // 조커 텍스트 업데이트

@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 95414049}
   - component: {fileID: 95414050}
   m_Layer: 0
-  m_Name: KardManager
+  m_Name: CardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,12 +554,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 95414047}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c29850d22f9e2ef498c51dacb5144cac, type: 3}
+  m_Script: {fileID: 11500000, guid: ac380987d02f357468c1f256883b1683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ItemDataReader: {fileID: 11400000, guid: e5e46081cc72ebf49acfe045b6964ab2, type: 2}
-  card: {fileID: -6056702233427692128, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
   deleteSpawn: {fileID: 409935967}
+  card: {fileID: -6056702233427692128, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
   itemBuffer: []
   myCards: []
   usedCards: []
@@ -2756,7 +2756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveNum: 
   deleteCardPoint: {fileID: 1013039322}
-  CardIDdata: []
+  cardData: {fileID: 1900035635}
   plus: 0
   multiple: 0
   pokerName: 
@@ -5158,7 +5158,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 95414050}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: KardManager, Assembly-CSharp
         m_MethodName: ColliderQuit
         m_Mode: 1
@@ -14573,6 +14573,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b8ce01e16ac794db09306db11545bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1900035634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900035636}
+  - component: {fileID: 1900035635}
+  m_Layer: 0
+  m_Name: CardData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1900035635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900035634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e52484037334a46b3b3054ccccb4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1900035636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900035634}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1915899665
 GameObject:
   m_ObjectHideFlags: 0
@@ -15801,6 +15845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalScore: 0
+  maxScore: 0
 --- !u!4 &2051770693
 Transform:
   m_ObjectHideFlags: 0
@@ -17762,7 +17807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7197080405999068274, guid: 941a561c000e5584da7b9933dba2b0d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: KardManager, Assembly-CSharp
+      value: CardManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7197080405999068274, guid: 941a561c000e5584da7b9933dba2b0d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -18858,3 +18903,4 @@ SceneRoots:
   - {fileID: 725096966}
   - {fileID: 362528179}
   - {fileID: 1367090332}
+  - {fileID: 1900035636}

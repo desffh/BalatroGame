@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 // 선택된 카드들이 저장된 selectCards 리스트를 관리
 
@@ -20,6 +22,9 @@ public class CardData : MonoBehaviour
         if(!selectCards.Contains(card))
         {
             selectCards.Add(card);
+            
+            // 나중에 위치를 바꿔주자 -> CardData에 정렬이 있으면 SRP 위배
+            selectCards = selectCards.OrderBy(x => x.itemdata.id).ToList();
         }
     }
 

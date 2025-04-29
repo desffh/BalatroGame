@@ -90,16 +90,19 @@ public class HoldManager : Singleton<HoldManager>
     // 등록된 이벤트
     public void CalSetting()
     {
-        for (int i = 0; i < pokerManager.saveNum.Count; i++)
+        var result = PokerManager.Instance.GetPokerResult();
+
+        foreach (var n in result.SaveNum)
         {
-            Num.Enqueue(pokerManager.saveNum[i]);
+            Num.Enqueue(n);
         }
 
-        PlusSum = pokerManager.plus;
-        MultiplySum = pokerManager.multiple;
+        PlusSum = result.Plus;
+        MultiplySum = result.Multiple;
 
         StartCoroutine(ExecuteActions());
     }
+
 
     private IEnumerator ExecuteActions()
     {
@@ -120,7 +123,7 @@ public class HoldManager : Singleton<HoldManager>
     public void Setting()
     {
         // 계산 다 하고 리스트 초기화
-        pokerManager.CardIDdata.Clear();
+        pokerManager.ClearSelection();
         pokerManager.saveNum.Clear();
 
         UIupdate();
@@ -134,10 +137,10 @@ public class HoldManager : Singleton<HoldManager>
 
         if(StageEnd() == false)
         {
-            KardManager.Instance.AddCardSpawn();
+            CardManager.Instance.AddCardSpawn();
 
             // 다시 콜라이더 활성화
-            KardManager.Instance.card.OnCollider();
+            CardManager.Instance.card.OnCollider();
             ButtonManager.Instance.ButtonInactive();
 
             // 정렬 버튼 활성화
@@ -196,14 +199,14 @@ public class HoldManager : Singleton<HoldManager>
         pokerManager.DelaySetActive();
 
         // 리스트 초기화
-        pokerManager.CardIDdata.Clear();
+        pokerManager.ClearSelection();
         pokerManager.saveNum.Clear();
 
-        KardManager.Instance.AddCardSpawn();
+        CardManager.Instance.AddCardSpawn();
         UIupdate();
 
         // 다시 콜라이더 활성화
-        KardManager.Instance.card.OnCollider();
+        CardManager.Instance.card.OnCollider();
         ButtonManager.Instance.ButtonInactive();
 
         // 정렬 버튼 활성화
@@ -267,15 +270,15 @@ public class HoldManager : Singleton<HoldManager>
     private bool[] savenumberCheck = new bool[5];
     public GameObject SaveNumber(int saveNumber)
     {
-        for (int i = 0; i < pokerManager.CardIDdata.Count; i++)
+        for (int i = 0; i < pokerManager.cardData.SelectCards.Count; i++)
         {
-            if (savenumberCheck[i] == false && pokerManager.CardIDdata[i].itemdata.id == saveNumber)
+            if (savenumberCheck[i] == false && pokerManager.cardData.SelectCards[i].itemdata.id == saveNumber)
             {
-                game = pokerManager.CardIDdata[i].gameObject;
+                game = pokerManager.cardData.SelectCards[i].gameObject;
 
                 savenumberCheck[i] = true;
 
-                ShowRankText = PokerManager.Instance.CardIDdata[i].GetComponent<ShowRankText>();
+                ShowRankText = PokerManager.Instance.cardData.SelectCards[i].GetComponent<ShowRankText>();
                 ShowRankText.OnSettingRank(saveNumber);
 
                 // 여기서 효과음 재생하고 피치 올리기
@@ -302,7 +305,7 @@ public class HoldManager : Singleton<HoldManager>
     // 족보 룰 점수
     public void PokerCalculate(int plus, int multiple)
     {
-        if (pokerManager.CardIDdata.Count > 0)
+        if (pokerManager.cardData.SelectCards.Count > 0)
         {
             PlusSum += plus;
             
@@ -314,7 +317,7 @@ public class HoldManager : Singleton<HoldManager>
     public void StartDeleteCard()
     {
         // 버리는 동안 카드의 콜라이더 비활성화               
-        KardManager.Instance.card.OffCollider();
+        CardManager.Instance.card.OffCollider();
 
         interactable.OffButton();
 

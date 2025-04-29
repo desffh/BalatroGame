@@ -4,22 +4,23 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-
 using UnityEngine.Pool;
 using TMPro;
 using Unity.VisualScripting;
 
-public class KardManager : Singleton<KardManager>
+
+
+public class CardManager : Singleton<CardManager>
 {
     // 참조
     [SerializeField] ItemDataReader ItemDataReader;
     [SerializeField] Transform deleteSpawn;
     [SerializeField] public Card card;
 
-    // ItemData 타입을 담을 List 선언
+    // ItemData 타입을 담을 List (총 52장)
     [SerializeField] public List<ItemData> itemBuffer;
 
-    // Card 타입을 담을 리스트 (내 카드)
+    // Card 타입을 담을 리스트 (내 카드 : 최대 8장)
     [SerializeField] public List<Card> myCards;
 
     // 사용한 카드들 (풀링 반환용도)
@@ -352,7 +353,7 @@ public class KardManager : Singleton<KardManager>
         ScoreManager.Instance.ResetTotalScore();
 
         // 리스트 초기화
-        PokerManager.Instance.CardIDdata.Clear();
+        PokerManager.Instance.cardData.ClearSelectCard();
         PokerManager.Instance.saveNum.Clear();
 
         // 카드 채우기

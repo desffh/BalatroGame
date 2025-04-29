@@ -12,7 +12,7 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        OnStageChanged += KardManager.Instance.SetupNextStage; // 여기서 이벤트 등록
+        OnStageChanged += CardManager.Instance.SetupNextStage; // 여기서 이벤트 등록
     }
 
     // |-스테이지 플레이 상태 (스테이지1)-----------------------------------------------|

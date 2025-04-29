@@ -8,7 +8,7 @@ public class GoStage : MonoBehaviour
     {
         ButtonManager.DestroySelf();
         HoldManager.DestroySelf();
-        KardManager.DestroySelf();
+        CardManager.DestroySelf();
         TextManager.DestroySelf();
         Round.DestroySelf();
         AnimationManager.DestroySelf();
