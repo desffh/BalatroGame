@@ -23,6 +23,7 @@ public class AnimationManager : Singleton<AnimationManager>
         });
     }
 
+    // 카드 점수 계산 시 텍스트 애니메이션
     public void ShowTextAnime(TextMeshPro scoreText)
     {
         // 원래 폰트 크기 저장
@@ -41,7 +42,7 @@ public class AnimationManager : Singleton<AnimationManager>
         });
     }
 
-    // 핸드 플레이 시 카드 이동
+    // 핸드 플레이 시 카드 이동 애니메이션
     public void PlayCardAnime(GameObject cardPrefabs)
     {
         cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
@@ -56,7 +57,7 @@ public class AnimationManager : Singleton<AnimationManager>
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f); });
     }
 
-    // 카드를 눌렀을 때
+    // 카드를 눌렀을 때 애니메이션
     public void CardAnime(Transform cardTransform)
     {
         cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
@@ -64,7 +65,7 @@ public class AnimationManager : Singleton<AnimationManager>
            cardTransform.transform.position.z), 0.2f);
     }
 
-    // 카드를 눌렀을 때 제자리
+    // 카드를 다시 눌렀을 때 제자리 애니메이션
     public void ReCardAnime(Transform cardTransform)
     {
         cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
@@ -72,6 +73,7 @@ public class AnimationManager : Singleton<AnimationManager>
            cardTransform.transform.position.z), 0.2f);
     }
 
+    // 카드를 다 눌렀을 때 애니메이션 
     public void NoCardAnime(Transform cardTransform)
     {
         cardTransform.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).

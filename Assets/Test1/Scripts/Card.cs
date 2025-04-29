@@ -140,16 +140,17 @@ public class Card : CardComponent
     public void OnMouseDown()
     {
         SoundManager.Instance.PlayCardClick();
-        OnMouse();
+        OnCardClicked();
     }
 
-    public override void OnMouse()
+    public override void OnCardClicked()
     {
         // 리스트가 꽉 찼다면
         if (checkCard && PokerManager.Instance.CardIDdata.Count <= 5)
         {
             // 이 스크립트가 달린 Card를 매개변수로 전달
             PokerManager.Instance.RemoveSuitIDdata(this);
+
 
             AnimationManager.Instance.CardAnime(cardPrefabs);
 
@@ -180,6 +181,12 @@ public class Card : CardComponent
 
     // |--------------------------------------------------------------
 
+    // 배치된 카드 콜라이더 활성화
+    public override void OnCollider()
+    {
+        Collider2D.enabled = true;     
+    }
+    
     // 배치된 카드 콜라이더 비활성화
     public override void OffCollider()
     {
@@ -188,12 +195,6 @@ public class Card : CardComponent
         
     }
 
-    // 배치된 카드 콜라이더 활성화
-    // -> 나중에 본인 카드만 끄도록 바꾸자 
-    public override void OnCollider()
-    {
-        Collider2D.enabled = true;     
-    }
 
     // |-----------------------------
 

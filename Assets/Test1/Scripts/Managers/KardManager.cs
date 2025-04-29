@@ -11,11 +11,10 @@ using Unity.VisualScripting;
 
 public class KardManager : Singleton<KardManager>
 {
-
     // 참조
     [SerializeField] ItemDataReader ItemDataReader;
-    [SerializeField] public Card card;
     [SerializeField] Transform deleteSpawn;
+    [SerializeField] public Card card;
 
     // ItemData 타입을 담을 List 선언
     [SerializeField] public List<ItemData> itemBuffer;
@@ -154,19 +153,11 @@ public class KardManager : Singleton<KardManager>
             itemBuffer[i] = itemBuffer[rand];
             itemBuffer[rand] = temp;
         }
-        
-        //Debug.Log("itemBuffer Count" + itemBuffer.Count);
     }
 
     // 버퍼에서 카드 뽑기
     public ItemData PopItem()
     {
-        //// 다 뽑았으면 다시 버퍼 채우기 
-        //if (itemBuffer.Count == 0)
-        //{
-        //    SetupItemBuffer();
-        //}
-
         ItemData item = itemBuffer[0];
         itemBuffer.RemoveAt(0); // 리스트 메서드 (0번째 요소 제거)
         return item;
@@ -284,7 +275,6 @@ public class KardManager : Singleton<KardManager>
         return results;
     }
 
-
     public void AddCardSpawn(System.Action onComplete = null)
     {
         StartCoroutine(SpawnCardsSequentially(onComplete));
@@ -315,13 +305,6 @@ public class KardManager : Singleton<KardManager>
         TurnOnAllCardColliders();
         onComplete?.Invoke();
     }
-
-
-
-
-
-
-
 
     public void Allignment()
     {
@@ -366,7 +349,7 @@ public class KardManager : Singleton<KardManager>
     {
         yield return CoroutineCache.WaitForSeconds(1.0f);
 
-        ScoreManager.Instance.TotalScore = 0;
+        ScoreManager.Instance.ResetTotalScore();
 
         // 리스트 초기화
         PokerManager.Instance.CardIDdata.Clear();
@@ -386,7 +369,7 @@ public class KardManager : Singleton<KardManager>
         HoldManager.Instance.interactable.OnButton();
 
         // 핸드 & 버리기 카운트 초기화 
-        HandDelete.Instance.Counting();
+        HandDelete.Instance.ResetCounts();
 
         // UI 모두 업데이트
         HoldManager.Instance.UIupdate();

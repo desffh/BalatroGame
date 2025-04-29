@@ -28,10 +28,5 @@ public class PopUpManager : Singleton<PopUpManager>
         yield return null;
     }
 
-    protected override void InitializeReferences()
-    {
-        if (clearPopUp == null)
-            clearPopUp = GameObject.Find("EndCanvas")?.GetComponent<GameObject>();
 
-    }
 }

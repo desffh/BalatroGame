@@ -79,10 +79,10 @@ public class PokerManager : Singleton<PokerManager>
     public void SaveSuitIDdata(Card card)
     {
         CardIDdata.Add(card);
-
+    
         // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
         CardIDdata = CardIDdata.OrderBy(x => x.itemdata.id).ToList();
-
+    
         if (CardIDdata.Count >= 0)
         {
             EvaluatePokerHands(CardIDdata);
@@ -90,22 +90,22 @@ public class PokerManager : Singleton<PokerManager>
             TextManager.Instance.UpdateText(2, multiple);
         
             TextManager.Instance.stringUpdateText(0, pokerName);
-
+    
         }
     }
-
+    
     public void RemoveSuitIDdata(Card card)
     {
         // 리스트에서 제거 
         CardIDdata.Remove(card);
-
+    
         if (CardIDdata.Count > 0)
         {
             EvaluatePokerHands(CardIDdata);
-
+    
             TextManager.Instance.UpdateText(1, plus);
             TextManager.Instance.UpdateText(2, multiple);
-
+    
             TextManager.Instance.stringUpdateText(0, pokerName);
         }
         else
@@ -115,10 +115,10 @@ public class PokerManager : Singleton<PokerManager>
             Debug.Log("모든 카드가 제거되어 saveNum 초기화됨.");
             TextManager.Instance.UpdateText(1);
             TextManager.Instance.UpdateText(2);
-
+    
             TextManager.Instance.stringUpdateText(0);
         }
-
+    
     }
 
     
@@ -167,9 +167,5 @@ public class PokerManager : Singleton<PokerManager>
         }
     }
 
-    protected override void InitializeReferences()
-    {
-        if (deleteCardPoint == null)
-            deleteCardPoint = GameObject.Find("HandCardPoints")?.GetComponent<HandCardPoints>();
-    }
+
 }

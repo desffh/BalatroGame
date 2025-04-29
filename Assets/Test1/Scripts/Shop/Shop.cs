@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
-
+// 상점 관리 - 조커 추가, 타로 카드 추가, 행성 카드 추가, 바우처 추가
 public class Shop : MonoBehaviour
 {
     // 조커 카드 타입 -> 라운드가 증가할수록 높은 조커가 나오도록
@@ -122,7 +122,7 @@ public class Shop : MonoBehaviour
         // 현재 머니에서 차감
         money.MinusMoney(currentTarget.currentData.baseData.cost);
 
-        // UI업데이트
+        // 머니 UI업데이트
         money.MoneyUpdate();
 
         // 데이터 복사

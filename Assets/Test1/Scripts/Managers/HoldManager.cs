@@ -110,7 +110,7 @@ public class HoldManager : Singleton<HoldManager>
         }
 
 
-        if(ScoreManager.Instance.Calculation() == false)
+        if(ScoreManager.Instance.CheckStageClear(Round.Instance.CurrentScores) == false)
         {
             ActionSetting.Invoke();
         }
@@ -220,7 +220,7 @@ public class HoldManager : Singleton<HoldManager>
 
         totalScore = PlusSum * MultiplySum;
 
-        ScoreManager.Instance.TotalScore = totalScore;
+        ScoreManager.Instance.AddScore(totalScore);
 
         Debug.Log(totalScore); // 왜 전체 점수가 0? 
 

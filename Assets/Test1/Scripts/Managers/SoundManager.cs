@@ -59,10 +59,7 @@ public class SoundManager : Singleton<SoundManager>
         bgmSource.volume = bgmDefaultVolume;
     }
 
-    protected override void InitializeReferences()
-    {
-        PlaySceneBGM(SceneManager.GetActiveScene().name);
-    }
+
 
     public void PlaySceneBGM(string sceneName)
     {

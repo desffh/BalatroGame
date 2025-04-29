@@ -52,11 +52,5 @@ public class GameManager : Singleton<GameManager>
         money.MoneyUpdate();
     }
 
-    protected override void InitializeReferences()
-    {
-        if (money == null)
-            money = GameObject.Find("MoneyManager")?.GetComponent<Money>();
 
-        
-    }
 }

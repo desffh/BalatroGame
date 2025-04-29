@@ -13,6 +13,7 @@ public class GameReset : MonoBehaviour
         SoundManager.Instance.ButtonClick();
 
         round.RoundReset();
-        money.ReSetting();
+        money.ReSetTotalMoney();
+        money.MoneyUpdate();
     }
 }

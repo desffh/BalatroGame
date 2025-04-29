@@ -75,11 +75,12 @@ public class JokerCard : CardComponent
     }
 
 
-
-
     public void DisableCard() => gameObject.SetActive(false);
 
-    // |-------------------------------------
+    // 추상 클래스 재정의|-------------------------------------
+
+    // 클릭되었는지 확인하기 위한 bool 변수
+    [SerializeField] bool checkClick = false;
 
     public override void OffCollider()
     {
@@ -91,12 +92,10 @@ public class JokerCard : CardComponent
         jokerImage.raycastTarget = true;
     }
 
-    [SerializeField] bool checkClick = false;
-
     // 마우스 클릭이 발생했을 때
-    public override void OnMouse()
+    public override void OnCardClicked()
     {
-        if (checkClick == false)
+        if (checkClick)
         {
             OnClickCard();
             checkClick = true;
@@ -110,8 +109,6 @@ public class JokerCard : CardComponent
     }
 
     // |-------------------------------
-
-    //public JokerData data; // 조커 카드 정보
 
     public void OnClickCard()
     {

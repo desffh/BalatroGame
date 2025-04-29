@@ -240,13 +240,5 @@ public class Round : Singleton<Round>
         currentScores = 0;
     }
 
-    protected override void InitializeReferences()
-    {
-        if (scoreUiSet == null)
-            scoreUiSet = GameObject.Find("ScoreSet")?.GetComponent<ScoreUISet>();
 
-        if (gameOverText == null)
-            gameOverText = GameObject.Find("GameOverCanvas")?.GetComponent<GameOverText>();
-
-    }
 }

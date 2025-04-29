@@ -4,41 +4,43 @@ using TMPro;
 using UnityEngine;
 
 public class ScoreManager : Singleton<ScoreManager>
-{
-    // 현재 전체 점수
-    [SerializeField] private int totalScore;
+{ 
+    [SerializeField] private int totalScore; // 스테이지 전체 점수
+    [SerializeField] private int maxScore;   // 가장 높은 점수 
 
-    public int TotalScore
+    // 읽기 전용 프로퍼티 
+    public int TotalScore => totalScore;
+    public int MaxScore => maxScore;
+
+    // |------------------------------------------------
+    
+    // 점수 리셋
+    public void ResetTotalScore()
     {
-        get { return totalScore; }
+        totalScore = 0;
+    }
 
-        set { 
-            
-            if(value == 0)
-            {
-                totalScore = 0;
-            }
+    // 점수 추가
+    public void AddScore(int score)
+    {
+        totalScore += score;
 
-            totalScore += value; 
+        if(totalScore > maxScore)
+        {
+            maxScore = totalScore;
         }
     }
 
-
-    public bool Calculation()
-    { 
-        if(TotalScore >= Round.Instance.CurrentScores)
+    // 스테이지 종료 체크 -> 내 점수가 더 크다면 true
+    public bool CheckStageClear(int targetScore)
+    {
+        if (totalScore >= targetScore)
         {
-            Debug.Log("목표 점수 달성");
-
-            // 스테이지 플레이 종료
             GameManager.Instance.PlayOff();
+
             return true;
         }
-        else
-        {
-            Debug.Log("목표 점수 실패 - 더 플레이하세요");
 
-            return false;
-        }
+        return false;
     }
 }
