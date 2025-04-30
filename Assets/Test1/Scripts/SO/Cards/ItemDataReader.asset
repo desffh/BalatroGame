@@ -17,211 +17,263 @@ MonoBehaviour:
   START_ROW_LENGTH: 2
   END_ROW_LENGTH: 53
   DataList:
-  - name: "\uD558\uD2B81"
-    id: 14
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_26
-  - name: "\uD558\uD2B82"
-    id: 2
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_27
-  - name: "\uD558\uD2B83"
-    id: 3
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_28
-  - name: "\uD558\uD2B84"
-    id: 4
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_29
-  - name: "\uD558\uD2B85"
-    id: 5
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_30
-  - name: "\uD558\uD2B86"
-    id: 6
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_31
-  - name: "\uD558\uD2B87"
-    id: 7
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_32
-  - name: "\uD558\uD2B88"
-    id: 8
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_33
-  - name: "\uD558\uD2B89"
-    id: 9
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_34
-  - name: "\uD558\uD2B810"
-    id: 10
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_35
-  - name: "\uD558\uD2B8\uC7AD"
-    id: 11
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_36
-  - name: "\uD558\uD2B8\uD038"
-    id: 12
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_37
-  - name: "\uD558\uD2B8\uD0B9"
-    id: 13
-    suit: "\uD558\uD2B8"
-    front: card_list_2d_38
   - name: "\uC2A4\uD398\uC774\uB4DC1"
     id: 14
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_0
+    inherenceID: 1
   - name: "\uC2A4\uD398\uC774\uB4DC2"
     id: 2
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_1
+    inherenceID: 2
   - name: "\uC2A4\uD398\uC774\uB4DC3"
     id: 3
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_2
+    inherenceID: 3
   - name: "\uC2A4\uD398\uC774\uB4DC4"
     id: 4
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_3
+    inherenceID: 4
   - name: "\uC2A4\uD398\uC774\uB4DC5"
     id: 5
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_4
+    inherenceID: 5
   - name: "\uC2A4\uD398\uC774\uB4DC6"
     id: 6
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_5
+    inherenceID: 6
   - name: "\uC2A4\uD398\uC774\uB4DC7"
     id: 7
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_6
+    inherenceID: 7
   - name: "\uC2A4\uD398\uC774\uB4DC8"
     id: 8
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_7
+    inherenceID: 8
   - name: "\uC2A4\uD398\uC774\uB4DC9"
     id: 9
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_8
+    inherenceID: 9
   - name: "\uC2A4\uD398\uC774\uB4DC10"
     id: 10
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_9
+    inherenceID: 10
   - name: "\uC2A4\uD398\uC774\uB4DC\uC7AD"
     id: 11
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_10
+    inherenceID: 11
   - name: "\uC2A4\uD398\uC774\uB4DC\uD038"
     id: 12
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_11
+    inherenceID: 12
   - name: "\uC2A4\uD398\uC774\uB4DC\uD0B9"
     id: 13
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_12
-  - name: "\uB2E4\uC774\uC5441"
+    inherenceID: 13
+  - name: "\uD558\uD2B81"
     id: 14
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_13
-  - name: "\uB2E4\uC774\uC5442"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_26
+    inherenceID: 14
+  - name: "\uD558\uD2B82"
     id: 2
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_14
-  - name: "\uB2E4\uC774\uC5443"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_27
+    inherenceID: 15
+  - name: "\uD558\uD2B83"
     id: 3
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_15
-  - name: "\uB2E4\uC774\uC5444"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_28
+    inherenceID: 16
+  - name: "\uD558\uD2B84"
     id: 4
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_16
-  - name: "\uB2E4\uC774\uC5445"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_29
+    inherenceID: 17
+  - name: "\uD558\uD2B85"
     id: 5
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_17
-  - name: "\uB2E4\uC774\uC5446"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_30
+    inherenceID: 18
+  - name: "\uD558\uD2B86"
     id: 6
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_18
-  - name: "\uB2E4\uC774\uC5447"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_31
+    inherenceID: 19
+  - name: "\uD558\uD2B87"
     id: 7
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_19
-  - name: "\uB2E4\uC774\uC5448"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_32
+    inherenceID: 20
+  - name: "\uD558\uD2B88"
     id: 8
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_20
-  - name: "\uB2E4\uC774\uC5449"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_33
+    inherenceID: 21
+  - name: "\uD558\uD2B89"
     id: 9
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_21
-  - name: "\uB2E4\uC774\uC54410"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_34
+    inherenceID: 22
+  - name: "\uD558\uD2B810"
     id: 10
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_22
-  - name: "\uB2E4\uC774\uC544\uC7AD"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_35
+    inherenceID: 23
+  - name: "\uD558\uD2B8\uC7AD"
     id: 11
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_23
-  - name: "\uB2E4\uC774\uC544\uD038"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_36
+    inherenceID: 24
+  - name: "\uD558\uD2B8\uD038"
     id: 12
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_24
-  - name: "\uB2E4\uC774\uC544\uD0B9"
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_37
+    inherenceID: 25
+  - name: "\uD558\uD2B8\uD0B9"
     id: 13
-    suit: "\uB2E4\uC774\uC544"
-    front: card_list_2d_25
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_38
+    inherenceID: 26
   - name: "\uD074\uB85C\uBC841"
     id: 14
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_39
+    inherenceID: 27
   - name: "\uD074\uB85C\uBC842"
     id: 2
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_40
+    inherenceID: 28
   - name: "\uD074\uB85C\uBC843"
     id: 3
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_41
+    inherenceID: 29
   - name: "\uD074\uB85C\uBC844"
     id: 4
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_42
+    inherenceID: 30
   - name: "\uD074\uB85C\uBC845"
     id: 5
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_43
+    inherenceID: 31
   - name: "\uD074\uB85C\uBC846"
     id: 6
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_44
+    inherenceID: 32
   - name: "\uD074\uB85C\uBC847"
     id: 7
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_45
+    inherenceID: 33
   - name: "\uD074\uB85C\uBC848"
     id: 8
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_46
+    inherenceID: 34
   - name: "\uD074\uB85C\uBC849"
     id: 9
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_47
+    inherenceID: 35
   - name: "\uD074\uB85C\uBC8410"
     id: 10
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_48
+    inherenceID: 36
   - name: "\uD074\uB85C\uBC84\uC7AD"
     id: 11
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_49
+    inherenceID: 37
   - name: "\uD074\uB85C\uBC84\uD038"
     id: 12
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_50
+    inherenceID: 38
   - name: "\uD074\uB85C\uBC84\uD0B9"
     id: 13
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_51
+    inherenceID: 39
+  - name: "\uB2E4\uC774\uC5441"
+    id: 14
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_13
+    inherenceID: 40
+  - name: "\uB2E4\uC774\uC5442"
+    id: 2
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_14
+    inherenceID: 41
+  - name: "\uB2E4\uC774\uC5443"
+    id: 3
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_15
+    inherenceID: 42
+  - name: "\uB2E4\uC774\uC5444"
+    id: 4
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_16
+    inherenceID: 43
+  - name: "\uB2E4\uC774\uC5445"
+    id: 5
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_17
+    inherenceID: 44
+  - name: "\uB2E4\uC774\uC5446"
+    id: 6
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_18
+    inherenceID: 45
+  - name: "\uB2E4\uC774\uC5447"
+    id: 7
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_19
+    inherenceID: 46
+  - name: "\uB2E4\uC774\uC5448"
+    id: 8
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_20
+    inherenceID: 47
+  - name: "\uB2E4\uC774\uC5449"
+    id: 9
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_21
+    inherenceID: 48
+  - name: "\uB2E4\uC774\uC54410"
+    id: 10
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_22
+    inherenceID: 49
+  - name: "\uB2E4\uC774\uC544\uC7AD"
+    id: 11
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_23
+    inherenceID: 50
+  - name: "\uB2E4\uC774\uC544\uD038"
+    id: 12
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_24
+    inherenceID: 51
+  - name: "\uB2E4\uC774\uC544\uD0B9"
+    id: 13
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_25
+    inherenceID: 52

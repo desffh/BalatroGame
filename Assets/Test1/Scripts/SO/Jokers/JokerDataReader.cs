@@ -15,13 +15,15 @@ public struct JokerData
     public int cost;
     public int multiple;
     public string require;
+    public string type;
 
-    public JokerData(string name, int cost, int multiple, string require)
+    public JokerData(string name, int cost, int multiple, string require, string type)
     {
         this.name = name;
         this.cost = cost;
         this.multiple = multiple;
         this.require = require;
+        this.type = type;
     }
 }
 
@@ -40,6 +42,7 @@ public class JokerDataReader : JokerReaderBase
         int cost = 0;
         int muliple = 0;
         string require = string.Empty;
+        string type = string.Empty;
 
 
         for (int i = 0; i < list.Count; i++)
@@ -76,10 +79,15 @@ public class JokerDataReader : JokerReaderBase
                         require = list[i].value;
                         break;
                     }
+                case "Type":
+                    {
+                        type = list[i].value;
+                        break;
+                    }
             }
         }
 
-        DataList.Add(new JokerData(name, cost, muliple, require));
+        DataList.Add(new JokerData(name, cost, muliple, require, type));
     }
 }
 

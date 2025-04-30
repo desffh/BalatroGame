@@ -52,7 +52,7 @@ public class JokerCard : CardComponent
     {
         // 조커 정보 셋팅
         currentData = new JokerTotalData(
-    new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require),
+    new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require, joker.baseData.type),
     joker.image);
 
         data = currentData.baseData;

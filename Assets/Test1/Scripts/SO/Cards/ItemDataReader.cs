@@ -15,12 +15,15 @@ public struct ItemData
     public int id;
     public string suit;
     public string front;
-    public ItemData(string name, int id, string suit, string front)
+    public int inherenceID;
+
+    public ItemData(string name, int id, string suit, string front, int inherence)
     {
         this.name = name;
         this.id = id;
         this.suit = suit;
         this.front = front;
+        this.inherenceID = inherence;
     }
 }
 
@@ -39,7 +42,7 @@ public class ItemDataReader : DataReaderBase
         string name = string.Empty;
         string suit = string.Empty;
         string front = string.Empty;
-
+        int inherenceID = 0;
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -70,10 +73,20 @@ public class ItemDataReader : DataReaderBase
                         front = list[i].value;
                         break;
                     }
+                case "inherenceID":
+                    {
+
+                        if (!int.TryParse(list[i].value, out inherenceID))
+                        {
+                            Debug.LogError($"잘못된 id 값: {list[i].value}");
+                        }
+
+                        break;
+                    }
             }
         }
 
-        DataList.Add(new ItemData(name, id, suit, front));
+        DataList.Add(new ItemData(name, id, suit, front, inherenceID));
     }
 }
 
