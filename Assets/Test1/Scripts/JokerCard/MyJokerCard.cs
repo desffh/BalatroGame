@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+ 
 public class MyJokerCard : MonoBehaviour
 {
     [SerializeField] public List<JokerCard> myCards;
@@ -27,10 +27,13 @@ public class MyJokerCard : MonoBehaviour
     }
 
     [SerializeField] Button sellButton;
-    
-    // 판매하기 버튼을 누르면 호출 될 함수
-    public void Sell()
-    {
 
+    // 판매하기 버튼을 누르면 호출 될 함수
+    public void RemoveJokerCard(JokerCard card)
+    {
+        if (Cards.Contains(card))
+        {
+            Cards.Remove(card);
+        }
     }
 }

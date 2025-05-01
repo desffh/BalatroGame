@@ -220,6 +220,7 @@ public class Round : Singleton<Round>
         gameOverText.EntyUpdate(Enty);
         gameOverText.RoundUpdate(Rounds);
         gameOverText.BlindUpdate(BlindName, blindimage);
+
     }
 
     // 라운드 리셋 |----------------------------------------------

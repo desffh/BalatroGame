@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+// 구매 불가 팝업 활성화 / 비활성화
+public class ShopJokerPanel : MonoBehaviour
+{
+    [SerializeField] GameObject Nobalance; // 잔액부족 팝업
+
+    [SerializeField] GameObject OverJokerCount; // 조커 갯수 최대 팝업 (5개)
+
+    [SerializeField] GameObject SellJokerPopup; // 조커 판매 시 팝업 
+    private void Start()
+    {
+        Nobalance.SetActive(false);
+
+        OverJokerCount.SetActive(false);
+
+        SellJokerPopup.SetActive(false);
+    }
+
+    // |-------------------------
+
+    // 구매 금액이 모자랄 때
+    public void OnNoBalance()
+    {
+        Nobalance.SetActive(true);
+    }
+
+    public void DeleteNoBalance()
+    {
+        Nobalance.SetActive(false);
+    }
+
+    // |-------------------------
+
+    // 이미 보유중인 조커가 5개일 때
+    public void OnOverJokerCount()
+    {
+        OverJokerCount.SetActive(true);
+    }
+
+    public void DeleteOverJokerCount()
+    {
+        OverJokerCount.SetActive(false);
+    }
+
+    // |-------------------------
+
+    // 조커 판매하기 버튼을 눌렀을 때
+    public void OnSellJokerPopup()
+    {
+        SellJokerPopup.SetActive(true);
+    }
+
+    public void DeleteSellJokerPopup()
+    {
+        SellJokerPopup.SetActive(false);
+    }
+
+    
+}

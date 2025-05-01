@@ -14,7 +14,7 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] Canvas stagecanvas; // 엔티3개 나오는 캔버스
 
-    [SerializeField] Canvas Entycanvas; // 결과창 캔버스
+    [SerializeField] GameObject Entycanvas; // 결과창 캔버스
 
     [SerializeField] GameObject ShopPanel; // 상점 캔버스
 

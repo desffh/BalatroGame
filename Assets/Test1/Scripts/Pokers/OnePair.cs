@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class OnePair : IPokerHandle
 {
-    public string pokerName => "원 페어";
+    public string pokerName => "페어";
     public int plus => 10;
     public int multiple => 2;
     public void PokerHandle(List<Card> cards, List<int> saveNum)

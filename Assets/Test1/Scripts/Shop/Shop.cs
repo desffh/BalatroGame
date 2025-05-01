@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
@@ -31,6 +32,8 @@ public class Shop : MonoBehaviour
     // |---------------------------------------------------------
 
     [SerializeField] Money money;
+
+    [SerializeField] ShopJokerPanel jokerPanel;
 
     private void Awake()
     {
@@ -70,6 +73,21 @@ public class Shop : MonoBehaviour
 
     [SerializeField] private JokerCard currentTarget;
 
+    public JokerCard CurrentTarget => currentTarget;
+
+    // 클릭된 카드인지 판별 
+    public void SetTarget(JokerCard card)
+    {
+        currentTarget = card;
+    }
+
+    public void ClearTarget()
+    {
+        currentTarget = null;
+    }
+
+    // | --------------------------------------------------
+
     [SerializeField] GameObject jokerPacksTransform;
 
     public void ShowBuyButton(JokerCard target)
@@ -85,7 +103,6 @@ public class Shop : MonoBehaviour
 
     public void OffBuyButton()
     {
-       
         buyButton.gameObject.SetActive(false);
         // 위치는 오프셋 정하기
     }
@@ -101,21 +118,29 @@ public class Shop : MonoBehaviour
         buttonRect.position = target.transform.position + new Vector3(165, 50, 0); // 원하는 오프셋
 
         sellButton.gameObject.SetActive(true);
+        fullScreenBlocker.SetActive(true); // 클릭 차단기 켜기
     }
     public void OffSellButton()
     {
         sellButton.gameObject.SetActive(false);
+        fullScreenBlocker.SetActive(false); // 클릭 차단기 끄기
     }
 
 
+    // 구매하기
     public void Buy()
     {
         if (currentTarget == null) return;
 
         // 조커가 5개 이상 & 현재 조커 금액 미만 이면 구매 불가능 
-        if(myJokerCards.Cards.Count >= 5 || money.TotalMoney < currentTarget.currentData.baseData.cost)
+        if(myJokerCards.Cards.Count >= 5)
         {
-            Debug.Log("더 이상 구매할 수 없음");
+            jokerPanel.OnOverJokerCount();
+            return;
+        }
+        else if(money.TotalMoney < currentTarget.currentData.baseData.cost)
+        {
+            jokerPanel.OnNoBalance();
             return;
         }
         
@@ -148,6 +173,28 @@ public class Shop : MonoBehaviour
         currentTarget = null;
     }
 
+    // 판매하기 
+    public void Sell()
+    {
+        if (currentTarget == null) return;
+
+        Debug.Log("판매되나요?");
+        // 1. 리스트에서 제거
+        myJokerCards.RemoveJokerCard(currentTarget);
+
+        // 2. 카드 오브젝트 비활성화
+        currentTarget.DisableCard();
+
+        // 3. 돈 환급 (예: 원가의 50% 회수)
+        int refundAmount = currentTarget.currentData.baseData.cost / 2;
+        money.AddMoney(refundAmount);
+        money.MoneyUpdate();
+
+        // 4. 상태 초기화
+        currentTarget = null;
+        sellButton.gameObject.SetActive(false);
+    }
+
     private void OnEnable()
     {
         ShopPanel.OnShopOpened += OpenShop;
@@ -157,4 +204,20 @@ public class Shop : MonoBehaviour
     {
         ShopPanel.OnShopOpened -= OpenShop;
     }
+
+    [SerializeField] private GameObject fullScreenBlocker;
+
+    public void OnSellJokerPopups()
+    {
+        jokerPanel.OnSellJokerPopup();
+        fullScreenBlocker.SetActive(false);
+    }
+
+    public void OnBlockerClicked()
+    {
+        OffSellButton();       // 판매 버튼 비활성화
+        currentTarget = null;  // 선택 카드 초기화
+    }
+
+
 }

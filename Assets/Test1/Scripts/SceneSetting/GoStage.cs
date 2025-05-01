@@ -14,7 +14,6 @@ public class GoStage : MonoBehaviour
         AnimationManager.DestroySelf();
         GameManager.DestroySelf();
         PokerManager.DestroySelf();
-        PopUpManager.DestroySelf();
         ScoreManager.DestroySelf();
         HandDelete.DestroySelf();
 

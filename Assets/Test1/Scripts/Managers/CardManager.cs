@@ -449,7 +449,7 @@ public class CardManager : Singleton<CardManager>
             ViewCard matchedViewer = viewerCards.FirstOrDefault(v => v.cardID == usedID);
             if (matchedViewer != null)
             {
-                Debug.Log("Ä«µå ¼û±â±â");
+                //Debug.Log("Ä«µå ¼û±â±â");
                 matchedViewer.Hide();
             }
         }

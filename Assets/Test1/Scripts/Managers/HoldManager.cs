@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,7 +45,7 @@ public class HoldManager : Singleton<HoldManager>
         ActionSetting += Setting;
     }
 
-    private void Start()
+    private void Start()        
     {
         waitForSeconds = new WaitForSeconds(1.0f);
 
@@ -64,6 +65,7 @@ public class HoldManager : Singleton<HoldManager>
         // 큐를 초기화하거나 리셋하고, 필요한 작업을 다시 추가
         //actionQueue.Enqueue(() => Setting());
         actionQueue.Enqueue(() => PlusCalculation()); // 각 값을 더하기
+        actionQueue.Enqueue(() => ApplyJokerEffectsStep());
         actionQueue.Enqueue(() => DelayedTotalScoreCal()); // 전체 스코어에 갱신
         actionQueue.Enqueue(() => DelayedMove()); // 하나씩 삭제 존으로 이동
         actionQueue.Enqueue(() => DelayActive()); // 비활성화
@@ -75,6 +77,8 @@ public class HoldManager : Singleton<HoldManager>
         {
             Round.Instance.GameOverText();
             gameOverPopUp.GameOver();
+            ScoreManager.Instance.BestHand();
+
             return true;
         }
         return false;
@@ -170,16 +174,50 @@ public class HoldManager : Singleton<HoldManager>
             Calculate();
         }
     }
-    
+
     IEnumerator DelayedTotalScoreCal()
     {
-        if(Num.Count == 0)
+        if (Num.Count == 0)
         {
-            yield return waitForSeconds;  // 대기
-            TotalScoreCal();  // TotalScoreCal 실행
+            yield return new WaitForSeconds(0.5f);
+
+            TotalScoreCal(); // 조커 효과 반영된 MultiplySum/PlusSum 사용
         }
-        
     }
+
+
+    private IEnumerator ApplyJokerEffectsStep()
+    {
+
+        List<Card> selectedCards = pokerManager.cardData.SelectCards.ToList();
+        string currentHandType = PokerManager.Instance.pokerName;
+
+        var myJokerCard = FindAnyObjectByType<MyJokerCard>();
+
+        if (myJokerCard == null)
+        {
+            Debug.LogWarning("[조커 효과] MyJokerCard를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        foreach (var joker in myJokerCard.Cards)
+        {
+            Debug.Log("실행되었어요");
+            joker.ActivateEffect(selectedCards, currentHandType, this);
+        }
+
+
+        Debug.Log("[조커 발동] 리팩션 큐 단계에서 조커 효과 적용 완료");
+
+        if(myJokerCard.Cards.Count > 0)
+        {
+            TextManager.Instance.UpdateText(2, MultiplySum);
+        }
+
+        yield return new WaitForSeconds(1f); // 연출 효과 대기
+    }
+
+
     IEnumerator DelayedMove()
     {
         yield return waitForSeconds;

@@ -88,3 +88,12 @@ public interface IGameState
     void Enter();
     void Exit();
 }
+
+// |------------------------------------------------------
+
+public interface IJokerEffect
+{
+    void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory);
+}
+
+

@@ -2,13 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.U2D;
 using UnityEngine.UI;
-
 
 public class JokerCard : CardComponent
 {
-    // 이 조커에 할당된 전체 데이터 정보
     [SerializeField] public JokerTotalData currentData;
 
     // UI 요소
@@ -17,43 +14,30 @@ public class JokerCard : CardComponent
     [SerializeField] private Text costText;
     [SerializeField] private Text abilityText;
 
-    // |--------------------------------
-
     private JokerData data;
     private Sprite sprite;
+    private IJokerEffect effect;
 
-    public int unlockRound; // 이 카드가 등장 가능한 최소 라운드
+    public int unlockRound; // 등장 가능한 라운드
 
-    // |--------------------------------
     [SerializeField] private MonoBehaviour popupComponent;
-
     private IPopupText jokerPopup;
 
+    [SerializeField] private bool checkClick = false;
 
     private void Awake()
     {
         jokerImage = GetComponent<Image>();
-
         jokerPopup = popupComponent as IPopupText;
-
     }
 
-    private void Start()
-    {
-
-    }
-
-    // |-------------------------------------
-
-    public JokerData GetData() => data;
-    public Sprite GetSprite() => sprite;
-
+    // 외부에서 조커 데이터 설정
     public void SetJokerData(JokerTotalData joker)
     {
-        // 조커 정보 셋팅
         currentData = new JokerTotalData(
-    new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require, joker.baseData.type),
-    joker.image);
+            new JokerData(joker.baseData.name, joker.baseData.cost, joker.baseData.multiple, joker.baseData.require, joker.baseData.type),
+            joker.image
+        );
 
         data = currentData.baseData;
         sprite = currentData.image;
@@ -61,106 +45,111 @@ public class JokerCard : CardComponent
         jokerImage.sprite = sprite;
 
         PopupSetting();
+        SetupEffect(); // 효과 객체 생성
     }
 
+    // 조커 효과 세팅 (JokerEffectFactory 통해 생성)
+    private void SetupEffect()
+    {
+        effect = JokerEffectFactory.Create(data);
+    }
+
+    // 효과 발동 - HoldManager에서 호출
+    public void ActivateEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager)
+    {
+        effect?.ApplyEffect(selectedCards, currentHandType, holdManager, data.type); // 조커 category도 함께 전달
+    }
+
+    // 데이터 제공용
+    public JokerData GetData() => data;
+    public Sprite GetSprite() => sprite;
+
+    // 팝업 텍스트 설정
     public void PopupSetting()
     {
-        if (jokerPopup != null)
-        {
-        jokerPopup.Initialize(currentData.baseData.name,
-        currentData.baseData.require,
-        currentData.baseData.multiple,
-        currentData.baseData.cost);
-        }
+        jokerPopup?.Initialize(
+            data.name,
+            data.require,
+            data.multiple,
+            data.cost
+        );
     }
-
 
     public void DisableCard() => gameObject.SetActive(false);
 
-    // 추상 클래스 재정의|-------------------------------------
+    public override void OffCollider() => jokerImage.raycastTarget = false;
+    public override void OnCollider() => jokerImage.raycastTarget = true;
 
-    // 클릭되었는지 확인하기 위한 bool 변수
-    [SerializeField] bool checkClick = false;
-
-    public override void OffCollider()
+    // UI에서 클릭될 때 호출
+    public void OnMouse()
     {
-        jokerImage.raycastTarget = false;
+        OnCardClicked();
     }
 
-    public override void OnCollider()
-    {
-        jokerImage.raycastTarget = true;
-    }
-
-    // 마우스 클릭이 발생했을 때
     public override void OnCardClicked()
     {
-        if (checkClick)
-        {
-            OnClickCard();
-            checkClick = true;
-        }
+        Shop shop = FindAnyObjectByType<Shop>();
+        if (shop == null) return;
 
-        else if (checkClick == true)
+        if (shop.CurrentTarget == this)
         {
             OffClickCard();
-            checkClick = false;
+            shop.ClearTarget();
+        }
+        else
+        {
+            if (shop.CurrentTarget != null)
+                shop.CurrentTarget.OffClickCard();
+
+            OnClickCard();
+            shop.SetTarget(this);
         }
     }
 
-    // |-------------------------------
-
+    // 상점/내 조커 영역에서 클릭 시 처리
     public void OnClickCard()
     {
+        var shop = FindAnyObjectByType<Shop>();
+        if (shop == null) return;
+
         if (IsInShop())
         {
-            FindAnyObjectByType<Shop>().ShowBuyButton(this);
+            shop.ShowBuyButton(this);
         }
         else if (IsInMyJokerPanel())
         {
-            FindAnyObjectByType<Shop>()?.ONSellButton(this);
-            Debug.Log("판매하기");
+            shop.ONSellButton(this);
+            Debug.Log("판매하기 버튼 활성화");
         }
     }
 
     public void OffClickCard()
     {
+        var shop = FindAnyObjectByType<Shop>();
+        if (shop == null) return;
+
         if (IsInShop())
         {
-            FindAnyObjectByType<Shop>().OffBuyButton();
+            shop.OffBuyButton();
         }
         else if (IsInMyJokerPanel())
         {
-            FindAnyObjectByType<Shop>().OffSellButton();
+            shop.OffSellButton();
             Debug.Log("판매하기 종료");
-
         }
     }
 
+    // 상점 영역 확인
     private bool IsInShop()
     {
         GameObject obj = GameObject.Find("ShopCanvas");
-        if (obj == null)
-        {
-            Debug.LogError("'JokerPanel' 오브젝트를 찾을 수 없습니다!");
-            return false;
-        }
-
-        return transform.IsChildOf(obj.transform);
+        return obj != null && transform.IsChildOf(obj.transform);
     }
 
+    // 내 조커 영역 확인
     private bool IsInMyJokerPanel()
     {
         GameObject parent = GameObject.Find("JokersPanel");
-        if (parent == null)
-        {
-            Debug.LogError("Joker' 오브젝트를 찾을 수 없습니다.");
-            return false;
-        }
-
-        return transform.IsChildOf(parent.transform);
+        return parent != null && transform.IsChildOf(parent.transform);
     }
-
-
-
 }

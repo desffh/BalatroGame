@@ -8,6 +8,8 @@ public class ScoreManager : Singleton<ScoreManager>
     [SerializeField] private int totalScore; // 스테이지 전체 점수
     [SerializeField] private int maxScore;   // 가장 높은 점수 
 
+    [SerializeField] GameOverText bestHand; // 베스트 핸드 갱신을 위한 참조
+
     // 읽기 전용 프로퍼티 
     public int TotalScore => totalScore;
     public int MaxScore => maxScore;
@@ -20,14 +22,20 @@ public class ScoreManager : Singleton<ScoreManager>
         totalScore = 0;
     }
 
+    public void ResetMaxScore()
+    {
+        maxScore = 0;
+    }
+
     // 점수 추가
     public void AddScore(int score)
     {
         totalScore += score;
 
-        if(totalScore > maxScore)
+        // 방금 들어온 계산이 더 높을 경우 갱신
+        if(score > maxScore)
         {
-            maxScore = totalScore;
+            maxScore = score;
         }
     }
 
@@ -42,5 +50,11 @@ public class ScoreManager : Singleton<ScoreManager>
         }
 
         return false;
+    }
+    
+    // 게임 오버 시 호출
+    public void BestHand()
+    {
+        bestHand.BestHandUpdate(MaxScore);
     }
 }

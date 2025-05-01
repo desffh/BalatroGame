@@ -14,8 +14,7 @@ public class ButtonManager : Singleton<ButtonManager>
 
     [SerializeField] HandCardPoints HandCardPoints;
 
-    [SerializeField] GameObject PopUpCanvas;
-    [SerializeField] GameObject EndPanel;
+
 
     
 
@@ -26,8 +25,6 @@ public class ButtonManager : Singleton<ButtonManager>
     {
         Handbutton.interactable = false;
         Treshbutton.interactable = false;
-
-        PopUpCanvas.SetActive(false);
     }
 
     private void Update()
@@ -177,19 +174,6 @@ public class ButtonManager : Singleton<ButtonManager>
         isButtonActive = true;
     }
 
-
-    public void RunOnClick()
-    {
-        SoundManager.Instance.ButtonClick();
-        PopUpCanvas.SetActive(true);
-        Time.timeScale = 0.0f;
-    }
-
-    public void RunDeleteClick()
-    {
-        PopUpCanvas.SetActive(false);
-        Time.timeScale = 1.0f;
-    }
 
     // |-----------------------------------------
 

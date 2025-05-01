@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameReset : MonoBehaviour
 {
+    [SerializeField] JokerManager jokerManager;
+
     [SerializeField] Round round;
 
     [SerializeField] Money money;
@@ -15,5 +17,7 @@ public class GameReset : MonoBehaviour
         round.RoundReset();
         money.ReSetTotalMoney();
         money.MoneyUpdate();
+        jokerManager.SetupJokerBuffer();
+        ScoreManager.Instance.ResetMaxScore();
     }
 }
