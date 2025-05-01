@@ -80,6 +80,6 @@ public class JokerManager : MonoBehaviour
             jokerBuffer.Add(totalData);
         }
 
-        Debug.Log("jokerBuffer 생성 완료! 총 개수: " + jokerBuffer.Count);
+        //Debug.Log("jokerBuffer 생성 완료! 총 개수: " + jokerBuffer.Count);
     }
 }

@@ -20,6 +20,8 @@ public class CardManager : Singleton<CardManager>
     // ItemData 타입을 담을 List (총 52장)
     [SerializeField] public List<ItemData> itemBuffer;
 
+    [SerializeField] private List<ViewCard> viewerCards; // 에디터에 미리 배치된 52장
+
     // Card 타입을 담을 리스트 (내 카드 : 최대 8장)
     [SerializeField] public List<Card> myCards;
 
@@ -30,7 +32,7 @@ public class CardManager : Singleton<CardManager>
     // |----------------------------------------
 
     // 카드 생성위치
-    [SerializeField] public Transform cardSpawnPoint; 
+    [SerializeField] public Transform cardSpawnPoint;
 
     // 카드 정렬 시작, 끝 위치
     [SerializeField] Transform myCardLeft;
@@ -38,7 +40,7 @@ public class CardManager : Singleton<CardManager>
 
     // 에디터에서 카드 프리팹 연결 (Instantiate)
     [SerializeField] GameObject cardPrefabs;
-    
+
     // 부모 게임 오브젝트 할당 (배치될 위치)
     [SerializeField] GameObject ParentCardPrefab;
 
@@ -50,9 +52,14 @@ public class CardManager : Singleton<CardManager>
     {
         base.Awake();
 
-        pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize:52);  
+        pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize: 52);
     }
 
+    private void Start()
+    {
+        SetupViewerCards();
+        ReactivateAllViewerCards(); // 처음엔 다 보이게
+    }
 
     // 사용한 카드들
     public void OnCardUsed(Card card)
@@ -61,6 +68,7 @@ public class CardManager : Singleton<CardManager>
         {
             usedCards.Add(card);
         }
+        SyncViewerCards(); // 여기서 뷰 카드 비활성화 처리
     }
 
     // 사용한 카드들의 위치&회전 변경 (cardSpawnPoint로 이동) 
@@ -86,7 +94,7 @@ public class CardManager : Singleton<CardManager>
     // 셔플 후 새로운 카드로 배치되면 팝업의 텍스트도 초기화 
     public void CheckTexts()
     {
-        for(int i = 0;i < myCards.Count;i++)
+        for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].GetComponent<Card>().PopupText();
         }
@@ -169,7 +177,7 @@ public class CardManager : Singleton<CardManager>
     // 8장의 배치될 카드 추가 
     void AddCard()
     {
-        if(myCards.Count < 8)
+        if (myCards.Count < 8)
         {
             //var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
 
@@ -177,7 +185,7 @@ public class CardManager : Singleton<CardManager>
 
             // 부모의 아래에 생성 (하이라키창 계층구조)
             cardObject.transform.SetParent(ParentCardPrefab.transform);
-        
+
             // 동적 생성된카드 오브젝트
             var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
             card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
@@ -379,7 +387,12 @@ public class CardManager : Singleton<CardManager>
         HoldManager.Instance.CheckReset();
 
         HoldManager.Instance.RefillActionQueue();
-    }    
+
+
+        // 뷰 카드 초기화
+        ReactivateAllViewerCards();
+        SetupViewerCards();           // 뷰 카드 정보 설정
+    }
 
 
     // 배치된 카드 & 계산중인 카드 콜라이더 비활성화
@@ -406,7 +419,7 @@ public class CardManager : Singleton<CardManager>
         TransCard();
 
         CheckCards();
-         
+
         // 중복 제거한 다음 반환
         var distinctUsedCards = usedCards.Distinct().ToList();
 
@@ -417,6 +430,51 @@ public class CardManager : Singleton<CardManager>
 
         usedCards.Clear();
         myCards.Clear();
+    }
+
+     //뷰 카드 함수
+    public void SyncViewerCards()
+    {
+        // 먼저 모두 보이게 설정
+        foreach (ViewCard viewer in viewerCards)
+        {
+            viewer.GetComponent<ViewCard>().Show();
+        }
+    
+        // 사용된 카드와 ID가 같은 뷰어 카드만 숨김
+        foreach (Card usedCard in usedCards)
+        {
+            int usedID = usedCard.itemdata.inherenceID;
+    
+            ViewCard matchedViewer = viewerCards.FirstOrDefault(v => v.cardID == usedID);
+            if (matchedViewer != null)
+            {
+                Debug.Log("카드 숨기기");
+                matchedViewer.Hide();
+            }
+        }
+    }
+
+
+    public void ReactivateAllViewerCards()
+    {
+        foreach (ViewCard viewer in viewerCards)
+        {
+            viewer.GetComponent<ViewCard>().Show();
+        }
+    }
+
+
+    public void SetupViewerCards()
+    {
+        Debug.Log("[CardManager] SetupViewerCards() 호출됨");
+
+        for (int i = 0; i < viewerCards.Count; i++)
+        {
+
+            ViewCard viewerCard = viewerCards[i];
+            viewerCard.GetComponent<ViewCard>().Setup(ItemDataReader.DataList[i]);
+        }
     }
 
 }

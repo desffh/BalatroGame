@@ -21,7 +21,7 @@ public class Card : CardComponent
     // |------------------------------
 
     private Transform cardPrefabs;
-     
+
     [SerializeField] SpriteRenderer card; // 앞면
     [SerializeField] SpriteRenderer cardBack; // 뒷면은 통일
 
@@ -32,22 +32,29 @@ public class Card : CardComponent
     [SerializeField] SpriteRenderer spriteCards2;
 
     [SerializeField] BoxCollider2D Collider2D;
-    
-    public string spriteSheetName;
+
+    //public string spriteSheetName;
     public string spriteNameToLoad;
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
 
     // 모든 텍스쳐를 다 넣어둘 배열
-    Sprite[] sprites;
+    //[SerializeField] Sprite[] sprites;
+
+    //[SerializeField] string spriteSheetName;
 
     // SetUp 함수로 뽑은 카드의 구조체 정보를 받아와서 저장
     public ItemData itemdata;
-    
+
+    public int ID => itemdata.id; // 고유 번호로 쓰기 쉽게 속성 제공
+
     // 카드가 눌렸는지 확인
     [SerializeField] public bool checkCard = false;
 
     // |-----------------------------------------------
+
+
+
 
     [SerializeField] CardPopup cardPopup;
 
@@ -85,30 +92,33 @@ public class Card : CardComponent
     }
     public void Setup(ItemData item)
     {
-        spriteCards = transform.GetChild(0).GetComponent<SpriteRenderer>();
-
         this.itemdata = item;
-        // 카드 스프라이트 이름 받아옴
+
+        // 스프라이트 이름 가져오기
         string spriteName = item.front;
 
-        // 모든 스프라이트 배열에 다 넣기
-        sprites = Resources.LoadAll<Sprite>(spriteSheetName);
+        // 카드 앞면을 렌더링할 SpriteRenderer
+        spriteCards = transform.GetChild(0).GetComponent<SpriteRenderer>();
 
-        if (sprites.Length > 0)
+        // CardSprites에서 스프라이트 꺼내오기
+        Sprite selectedSprite = CardSprites.Instance.Get(spriteName);
+
+        if (selectedSprite != null)
         {
-            Sprite selctedSprite = sprites.FirstOrDefault(s => s.name == spriteName);
-
-            if (selctedSprite != null)
-            {
-                spriteCards.sprite = selctedSprite;  // 선택한 스프라이트를 카드에 적용
-            }
+            spriteCards.sprite = selectedSprite;
+        }
+        else
+        {
+            Debug.LogWarning($"[Card] 스프라이트 '{spriteName}'을(를) 찾을 수 없습니다.");
         }
 
-        if(cardback != null)
+        // 카드 뒷면 설정 (옵션)
+        if (cardback != null)
         {
             spriteCards2 = transform.GetChild(1).GetComponent<SpriteRenderer>();
             cardBack.sprite = cardback;
         }
+
     }
 
     // 카드 정렬 애니메이션
@@ -157,10 +167,10 @@ public class Card : CardComponent
             checkCard = false;
         }
         // 리스트가 덜 찼다면
-        else if(PokerManager.Instance.cardData.SelectCards.Count < 5)
+        else if (PokerManager.Instance.cardData.SelectCards.Count < 5)
         {
             //PokerManager.Instance.SaveSuitIDdata(this);
-            
+
             PokerManager.Instance.SelectCard(this);
 
             AnimationManager.Instance.ReCardAnime(cardPrefabs);
@@ -170,7 +180,7 @@ public class Card : CardComponent
         else
         {
             AnimationManager.Instance.NoCardAnime(cardPrefabs);
-        }           
+        }
     }
 
     // |--------------------------------------------------------------
@@ -178,15 +188,15 @@ public class Card : CardComponent
     // 배치된 카드 콜라이더 활성화
     public override void OnCollider()
     {
-        Collider2D.enabled = true;     
+        Collider2D.enabled = true;
     }
-    
+
     // 배치된 카드 콜라이더 비활성화
     public override void OffCollider()
     {
 
         Collider2D.enabled = false;
-        
+
     }
 
 
