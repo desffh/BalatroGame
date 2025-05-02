@@ -93,7 +93,7 @@ public interface IGameState
 
 public interface IJokerEffect
 {
-    void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory);
+    void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker);
 }
 
 

@@ -22,7 +22,7 @@ public class CardSprites : Singleton<CardSprites>
 
         Sprite[] sprites = Resources.LoadAll<Sprite>(fullPath);
 
-        Debug.Log($"[CardSprites] 총 {sprites.Length}개 스프라이트 로드 성공");
+        //Debug.Log($"[CardSprites] 총 {sprites.Length}개 스프라이트 로드 성공");
 
         foreach (var sprite in sprites)
         {

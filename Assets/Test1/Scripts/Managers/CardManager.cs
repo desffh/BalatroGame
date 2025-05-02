@@ -68,6 +68,11 @@ public class CardManager : Singleton<CardManager>
         {
             usedCards.Add(card);
         }
+        else
+        {
+            Debug.LogWarning($"[중복사용] 이미 usedCards에 있는 카드가 또 들어가려 함: {card.name}");
+        }
+
         SyncViewerCards(); // 여기서 뷰 카드 비활성화 처리
     }
 
@@ -111,16 +116,24 @@ public class CardManager : Singleton<CardManager>
     // 풀에서 오브젝트를 빌릴 때 사용되는 함수
     private void OnGetCard(Card card)
     {
+        if (card.isInUse)
+        {
+            Debug.LogWarning($"[풀링 오류] 이미 사용 중인 카드를 다시 꺼냄: {card.name}");
+        }
+        card.isInUse = true;
         card.OffCollider();
         card.gameObject.SetActive(true);
     }
 
+
     // 풀에 오브젝트를 반납할 때 사용되는 함수
     private void OnReleaseCard(Card card)
     {
+        card.isInUse = false;
         card.OffCollider();
         card.gameObject.SetActive(false);
     }
+
 
     // 풀에서 오브젝트 파괴 시 호출 될 함수
     private void OnDestroyCard(Card card)
@@ -193,8 +206,12 @@ public class CardManager : Singleton<CardManager>
             card.OffCollider();
 
             // 동적 생성된 카드 오브젝트는 Card 스크립트를 가지고 있어서 Card타입 리스트에 담을 수 있다
-            myCards.Add(card);
-            totalSpawnedCount++;
+            if (!myCards.Contains(card))
+            {
+                myCards.Add(card);
+                totalSpawnedCount++;
+            }
+
 
             SoundManager.Instance.PlayCardSpawn();
         }
@@ -227,20 +244,36 @@ public class CardManager : Singleton<CardManager>
         List<PRS> originCardPRSs = RoundAlignment(myCardLeft, myCardRight, myCards.Count, 0.5f, Vector3.one * 0.7f);
 
         int completeCount = 0;
+        int cardCount = myCards.Count;
 
-        for (int i = 0; i < myCards.Count; i++)
+        for (int i = 0; i < cardCount; i++)
         {
             var targetCard = myCards[i];
+
+            if (targetCard == null)
+            {
+                Debug.LogError($"[CardAlignment] targetCard가 null입니다! index: {i}");
+                continue;
+            }
+
             targetCard.originPRS = originCardPRSs[i];
+
+            Debug.Log($"[CardAlignment] 카드 배치 시작: {targetCard.name}");
+
             targetCard.MoveTransform(targetCard.originPRS, true, 0.6f, () => {
                 completeCount++;
-                if (completeCount >= myCards.Count)
+                Debug.Log($"[애니메이션 완료] 카드: {targetCard.name}, 현재 완료 수: {completeCount}");
+
+                if (completeCount >= cardCount)
                 {
-                    onAllComplete?.Invoke(); // 카드 이동 애니메이션 전부 끝난 다음 호출
+                    Debug.Log("[CardAlignment] 모든 카드 애니메이션 완료");
+                    onAllComplete?.Invoke();
                 }
             });
         }
+
     }
+
 
 
 
@@ -293,27 +326,34 @@ public class CardManager : Singleton<CardManager>
     {
         bool lastMoveDone = false;
 
-        for (int i = myCards.Count; i < 8; i++)
+        int cardsNeeded = 8 - myCards.Count; // 현재 보유 수를 기준으로 부족한 만큼만 생성
+
+        for (int i = 0; i < cardsNeeded; i++)
         {
             AddCard();
 
-            if (i == 7)
+            if (i == cardsNeeded - 1)
             {
-                CardAlignment(() => { lastMoveDone = true; });
+                // 마지막 카드 정렬 완료 시점에 콜백 설정
+                CardAlignment(() => {
+                    Debug.Log("[SpawnCardsSequentially] 마지막 카드 애니메이션 완료");
+                    lastMoveDone = true;
+                });
             }
             else
             {
                 CardAlignment();
             }
 
-            yield return new WaitForSeconds(0.12f);
+            yield return new WaitForSeconds(0.15f);
         }
 
         yield return new WaitUntil(() => lastMoveDone);
 
-        TurnOnAllCardColliders();
-        onComplete?.Invoke();
+        Debug.Log("[SpawnCardsSequentially] 모든 카드 배치 완료 → onComplete 실행");
+        onComplete?.Invoke(); // 콜라이더 켜기
     }
+
 
     public void Allignment()
     {
@@ -342,6 +382,7 @@ public class CardManager : Singleton<CardManager>
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].OnCollider();
+            Debug.Log($"[콜라이더 ON] 카드: {myCards[i].name}");
         }
     }
 
@@ -467,7 +508,7 @@ public class CardManager : Singleton<CardManager>
 
     public void SetupViewerCards()
     {
-        Debug.Log("[CardManager] SetupViewerCards() 호출됨");
+        //Debug.Log("[CardManager] SetupViewerCards() 호출됨");
 
         for (int i = 0; i < viewerCards.Count; i++)
         {

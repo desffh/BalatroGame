@@ -17,15 +17,23 @@ public class SuitBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory)
+    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        //if (jokerCategory != category) return;
+        var matchedCard = selectedCards.FirstOrDefault(card => card.itemdata.suit == targetSuit);
 
-        if (selectedCards.Any(card => card.itemdata.suit == targetSuit))
+        if (matchedCard != null)
         {
             holdManager.MultiplySum += bonus;
-            Debug.Log($"[조커: {targetSuit}] 문양 일치 → 배수 +{bonus}");
+
+            AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
+
+            AnimationManager.Instance.PlayCardAnime(matchedCard.gameObject); // ← 여기에 전달
+
+            TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
+
+            Debug.Log($"[조커: {targetSuit}] 문양 일치 → 배수 +{bonus}, 애니메이션 대상: {matchedCard.name}");
         }
+
     }
 }
 

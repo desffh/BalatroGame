@@ -9,7 +9,7 @@ using System.Linq;
 public class CardData : MonoBehaviour
 {
     // 저장 된 카드 리스트
-    private List<Card> selectCards = new List<Card>();
+    [SerializeField] private List<Card> selectCards = new List<Card>();
 
     // 리스트 읽기 전용 (일반 프로퍼티 사용 시 내부 데이터 수정이 가능해짐)
     public IReadOnlyList<Card> SelectCards => selectCards;

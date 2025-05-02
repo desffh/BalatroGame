@@ -54,7 +54,7 @@ public class AnimationManager : Singleton<AnimationManager>
         });
     }
 
-    // 핸드 플레이 시 카드 이동 애니메이션
+    // 핸드 플레이 시 카드 애니메이션
     public void PlayCardAnime(GameObject cardPrefabs)
     {
         cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
@@ -67,6 +67,21 @@ public class AnimationManager : Singleton<AnimationManager>
 
         cardPrefabs.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f); });
+    }
+
+    // 조커 플레이 시 카드 애니메이션
+    public void PlayJokerCardAnime(GameObject cardPrefabs)
+    {
+        //cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
+        //    cardPrefabs.transform.position.y, cardPrefabs.transform.position.z + 0.1f), 0.1f).
+        //    OnComplete(() =>
+        //    {
+        //        cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
+        //    cardPrefabs.transform.position.y, cardPrefabs.transform.position.z), 0.1f);
+        //    });
+
+        cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f).
+            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f); });
     }
 
     // 카드를 눌렀을 때 애니메이션

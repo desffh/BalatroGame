@@ -43,6 +43,11 @@ public class Shop : MonoBehaviour
         buyButton.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        emptyPanel.gameObject.SetActive(false);
+    }
+
     [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
 
     public void OpenShop()
@@ -90,6 +95,8 @@ public class Shop : MonoBehaviour
 
     [SerializeField] GameObject jokerPacksTransform;
 
+    [SerializeField] GameObject emptyPanel;
+
     public void ShowBuyButton(JokerCard target)
     {
         currentTarget = target;
@@ -99,12 +106,19 @@ public class Shop : MonoBehaviour
         buttonRect.position = target.transform.position + new Vector3(170, 50, 0); // 원하는 오프셋
 
         buyButton.gameObject.SetActive(true);
+        emptyPanel.SetActive(true); // 클릭 차단기 켜기
     }
 
     public void OffBuyButton()
     {
         buyButton.gameObject.SetActive(false);
+        emptyPanel.SetActive(false); // 클릭 차단기 끄기
         // 위치는 오프셋 정하기
+    }
+    public void OnEmptyClicked()
+    {
+        OffBuyButton();       
+        currentTarget = null;  
     }
 
     // |------------------------------------
@@ -125,6 +139,7 @@ public class Shop : MonoBehaviour
         sellButton.gameObject.SetActive(false);
         fullScreenBlocker.SetActive(false); // 클릭 차단기 끄기
     }
+
 
 
     // 구매하기
@@ -171,6 +186,8 @@ public class Shop : MonoBehaviour
         // 버튼 숨김
         buyButton.gameObject.SetActive(false);
         currentTarget = null;
+
+        emptyPanel.gameObject.SetActive(false);
     }
 
     // 판매하기 

@@ -141,10 +141,13 @@ public class HoldManager : Singleton<HoldManager>
 
         if(StageEnd() == false)
         {
-            CardManager.Instance.AddCardSpawn();
+            // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
+            CardManager.Instance.AddCardSpawn(() => {
+                CardManager.Instance.TurnOnAllCardColliders();
+            });
 
             // 다시 콜라이더 활성화
-            CardManager.Instance.card.OnCollider();
+            //CardManager.Instance.card.OnCollider();
             ButtonManager.Instance.ButtonInactive();
 
             // 정렬 버튼 활성화
@@ -179,7 +182,7 @@ public class HoldManager : Singleton<HoldManager>
     {
         if (Num.Count == 0)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
 
             TotalScoreCal(); // 조커 효과 반영된 MultiplySum/PlusSum 사용
         }
@@ -188,34 +191,35 @@ public class HoldManager : Singleton<HoldManager>
 
     private IEnumerator ApplyJokerEffectsStep()
     {
-
-        List<Card> selectedCards = pokerManager.cardData.SelectCards.ToList();
-        string currentHandType = PokerManager.Instance.pokerName;
+        Debug.Log("조커 효과 적용 단계 진입");
 
         var myJokerCard = FindAnyObjectByType<MyJokerCard>();
 
-        if (myJokerCard == null)
+        if (myJokerCard == null || myJokerCard.Cards.Count == 0)
         {
-            Debug.LogWarning("[조커 효과] MyJokerCard를 찾을 수 없습니다.");
+            Debug.Log("조커가 없으므로 효과 적용 없이 다음 단계로 진행");
             yield break;
         }
 
+        yield return new WaitForSeconds(0.5f);
+
+        List<Card> selectedCards = pokerManager.cardData.SelectCards.ToList();
+        
+        string currentHandType = PokerManager.Instance.pokerName;
+
         foreach (var joker in myJokerCard.Cards)
         {
-            Debug.Log("실행되었어요");
-            joker.ActivateEffect(selectedCards, currentHandType, this);
+            Debug.Log($"조커 효과 시도: {joker.name}, 조건: {joker.currentData.baseData.require}");
+
+            joker.ActivateEffect(selectedCards, currentHandType, this, joker);
+            
+            yield return new WaitForSeconds(0.5f);
         }
 
-
-        Debug.Log("[조커 발동] 리팩션 큐 단계에서 조커 효과 적용 완료");
-
-        if(myJokerCard.Cards.Count > 0)
-        {
-            TextManager.Instance.UpdateText(2, MultiplySum);
-        }
-
-        yield return new WaitForSeconds(1f); // 연출 효과 대기
+        Debug.Log("조커 루프 완료");
     }
+
+
 
 
     IEnumerator DelayedMove()
@@ -240,11 +244,15 @@ public class HoldManager : Singleton<HoldManager>
         pokerManager.ClearSelection();
         pokerManager.saveNum.Clear();
 
-        CardManager.Instance.AddCardSpawn();
+        // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
+        CardManager.Instance.AddCardSpawn(() => {
+            CardManager.Instance.TurnOnAllCardColliders();
+        });
+
         UIupdate();
 
         // 다시 콜라이더 활성화
-        CardManager.Instance.card.OnCollider();
+        //CardManager.Instance.card.OnCollider();
         ButtonManager.Instance.ButtonInactive();
 
         // 정렬 버튼 활성화

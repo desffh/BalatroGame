@@ -15,13 +15,18 @@ public class HandTypeBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory)
+    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        //if (jokerCategory != category) return;
+        if (jokerCategory != category) return;
 
         if (string.Equals(currentHandType, targetType, StringComparison.OrdinalIgnoreCase))
         {
             holdManager.MultiplySum += bonus;
+
+            AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
+
+            TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
+
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
         }
     }

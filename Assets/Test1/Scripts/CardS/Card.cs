@@ -53,6 +53,7 @@ public class Card : CardComponent
 
     // |-----------------------------------------------
 
+    public bool isInUse = false;
 
 
 

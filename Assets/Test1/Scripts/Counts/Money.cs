@@ -17,7 +17,7 @@ public class Money : MonoBehaviour
 
     private void Awake()
     {
-        totalMoney = 0;
+        totalMoney = 10;
     }
 
     public void Start()
@@ -36,7 +36,7 @@ public class Money : MonoBehaviour
     // ¸Ó´Ï ¸®¼Â
     public void ReSetTotalMoney()
     {
-        totalMoney = 0;
+        totalMoney = 10;
     }
 
     // ¸Ó´Ï È¹µæ

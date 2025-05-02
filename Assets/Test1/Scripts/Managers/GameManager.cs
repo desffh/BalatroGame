@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
 
     public void PlayOn()
     {
-        Debug.Log("PlayOn 호출");
+        //Debug.Log("PlayOn 호출");
 
         //playState = true;
         
