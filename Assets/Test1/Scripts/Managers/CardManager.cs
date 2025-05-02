@@ -7,6 +7,7 @@ using DG.Tweening;
 using UnityEngine.Pool;
 using TMPro;
 using Unity.VisualScripting;
+using System.Runtime.Serialization.Formatters;
 
 
 
@@ -258,15 +259,15 @@ public class CardManager : Singleton<CardManager>
 
             targetCard.originPRS = originCardPRSs[i];
 
-            Debug.Log($"[CardAlignment] 카드 배치 시작: {targetCard.name}");
+            //Debug.Log($"[CardAlignment] 카드 배치 시작: {targetCard.name}");
 
-            targetCard.MoveTransform(targetCard.originPRS, true, 0.6f, () => {
+            targetCard.MoveTransform(targetCard.originPRS, true, 1f, () => {
                 completeCount++;
-                Debug.Log($"[애니메이션 완료] 카드: {targetCard.name}, 현재 완료 수: {completeCount}");
+                // 기준 위치 저장(한 번만 저장하고 싶다면 bool로 체크)
+                targetCard.SaveInitialTransform();
 
                 if (completeCount >= cardCount)
                 {
-                    Debug.Log("[CardAlignment] 모든 카드 애니메이션 완료");
                     onAllComplete?.Invoke();
                 }
             });
@@ -320,37 +321,29 @@ public class CardManager : Singleton<CardManager>
     public void AddCardSpawn(System.Action onComplete = null)
     {
         StartCoroutine(SpawnCardsSequentially(onComplete));
+
+        if (myCards.Count == 8)
+        {
+            for (int i = 0; i < myCards.Count; i++)
+            {
+                Debug.Log("내 카드 클릭 초기화");
+                myCards[i].GetComponent<Card>().checkCard = false;
+            }
+        }
     }
 
     private IEnumerator SpawnCardsSequentially(System.Action onComplete = null)
     {
-        bool lastMoveDone = false;
-
-        int cardsNeeded = 8 - myCards.Count; // 현재 보유 수를 기준으로 부족한 만큼만 생성
-
-        for (int i = 0; i < cardsNeeded; i++)
+        for (int i = myCards.Count; i < 8; i++)
         {
             AddCard();
 
-            if (i == cardsNeeded - 1)
-            {
-                // 마지막 카드 정렬 완료 시점에 콜백 설정
-                CardAlignment(() => {
-                    Debug.Log("[SpawnCardsSequentially] 마지막 카드 애니메이션 완료");
-                    lastMoveDone = true;
-                });
-            }
-            else
-            {
-                CardAlignment();
-            }
+            CardAlignment();
 
             yield return new WaitForSeconds(0.15f);
         }
 
-        yield return new WaitUntil(() => lastMoveDone);
-
-        Debug.Log("[SpawnCardsSequentially] 모든 카드 배치 완료 → onComplete 실행");
+        //Debug.Log("[SpawnCardsSequentially] 모든 카드 배치 완료 → onComplete 실행");
         onComplete?.Invoke(); // 콜라이더 켜기
     }
 
@@ -382,7 +375,7 @@ public class CardManager : Singleton<CardManager>
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].OnCollider();
-            Debug.Log($"[콜라이더 ON] 카드: {myCards[i].name}");
+            //Debug.Log($"[콜라이더 ON] 카드: {myCards[i].name}");
         }
     }
 

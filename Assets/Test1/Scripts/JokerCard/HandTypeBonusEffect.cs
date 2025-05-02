@@ -17,7 +17,8 @@ public class HandTypeBonusEffect : IJokerEffect
 
     public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        if (jokerCategory != category) return;
+        Debug.Log("족보 확인 할게요");
+        //if (jokerCategory != category) return;
 
         if (string.Equals(currentHandType, targetType, StringComparison.OrdinalIgnoreCase))
         {

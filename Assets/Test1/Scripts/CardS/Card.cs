@@ -122,26 +122,45 @@ public class Card : CardComponent
 
     }
 
-    // 카드 정렬 애니메이션
-    public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0, System.Action onComplete = null)
+    public Vector3 basePosition { get; private set; }
+    public Vector3 baseScale { get; private set; }
+
+    public void SaveInitialTransform()
     {
-        if (useDotween)
+        basePosition = transform.position;
+        baseScale = transform.localScale;
+    }
+
+
+    // 카드 정렬 애니메이션
+    public void MoveTransform(PRS prs, bool useAnimation, float duration, System.Action onComplete = null)
+    {
+        if (useAnimation)
         {
-            transform.DOMove(prs.pos, dotweenTime).SetDelay(0.2f);
-            transform.DORotateQuaternion(prs.rot, dotweenTime).SetDelay(0.2f);
-            transform.DOScale(prs.scale, dotweenTime).SetDelay(0.2f)
-                .OnComplete(() => {
-                    onComplete?.Invoke(); // 스케일 애니메이션이 끝나고 콜백 실행
-                });
+            if (TryGetComponent<Collider2D>(out var collider))
+                collider.enabled = false; // 클릭 충돌 자체 차단
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(transform.DOMove(prs.pos, duration).SetEase(Ease.OutCubic));
+            seq.Join(transform.DORotateQuaternion(prs.rot, duration).SetEase(Ease.OutCubic));
+            seq.Join(transform.DOScale(prs.scale, duration).SetEase(Ease.OutCubic));
+
+            seq.OnComplete(() =>
+            {
+                if (collider != null)
+                    collider.enabled = true; // 애니메이션 끝난 뒤 클릭 가능하게
+                onComplete?.Invoke();
+            });
         }
         else
         {
             transform.position = prs.pos;
             transform.rotation = prs.rot;
             transform.localScale = prs.scale;
-            onComplete?.Invoke(); // 도트윈 안 썼을 때도 바로 호출
+            onComplete?.Invoke();
         }
     }
+
 
 
     // |--------------------------------------------------------------
@@ -156,7 +175,7 @@ public class Card : CardComponent
 
     public override void OnCardClicked()
     {
-        // 리스트가 꽉 찼다면
+        // 리스트  덜 찼다면
         if (checkCard && PokerManager.Instance.cardData.SelectCards.Count <= 5)
         {
             // 이 스크립트가 달린 Card를 매개변수로 전달

@@ -19,6 +19,8 @@ public class SuitBonusEffect : IJokerEffect
 
     public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
+        Debug.Log("문양 확인 할게요");
+
         var matchedCard = selectedCards.FirstOrDefault(card => card.itemdata.suit == targetSuit);
 
         if (matchedCard != null)

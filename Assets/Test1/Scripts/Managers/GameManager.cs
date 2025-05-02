@@ -43,7 +43,7 @@ public class GameManager : Singleton<GameManager>
 
     public void PlayOff()
     {
-        Debug.Log("PlayOff 호출");
+        //Debug.Log("PlayOff 호출");
 
         //playState = false;
 

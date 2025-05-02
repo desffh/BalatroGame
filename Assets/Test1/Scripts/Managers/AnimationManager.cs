@@ -8,6 +8,7 @@ using TMPro;
 
 public class AnimationManager : Singleton<AnimationManager>
 {
+    private float defaultFontsize = 45f;
 
     protected override void Awake()
     {
@@ -19,17 +20,20 @@ public class AnimationManager : Singleton<AnimationManager>
     // 스코어들 텍스트
     public void CaltransformAnime(TextMeshProUGUI scoreText)
     {
+       // 맨 처음 폰트 사이즈만 저장
+        if(defaultFontsize == 0f)
+        {
+            defaultFontsize = scoreText.fontSize;
+        }
+
         scoreText.DOKill(); // 이전 Tween 제거
 
-        // 원래 폰트 크기 저장
-        float originalFontSize = scoreText.fontSize;
-
         // 글씨 크기를 키우는 애니메이션
-        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize * 1.3f, 0.1f)
+        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, defaultFontsize * 1.3f, 0.1f)
         .OnComplete(() =>
         {
             // 글씨 크기를 다시 원래 크기로 줄이는 애니메이션
-            DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize, 0.1f);
+            DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, defaultFontsize, 0.1f);
         });
     }
 
@@ -84,7 +88,8 @@ public class AnimationManager : Singleton<AnimationManager>
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f); });
     }
 
-    // 카드를 눌렀을 때 애니메이션
+
+
     public void CardAnime(Transform cardTransform)
     {
         cardTransform.DOKill(); // 기존 Tween 제거

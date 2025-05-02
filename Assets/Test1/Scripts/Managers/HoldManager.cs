@@ -193,6 +193,9 @@ public class HoldManager : Singleton<HoldManager>
     {
         Debug.Log("조커 효과 적용 단계 진입");
 
+        // **한 프레임 대기 후 실행 → 객체들 초기화 시간 확보**
+        yield return null;
+
         var myJokerCard = FindAnyObjectByType<MyJokerCard>();
 
         if (myJokerCard == null || myJokerCard.Cards.Count == 0)
@@ -201,20 +204,24 @@ public class HoldManager : Singleton<HoldManager>
             yield break;
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         List<Card> selectedCards = pokerManager.cardData.SelectCards.ToList();
         
         string currentHandType = PokerManager.Instance.pokerName;
 
+        Debug.Log($"[조커 효과] 현재 핸드타입: {currentHandType}");
+        Debug.Log($"[조커 효과] 선택된 카드 수: {selectedCards.Count}");
+
         foreach (var joker in myJokerCard.Cards)
         {
-            Debug.Log($"조커 효과 시도: {joker.name}, 조건: {joker.currentData.baseData.require}");
+            Debug.Log($"[조커 효과] 조커 이름: {joker.name}, 조건: {joker.currentData.baseData.require}");
 
             joker.ActivateEffect(selectedCards, currentHandType, this, joker);
-            
-            yield return new WaitForSeconds(0.5f);
+
+            yield return new WaitForSeconds(1f);
         }
+
 
         Debug.Log("조커 루프 완료");
     }
