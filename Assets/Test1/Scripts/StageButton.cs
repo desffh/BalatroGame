@@ -18,6 +18,10 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] GameObject ShopPanel; // 상점 캔버스
 
+
+
+    public static event System.Action OnShopCloseRequest;
+
     private void Awake()
     {
         button = GetComponent<Button>();
@@ -78,6 +82,7 @@ public class StageButton : MonoBehaviour
     }
 
 
+
     // -------------------- 캐시 아웃 버튼 -----------------------
 
     public void NextEntyOn() // 캐시 아웃 버튼을 누르면 상점 나오게
@@ -100,14 +105,18 @@ public class StageButton : MonoBehaviour
         nextEnty.interactable = false;
     }
 
+
     // 상점의 다음 라운드 버튼
     public void NextEnty()
     {
         SoundManager.Instance.ButtonClick();
         SoundManager.Instance.ResumePreviousBGM();
 
+        OnShopCloseRequest?.Invoke();
+
         ShopPanel.gameObject.SetActive(false);
         stagecanvas.gameObject.SetActive(true);
+
     }
 
     public void OnEntyCanvas()

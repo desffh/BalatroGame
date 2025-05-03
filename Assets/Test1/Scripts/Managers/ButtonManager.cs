@@ -69,7 +69,6 @@ public class ButtonManager : Singleton<ButtonManager>
 
     IEnumerator CardDeletePoint()
     {
-
         // 카드 클릭 비활성화
         CardManager.Instance.TurnOffAllCardColliders();
 

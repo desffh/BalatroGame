@@ -77,6 +77,8 @@ public interface IPokerJoker
 // 팝업 텍스트 인터페이스 
 public interface IPopupText
 {
+    string type { get; }
+
     void Initialize(string name, string info, int multiple, int cost);
 }
 

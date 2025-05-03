@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UI;
 
 public class JokerCard : CardComponent
@@ -20,15 +21,21 @@ public class JokerCard : CardComponent
 
     public int unlockRound; // 등장 가능한 라운드
 
-    [SerializeField] private MonoBehaviour popupComponent;
+
     private IPopupText jokerPopup;
 
     [SerializeField] private bool checkClick = false;
 
+    // |------------------------------
+    //[SerializeField] private MonoBehaviour popupComponent;
+
+
+    // |------------------------------
+
     private void Awake()
     {
         jokerImage = GetComponent<Image>();
-        jokerPopup = popupComponent as IPopupText;
+        //jokerPopup = popupComponent as IPopupText;
     }
 
     // 외부에서 조커 데이터 설정
@@ -43,6 +50,7 @@ public class JokerCard : CardComponent
         sprite = currentData.image;
 
         jokerImage.sprite = sprite;
+
 
         PopupSetting();
         SetupEffect(); // 효과 객체 생성
@@ -67,13 +75,28 @@ public class JokerCard : CardComponent
     // 팝업 텍스트 설정
     public void PopupSetting()
     {
-        jokerPopup?.Initialize(
-            data.name,
-            data.require,
-            data.multiple,
-            data.cost
-        );
+        SetupPopupComponent();
+
+        // 팝업 생성
+        jokerPopup = PopupTextFactory.Create(data.type, gameObject);
+
+        if (jokerPopup != null)
+        {
+            jokerPopup.Initialize(data.name, data.require, data.multiple, data.cost);
+        }
     }
+
+    private void SetupPopupComponent()
+    {
+        // 1. 기존 컴포넌트 제거
+        var oldPopup = GetComponent<IPopupText>() as MonoBehaviour;
+        if (oldPopup != null)
+            Destroy(oldPopup);
+    }
+
+
+
+
 
     public void DisableCard() => gameObject.SetActive(false);
 

@@ -52,24 +52,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390171481a4df0a4ba30ec59ccf6a4f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 21200000}
-  cardBack: {fileID: 21200002}
-  cardback: {fileID: 21300110, guid: 3924dd0449c173e4aa69d07bdb73d5ed, type: 3}
-  cardFront: {fileID: 21300110, guid: 3924dd0449c173e4aa69d07bdb73d5ed, type: 3}
-  spriteCards: {fileID: 0}
-  spriteCards2: {fileID: 0}
-  Collider2D: {fileID: 7758442722237426489}
-  spriteNameToLoad: 
-  originPRS:
-    pos: {x: 0, y: 0, z: 0}
-    rot: {x: 0, y: 0, z: 0, w: 0}
-    scale: {x: 0, y: 0, z: 0}
   itemdata:
     name: 
     id: 0
     suit: 
     front: 
     inherenceID: 0
+  cardFront: {fileID: 21300110, guid: 3924dd0449c173e4aa69d07bdb73d5ed, type: 3}
+  spriteCards: {fileID: 0}
+  Collider2D: {fileID: 7758442722237426489}
+  spriteNameToLoad: 
+  originPRS:
+    pos: {x: 0, y: 0, z: 0}
+    rot: {x: 0, y: 0, z: 0, w: 0}
+    scale: {x: 0, y: 0, z: 0}
   checkCard: 0
   isInUse: 0
   cardPopup: {fileID: 4610209607889900206}
@@ -772,7 +768,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.5}
+  m_AnchoredPosition: {x: 0, y: 2.068}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &5259917040528316099

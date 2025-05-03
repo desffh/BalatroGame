@@ -38,6 +38,11 @@ public class HoldManager : Singleton<HoldManager>
     [SerializeField] AnimationManager animationManager;
 
     private Queue<Func<IEnumerator>> actionQueue = new Queue<Func<IEnumerator>>();
+    
+    ShowRankText ShowRankText;
+
+    ShowJokerRankText showJokerRankText;
+
 
     protected override void Awake()
     {
@@ -116,8 +121,7 @@ public class HoldManager : Singleton<HoldManager>
             yield return StartCoroutine(actionQueue.Dequeue().Invoke());
         }
 
-
-        if(ScoreManager.Instance.CheckStageClear(Round.Instance.CurrentScores) == false)
+        if (ScoreManager.Instance.CheckStageClear(Round.Instance.CurrentScores) == false)
         {
             ActionSetting.Invoke();
         }
@@ -143,7 +147,7 @@ public class HoldManager : Singleton<HoldManager>
         {
             // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
             CardManager.Instance.AddCardSpawn(() => {
-                CardManager.Instance.TurnOnAllCardColliders();
+                //CardManager.Instance.TurnOnAllCardColliders();
             });
 
             // 다시 콜라이더 활성화
@@ -198,6 +202,7 @@ public class HoldManager : Singleton<HoldManager>
 
         var myJokerCard = FindAnyObjectByType<MyJokerCard>();
 
+        // 조커가 리스트에 없다면 코루틴 종료
         if (myJokerCard == null || myJokerCard.Cards.Count == 0)
         {
             Debug.Log("조커가 없으므로 효과 적용 없이 다음 단계로 진행");
@@ -218,6 +223,9 @@ public class HoldManager : Singleton<HoldManager>
             Debug.Log($"[조커 효과] 조커 이름: {joker.name}, 조건: {joker.currentData.baseData.require}");
 
             joker.ActivateEffect(selectedCards, currentHandType, this, joker);
+
+            showJokerRankText = joker.GetComponent<ShowJokerRankText>();
+            showJokerRankText.OnSettingRank(joker.currentData.baseData.multiple);
 
             yield return new WaitForSeconds(1f);
         }
@@ -253,7 +261,7 @@ public class HoldManager : Singleton<HoldManager>
 
         // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
         CardManager.Instance.AddCardSpawn(() => {
-            CardManager.Instance.TurnOnAllCardColliders();
+            //CardManager.Instance.TurnOnAllCardColliders();
         });
 
         UIupdate();
@@ -309,13 +317,15 @@ public class HoldManager : Singleton<HoldManager>
 
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
-           
+
+            TextManager.Instance.UpdateText(1, PlusSum);
+            
+            // 애니메이션이 끝나기 전까지는 텍스트가 업데이트 되지 않기 때문에 텍스트 업데이트 이후에 로직 설정
+            if (animationManager.moveTween != null && animationManager.moveTween.IsPlaying()) return;
+
         }
-        TextManager.Instance.UpdateText(1, PlusSum);
-        
+     
     }
-    
-    [SerializeField] ShowRankText ShowRankText;
 
     // 애니메이션을 호출하기 위해 사용
     private GameObject game;
@@ -370,7 +380,7 @@ public class HoldManager : Singleton<HoldManager>
     public void StartDeleteCard()
     {
         // 버리는 동안 카드의 콜라이더 비활성화               
-        CardManager.Instance.card.OffCollider();
+        //CardManager.Instance.card.OffCollider();
 
         interactable.OffButton();
 

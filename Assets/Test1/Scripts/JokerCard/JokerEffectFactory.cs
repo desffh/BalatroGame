@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 팩토리 패턴을 사용함
 public static class JokerEffectFactory
 {
     // 조커의 type (예: "Poker", "Color") 에 따라 효과 생성자 지정

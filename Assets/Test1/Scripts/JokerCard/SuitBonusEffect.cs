@@ -21,20 +21,25 @@ public class SuitBonusEffect : IJokerEffect
     {
         Debug.Log("문양 확인 할게요");
 
-        var matchedCard = selectedCards.FirstOrDefault(card => card.itemdata.suit == targetSuit);
+        var matchedCard = selectedCards.Where(card => card.itemdata.suit == targetSuit).ToList();
 
-        if (matchedCard != null)
+        if (matchedCard.Count > 0)
         {
             holdManager.MultiplySum += bonus;
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
-            AnimationManager.Instance.PlayCardAnime(matchedCard.gameObject); // ← 여기에 전달
+            // 문양과 일치하는 카드들의 애니메이션 실행
+            foreach (var card in matchedCard)
+            {
+                AnimationManager.Instance.PlayCardAnime(card.gameObject);
+                Debug.Log($"[조커: {targetSuit}] 문양 일치 → 애니메이션 대상: {card.name}");
+            }
 
             TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
-
-            Debug.Log($"[조커: {targetSuit}] 문양 일치 → 배수 +{bonus}, 애니메이션 대상: {matchedCard.name}");
         }
+
+        // 그렇지 않다면 실패 효과음과 애니메이션 실행
 
     }
 }

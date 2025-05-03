@@ -58,20 +58,49 @@ public class AnimationManager : Singleton<AnimationManager>
         });
     }
 
-    // 핸드 플레이 시 카드 애니메이션
+    public void ShowTextAnime(TextMeshProUGUI scoreText)
+    {
+        scoreText.DOKill();
+
+        // 원래 폰트 크기 저장
+        float originalFontSize = scoreText.fontSize;
+
+        // 글씨 크기를 키우는 애니메이션
+        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize * 1.35f, 0.3f)
+        .OnComplete(() =>
+        {
+            // 글씨 크기를 다시 원래 크기로 줄이는 애니메이션
+            DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize, 0.3f)
+            .OnComplete(() =>
+            {
+                scoreText.gameObject.SetActive(false);
+            });
+        });
+    }
+    public Tween moveTween;
+
     public void PlayCardAnime(GameObject cardPrefabs)
     {
-        cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
-            cardPrefabs.transform.position.y, cardPrefabs.transform.position.z + 3f), 0.1f).
-            OnComplete(() =>
-            {
-                cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
-            cardPrefabs.transform.position.y, cardPrefabs.transform.position.z), 0.1f);
-            });
+        Transform t = cardPrefabs.transform;
 
-        cardPrefabs.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f).
-            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f); });
+        // 기존 Tween 제거
+        t.DOKill();
+
+        // Sequence 생성
+        Sequence seq = DOTween.Sequence();
+
+        // 1단계: 회전 (작은 각도로 튕기는 느낌)
+        seq.Append(t.DORotate(new Vector3(t.eulerAngles.x, t.eulerAngles.y, t.eulerAngles.z + 3f), 0.1f));
+        seq.Append(t.DORotate(new Vector3(t.eulerAngles.x, t.eulerAngles.y, t.eulerAngles.z), 0.1f));
+
+        // 동시에 스케일 변경
+        seq.Join(t.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f));
+        seq.Append(t.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f));
+
+        // moveTween에 저장
+        moveTween = seq;
     }
+
 
     // 조커 플레이 시 카드 애니메이션
     public void PlayJokerCardAnime(GameObject cardPrefabs)
@@ -92,7 +121,8 @@ public class AnimationManager : Singleton<AnimationManager>
 
     public void CardAnime(Transform cardTransform)
     {
-        cardTransform.DOKill(); // 기존 Tween 제거
+        if (DOTween.IsTweening(cardTransform))
+            DOTween.Kill(cardTransform); // 기존 트윈 제거
 
         cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
            cardTransform.transform.position.y - 0.5f,
@@ -102,7 +132,8 @@ public class AnimationManager : Singleton<AnimationManager>
     // 카드를 다시 눌렀을 때 제자리 애니메이션
     public void ReCardAnime(Transform cardTransform)
     {
-        cardTransform.DOKill(); // 기존 Tween 제거
+        if (DOTween.IsTweening(cardTransform))
+            DOTween.Kill(cardTransform); // 기존 트윈 제거
 
         cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
            cardTransform.transform.position.y + 0.5f,

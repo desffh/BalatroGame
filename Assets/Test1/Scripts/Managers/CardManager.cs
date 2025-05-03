@@ -26,10 +26,6 @@ public class CardManager : Singleton<CardManager>
     // Card 타입을 담을 리스트 (내 카드 : 최대 8장)
     [SerializeField] public List<Card> myCards;
 
-    // 사용한 카드들 (풀링 반환용도)
-    [SerializeField] public List<Card> usedCards;
-
-
     // |----------------------------------------
 
     // 카드 생성위치
@@ -47,22 +43,38 @@ public class CardManager : Singleton<CardManager>
 
     // |------------------------------
 
+    // 오브젝트 풀링 변수
+    //
+    // CardManager.pools : 카드 풀 자체를 관리하는 중앙 관리자
+    //                     
+    //                     카드가 필요할 때 pools.Get() 으로 꺼내고,
+    //                     카드를 반납할 때 pools.Release(card)로 돌려보낸다
+    // |------------------------------
+
+    // 사용한 카드들 (풀링 반환용도)
+    [SerializeField] public List<Card> usedCards;
+
     private IObjectPool<Card> pools;
+
+    // |------------------------------
 
     protected override void Awake()
     {
         base.Awake();
 
+        // 오브젝트 풀 초기화 -> 카드 생성/획득/반납/삭제 시 사용될 콜백 함수 등록
         pools = new ObjectPool<Card>(CreateCard, OnGetCard, OnReleaseCard, OnDestroyCard, maxSize: 52);
     }
 
     private void Start()
     {
         SetupViewerCards();
-        ReactivateAllViewerCards(); // 처음엔 다 보이게
+        ReactivateAllViewerCards(); // 처음엔 뷰 카드 다 보이도록
     }
 
-    // 사용한 카드들
+    // |------------------------------
+
+    // 사용한 카드들은 usedCards에 추가 (나중에 풀에 반환 될 카드들)
     public void OnCardUsed(Card card)
     {
         if (!usedCards.Contains(card))
@@ -71,11 +83,54 @@ public class CardManager : Singleton<CardManager>
         }
         else
         {
-            Debug.LogWarning($"[중복사용] 이미 usedCards에 있는 카드가 또 들어가려 함: {card.name}");
+            Debug.LogWarning($"[중복사용]: {card.name}");
         }
 
-        SyncViewerCards(); // 여기서 뷰 카드 비활성화 처리
+        // 사용된 카드들의 뷰 카드 비활성화 처리
+        SyncViewerCards();
     }
+
+    // (풀이 비었을 때) 카드 생성 시 호출 될 함수
+    private Card CreateCard()
+    {
+        Card cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI).GetComponent<Card>(); // 게임 오브젝트 타입
+
+        cardObject.SetManagedPool(pools); // 카드 생성 후 풀에 넣기
+
+        return cardObject;
+    }
+
+    // 풀에서 오브젝트를 빌릴 때 사용되는 함수
+    private void OnGetCard(Card card)
+    {
+        if (card.isInUse)
+        {
+            Debug.LogWarning($"[풀링 오류] 이미 사용중인 카드: {card.name}");
+        }
+        card.isInUse = true;
+
+        //card.OffCollider();
+
+        card.gameObject.SetActive(true);
+    }
+
+    // 풀에 오브젝트를 반납할 때 사용되는 함수
+    private void OnReleaseCard(Card card)
+    {
+        card.isInUse = false;
+
+        //card.OffCollider();
+
+        card.gameObject.SetActive(false);
+    }
+
+    // 풀에서 오브젝트 파괴 시 호출 될 함수
+    private void OnDestroyCard(Card card)
+    {
+        Destroy(card.gameObject);
+    }
+
+    // |------------------------------
 
     // 사용한 카드들의 위치&회전 변경 (cardSpawnPoint로 이동) 
     public void TransCard()
@@ -106,47 +161,8 @@ public class CardManager : Singleton<CardManager>
         }
     }
 
-    // 카드가 생성될 때 호출 될 함수
-    private Card CreateCard()
-    {
-        Card cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI).GetComponent<Card>(); // 게임 오브젝트 타입
-        cardObject.SetManagedPool(pools);
-        return cardObject;
-    }
 
-    // 풀에서 오브젝트를 빌릴 때 사용되는 함수
-    private void OnGetCard(Card card)
-    {
-        if (card.isInUse)
-        {
-            Debug.LogWarning($"[풀링 오류] 이미 사용 중인 카드를 다시 꺼냄: {card.name}");
-        }
-        card.isInUse = true;
-        card.OffCollider();
-        card.gameObject.SetActive(true);
-    }
-
-
-    // 풀에 오브젝트를 반납할 때 사용되는 함수
-    private void OnReleaseCard(Card card)
-    {
-        card.isInUse = false;
-        card.OffCollider();
-        card.gameObject.SetActive(false);
-    }
-
-
-    // 풀에서 오브젝트 파괴 시 호출 될 함수
-    private void OnDestroyCard(Card card)
-    {
-        Destroy(card.gameObject);
-    }
-
-
-
-
-
-    // 버퍼에 카드 넣기
+    // 버퍼에 카드 넣기 (52)
     void SetupItemBuffer()
     {
         // 크기 동적할당
@@ -178,7 +194,7 @@ public class CardManager : Singleton<CardManager>
         }
     }
 
-    // 버퍼에서 카드 뽑기
+    // 버퍼에서 카드 뽑기 (풀에서 카드 빌리기)
     public ItemData PopItem()
     {
         ItemData item = itemBuffer[0];
@@ -193,26 +209,25 @@ public class CardManager : Singleton<CardManager>
     {
         if (myCards.Count < 8)
         {
-            //var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
-
-            var cardObject = pools.Get();
+            Card cardObject = pools.Get();
 
             // 부모의 아래에 생성 (하이라키창 계층구조)
             cardObject.transform.SetParent(ParentCardPrefab.transform);
 
             // 동적 생성된카드 오브젝트
-            var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
+            Card card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
+
             card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
 
-            card.OffCollider();
+            //card.OffCollider();
 
-            // 동적 생성된 카드 오브젝트는 Card 스크립트를 가지고 있어서 Card타입 리스트에 담을 수 있다
+            // myCards 리스트에 저장
             if (!myCards.Contains(card))
             {
                 myCards.Add(card);
+
                 totalSpawnedCount++;
             }
-
 
             SoundManager.Instance.PlayCardSpawn();
         }
@@ -222,8 +237,6 @@ public class CardManager : Singleton<CardManager>
 
         // 카드 정렬
         SetOriginOrder();
-        //CardAlignment();
-
     }
 
     // 리스트 전체 정렬 (먼저 추가한 카드가 제일 뒷쪽에 보임)
@@ -239,7 +252,9 @@ public class CardManager : Singleton<CardManager>
             targetCard?.GetComponent<Order>().SetOriginOrder(i);
         }
     }
-    // 카드 정렬
+
+
+    // 카드 배치 정렬
     public void CardAlignment(System.Action onAllComplete = null)
     {
         List<PRS> originCardPRSs = RoundAlignment(myCardLeft, myCardRight, myCards.Count, 0.5f, Vector3.one * 0.7f);
@@ -253,15 +268,13 @@ public class CardManager : Singleton<CardManager>
 
             if (targetCard == null)
             {
-                Debug.LogError($"[CardAlignment] targetCard가 null입니다! index: {i}");
                 continue;
             }
 
             targetCard.originPRS = originCardPRSs[i];
 
-            //Debug.Log($"[CardAlignment] 카드 배치 시작: {targetCard.name}");
-
-            targetCard.MoveTransform(targetCard.originPRS, true, 1f, () => {
+            targetCard.MoveTransform(targetCard.originPRS, true, 1f, () =>
+            {
                 completeCount++;
                 // 기준 위치 저장(한 번만 저장하고 싶다면 bool로 체크)
                 targetCard.SaveInitialTransform();
@@ -274,9 +287,6 @@ public class CardManager : Singleton<CardManager>
         }
 
     }
-
-
-
 
     // 카드 원형 정렬
     List<PRS> RoundAlignment(Transform leftTr, Transform rightTr, int objCount, float height, Vector3 scale)
@@ -318,10 +328,14 @@ public class CardManager : Singleton<CardManager>
         return results;
     }
 
+    // |------------------------------
+
+    // 카드를 myCards 로 배치 (카드 추가)
     public void AddCardSpawn(System.Action onComplete = null)
     {
         StartCoroutine(SpawnCardsSequentially(onComplete));
 
+        // 이부분이 의미가 없는 거 같음 -> myCards.Count가 8이 되었어도 아직 애니메이션이 끝나지 않은 상태
         if (myCards.Count == 8)
         {
             for (int i = 0; i < myCards.Count; i++)
@@ -338,29 +352,39 @@ public class CardManager : Singleton<CardManager>
         {
             AddCard();
 
-            CardAlignment();
+            // 정렬 후 애니메이션 완료됐을 때 콜라이더 다시 켜기
+            CardAlignment(() =>
+            {
+                TurnOnAllCardColliders();
+            });
 
-            yield return new WaitForSeconds(0.15f);
+                yield return new WaitForSeconds(0.15f);
         }
+        //Debug.Log("모든 카드 배치 완료 → onComplete 실행");
 
-        //Debug.Log("[SpawnCardsSequentially] 모든 카드 배치 완료 → onComplete 실행");
         onComplete?.Invoke(); // 콜라이더 켜기
     }
 
-
+    // 랭크 정렬 버튼 클릭 시
     public void Allignment()
     {
         myCards = myCards.OrderBy(card => card.itemdata.id).ToList();
         SetOriginOrder();
-        CardAlignment();
+        CardAlignment(() =>
+        {
+            TurnOnAllCardColliders();
+        });
     }
 
+    // |------------------------------
 
+    // 다음 스테이지 셋팅
     public void SetupNextStage()
     {
+        // OnUsedCard 에 추가
         deleteCards();
 
-        ReturnAllCardsToPool(); // 기존 카드 반환
+        ReturnAllCardsToPool(); // 풀에 기존 카드 반환
 
         StartSettings();
     }
@@ -370,15 +394,16 @@ public class CardManager : Singleton<CardManager>
         StartCoroutine(Settings());
     }
 
+    // 배치된 myCards 카드 모두 콜라이더 활성화
     public void TurnOnAllCardColliders()
     {
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].OnCollider();
-            //Debug.Log($"[콜라이더 ON] 카드: {myCards[i].name}");
         }
     }
 
+    // 배치된 myCards 카드 모두 콜라이더 비활성화
     public void TurnOffAllCardColliders()
     {
         for (int i = 0; i < myCards.Count; i++)
@@ -403,7 +428,7 @@ public class CardManager : Singleton<CardManager>
 
         // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
         AddCardSpawn(() => {
-            TurnOnAllCardColliders();
+            //TurnOnAllCardColliders();
         });
 
         ButtonManager.Instance.ButtonInactive();
@@ -437,6 +462,7 @@ public class CardManager : Singleton<CardManager>
     }
 
 
+    // 사용한 카드로 풀에 반환해야함
     public void deleteCards()
     {
         for (int i = 0; i < myCards.Count; i++)
@@ -466,7 +492,9 @@ public class CardManager : Singleton<CardManager>
         myCards.Clear();
     }
 
-     //뷰 카드 함수
+    // |-------------------------
+
+    //뷰 카드 함수
     public void SyncViewerCards()
     {
         // 먼저 모두 보이게 설정
@@ -475,7 +503,7 @@ public class CardManager : Singleton<CardManager>
             viewer.GetComponent<ViewCard>().Show();
         }
     
-        // 사용된 카드와 ID가 같은 뷰어 카드만 숨김
+        // 사용된 카드와 inherenceID가 같은 뷰어 카드만 숨김
         foreach (Card usedCard in usedCards)
         {
             int usedID = usedCard.itemdata.inherenceID;
@@ -489,7 +517,7 @@ public class CardManager : Singleton<CardManager>
         }
     }
 
-
+    // 뷰 카드의 이미지 모두 보이게 초기화 (스테이지 새로 시작할때마다 호출)
     public void ReactivateAllViewerCards()
     {
         foreach (ViewCard viewer in viewerCards)
@@ -499,14 +527,13 @@ public class CardManager : Singleton<CardManager>
     }
 
 
+    // 뷰 카드 스프라이트 셋팅
     public void SetupViewerCards()
     {
-        //Debug.Log("[CardManager] SetupViewerCards() 호출됨");
-
         for (int i = 0; i < viewerCards.Count; i++)
         {
-
             ViewCard viewerCard = viewerCards[i];
+         
             viewerCard.GetComponent<ViewCard>().Setup(ItemDataReader.DataList[i]);
         }
     }

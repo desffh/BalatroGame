@@ -741,7 +741,7 @@ Transform:
   m_GameObject: {fileID: 93144741}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -854,12 +854,12 @@ MonoBehaviour:
   - {fileID: 769284486}
   - {fileID: 1263872350}
   myCards: []
-  usedCards: []
   cardSpawnPoint: {fileID: 773965599}
   myCardLeft: {fileID: 1195458377}
   myCardRight: {fileID: 888227813}
   cardPrefabs: {fileID: 100000, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
   ParentCardPrefab: {fileID: 2107249538}
+  usedCards: []
   totalSpawnedCount: 0
 --- !u!1 &95446062
 GameObject:
@@ -886,7 +886,7 @@ Transform:
   m_GameObject: {fileID: 95446062}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 3.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1775,7 +1775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 420, y: -60}
+  m_AnchoredPosition: {x: 420, y: -59.999878}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &188309488
@@ -3939,7 +3939,7 @@ Transform:
   m_GameObject: {fileID: 364835323}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7256,7 +7256,7 @@ Transform:
   m_GameObject: {fileID: 657163913}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 5.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7387,9 +7387,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 658130916}
-        m_TargetAssemblyTypeName: HoldManager, Assembly-CSharp
-        m_MethodName: CalSetting
+      - m_Target: {fileID: 95414050}
+        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
+        m_MethodName: ColliderQuit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7411,9 +7411,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 95414050}
-        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
-        m_MethodName: ColliderQuit
+      - m_Target: {fileID: 658130916}
+        m_TargetAssemblyTypeName: HoldManager, Assembly-CSharp
+        m_MethodName: CalSetting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7426,7 +7426,6 @@ MonoBehaviour:
   PlusSum: 0
   MultiplySum: 0
   animationManager: {fileID: 1465190950}
-  ShowRankText: {fileID: 0}
 --- !u!1 &675075696 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 238980810272952667, guid: 839195f4bb2fd614882ec3d87e41b37e, type: 3}
@@ -7751,7 +7750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -216, y: -240}
+  m_AnchoredPosition: {x: -286, y: -240}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &690783559
@@ -7837,7 +7836,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 773.44684, y: 0, z: 0, w: 0}
+  m_margin: {x: 791.37646, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -8851,9 +8850,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715993832}
-        m_TargetAssemblyTypeName: ShopJokerPanel, Assembly-CSharp
-        m_MethodName: DeleteSellJokerPopup
+      - m_Target: {fileID: 1715993831}
+        m_TargetAssemblyTypeName: Shop, Assembly-CSharp
+        m_MethodName: DeleteSellJoker
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10805,7 +10804,7 @@ Transform:
   m_GameObject: {fileID: 888227812}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.043619405, w: 0.9990483}
-  m_LocalPosition: {x: 5.11, y: -2, z: 0}
+  m_LocalPosition: {x: 5.11, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14019,7 +14018,7 @@ Transform:
   m_GameObject: {fileID: 1195458376}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.043619405, w: 0.9990483}
-  m_LocalPosition: {x: -2.5, y: -2, z: 0}
+  m_LocalPosition: {x: -2.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14406,7 +14405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 350, y: -246}
+  m_AnchoredPosition: {x: 421, y: -246}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1214723717
@@ -22087,7 +22086,7 @@ Transform:
   m_GameObject: {fileID: 1851400715}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: -2.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23349,10 +23348,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -23370,8 +23369,8 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_Camera: {fileID: 519420031}
+  m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -25447,6 +25446,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7692541479000467776, guid: befab5c378a31d142b5c58b8412dd8ac, type: 3}
+      propertyPath: shop
+      value: 
+      objectReference: {fileID: 1715993831}
+    - target: {fileID: 7692541479000467776, guid: befab5c378a31d142b5c58b8412dd8ac, type: 3}
       propertyPath: Entycanvas
       value: 
       objectReference: {fileID: 1855314894}
@@ -27413,6 +27416,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 180.20001
       objectReference: {fileID: 0}
+    - target: {fileID: 2317890181445717692, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317890181445717692, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317890181445717692, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317890181445717692, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937945266746345931, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -172
@@ -27449,6 +27468,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Round
       objectReference: {fileID: 0}
+    - target: {fileID: 4546164872458986695, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546164872458986695, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546164872458986695, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546164872458986695, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4703769321891046857, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_SizeDelta.x
       value: 490.37
@@ -27468,6 +27503,18 @@ PrefabInstance:
     - target: {fileID: 5066948527267101690, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377005854017999205, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377005854017999205, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377005854017999205, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5590153047835181813, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_Pivot.x
@@ -27561,6 +27608,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Delete
       objectReference: {fileID: 0}
+    - target: {fileID: 7721800337353453129, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_margin.x
+      value: 20.43409
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721800337353453129, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_margin.z
+      value: 18.807938
+      objectReference: {fileID: 0}
     - target: {fileID: 7890639577210646786, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_Type
       value: 1
@@ -27571,27 +27626,43 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: f05ec7f8583bfa3468fb8958e87e24d9, type: 3}
     - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_text
-      value: 
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_fontSize
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_margin.w
-      value: 29.420288
+      value: 11.86676
       objectReference: {fileID: 0}
     - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_margin.x
-      value: 204.17679
+      value: 183.28592
       objectReference: {fileID: 0}
     - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_margin.y
-      value: 21.182587
+      value: 1.7483215
       objectReference: {fileID: 0}
     - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_margin.z
-      value: 127.68411
+      value: 82.48067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8219381292084476389, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 8572878191289885347, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -172
+      objectReference: {fileID: 0}
+    - target: {fileID: 8982342623653375118, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_margin.x
+      value: 18.150253
+      objectReference: {fileID: 0}
+    - target: {fileID: 8982342623653375118, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
+      propertyPath: m_margin.z
+      value: 19.79792
       objectReference: {fileID: 0}
     - target: {fileID: 9146173360262924099, guid: 113eea049d7208444924b0c29d51ef9a, type: 3}
       propertyPath: m_AnchoredPosition.y

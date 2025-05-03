@@ -16,48 +16,53 @@ using UnityEngine.Pool;
 // Card에 들어갈 스크립트
 public class Card : CardComponent
 {
-    private IObjectPool<Card> ManagedPool;
+    // SetUp 함수로 뽑은 카드의 구조체 정보를 받아와서 저장
+    public ItemData itemdata;
+
+    // 고유 번호로 쓰기 쉽게 속성 제공
+    public int ID => itemdata.inherenceID; 
 
     // |------------------------------
 
     private Transform cardPrefabs;
 
-    [SerializeField] SpriteRenderer card; // 앞면
-    [SerializeField] SpriteRenderer cardBack; // 뒷면은 통일
-
-    [SerializeField] Sprite cardback; // 뒷면 이미지
+    // 카드 앞면 이미지 
     [SerializeField] Sprite cardFront;
 
     [SerializeField] SpriteRenderer spriteCards;
-    [SerializeField] SpriteRenderer spriteCards2;
 
     [SerializeField] BoxCollider2D Collider2D;
 
-    //public string spriteSheetName;
     public string spriteNameToLoad;
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
 
-    // 모든 텍스쳐를 다 넣어둘 배열
-    //[SerializeField] Sprite[] sprites;
-
-    //[SerializeField] string spriteSheetName;
-
-    // SetUp 함수로 뽑은 카드의 구조체 정보를 받아와서 저장
-    public ItemData itemdata;
-
-    public int ID => itemdata.id; // 고유 번호로 쓰기 쉽게 속성 제공
-
     // 카드가 눌렸는지 확인
     [SerializeField] public bool checkCard = false;
 
-    // |-----------------------------------------------
+    // |------------------------------
 
     public bool isInUse = false;
 
-
-
     [SerializeField] CardPopup cardPopup;
+
+    // |------------------------------
+
+    // 오브젝트 풀링
+    //
+    // Card.ManagedPool : 각 카드 객체가 자기 풀을 알아야 자가 반납 가능함 
+    //                    즉, 이 카드 객체가 어느 풀에서 왔는지 기억하는 용도
+    // |------------------------------
+
+    private IObjectPool<Card> ManagedPool;
+
+    // 매개변수로 받은 Card 타입의 pool을 ManagedPool에 저장
+    public void SetManagedPool(IObjectPool<Card> pool)
+    {
+        ManagedPool = pool;
+    }
+
+    // |------------------------------
 
     private void Awake()
     {
@@ -73,6 +78,7 @@ public class Card : CardComponent
 
         cardPopup.gameObject.SetActive(false);
 
+        // 카드 팝업 정보 세팅
         PopupText();
     }
 
@@ -81,18 +87,27 @@ public class Card : CardComponent
         cardPopup.Initialize(itemdata.name, itemdata.id);
     }
 
+    // |------------------------------
+
+    // 마우스가 카드에 닿았을 때 -> 효과음, 팝업 띄우기
     private void OnMouseEnter()
     {
         SoundManager.Instance.PlayCardEnter();
         cardPopup.MouseEnter();
     }
 
+    // 마우스가 카드를 떠났을 때 -> 팝업 닫기
     private void OnMouseExit()
     {
         cardPopup.MouseExit();
     }
+
+    // |------------------------------
+
+    // 카드 정보, 스프라이트 셋팅 (버퍼에서 카드를 뽑을 때 마다)
     public void Setup(ItemData item)
     {
+        // 구조체에 itemdata 저장
         this.itemdata = item;
 
         // 스프라이트 이름 가져오기
@@ -110,17 +125,10 @@ public class Card : CardComponent
         }
         else
         {
-            Debug.LogWarning($"[Card] 스프라이트 '{spriteName}'을(를) 찾을 수 없습니다.");
+            Debug.LogWarning($"카드 스프라이트 찾을 수 없음");
         }
-
-        // 카드 뒷면 설정 (옵션)
-        if (cardback != null)
-        {
-            spriteCards2 = transform.GetChild(1).GetComponent<SpriteRenderer>();
-            cardBack.sprite = cardback;
-        }
-
     }
+    // |------------------------------
 
     public Vector3 basePosition { get; private set; }
     public Vector3 baseScale { get; private set; }
@@ -131,6 +139,11 @@ public class Card : CardComponent
         baseScale = transform.localScale;
     }
 
+    // |------------------------------
+
+    private Tween moveTween;
+
+
 
     // 카드 정렬 애니메이션
     public void MoveTransform(PRS prs, bool useAnimation, float duration, System.Action onComplete = null)
@@ -138,7 +151,14 @@ public class Card : CardComponent
         if (useAnimation)
         {
             if (TryGetComponent<Collider2D>(out var collider))
-                collider.enabled = false; // 클릭 충돌 자체 차단
+                collider.enabled = false;
+
+            // 기존 Tween이 있다면 안전하게 제거
+            if (moveTween != null && moveTween.IsActive())
+            {
+                moveTween.Kill();
+                moveTween = null;
+            }
 
             Sequence seq = DOTween.Sequence();
             seq.Append(transform.DOMove(prs.pos, duration).SetEase(Ease.OutCubic));
@@ -147,10 +167,11 @@ public class Card : CardComponent
 
             seq.OnComplete(() =>
             {
-                if (collider != null)
-                    collider.enabled = true; // 애니메이션 끝난 뒤 클릭 가능하게
+                //collider.enabled = true; // 이거 왜 있죠>??????
                 onComplete?.Invoke();
             });
+
+            moveTween = seq; // Sequence도 Tween이라 저장 가능
         }
         else
         {
@@ -161,57 +182,57 @@ public class Card : CardComponent
         }
     }
 
+    // |------------------------------
 
-
-    // |--------------------------------------------------------------
-
-
-    // 마우스로 클릭하면 CardIDdata 리스트에 카드 넣기 (최대5개)
+    // 마우스로 클릭하면 CardIDdata 리스트에 카드 넣기 (최대5개) & 사운드
     public void OnMouseDown()
     {
         SoundManager.Instance.PlayCardClick();
         OnCardClicked();
     }
 
+
+    
     public override void OnCardClicked()
     {
-        // 리스트  덜 찼다면
+        // 안전하게 Tween 상태 검사
+        if (moveTween != null && moveTween.IsActive() && moveTween.IsPlaying())
+            return;
+
+        // 카드 제거
         if (checkCard && PokerManager.Instance.cardData.SelectCards.Count <= 5)
         {
             // 이 스크립트가 달린 Card를 매개변수로 전달
-            //PokerManager.Instance.RemoveSuitIDdata(this);
             PokerManager.Instance.DeselectCard(this);
 
             AnimationManager.Instance.CardAnime(cardPrefabs);
 
             checkCard = false;
         }
-        // 리스트가 덜 찼다면
+        // 카드 추가
         else if (PokerManager.Instance.cardData.SelectCards.Count < 5)
         {
-            //PokerManager.Instance.SaveSuitIDdata(this);
-
             PokerManager.Instance.SelectCard(this);
 
             AnimationManager.Instance.ReCardAnime(cardPrefabs);
 
             checkCard = true;
         }
-        else
+        else // 카드 꽉 참 
         {
             AnimationManager.Instance.NoCardAnime(cardPrefabs);
         }
     }
 
-    // |--------------------------------------------------------------
+    // |------------------------------
 
-    // 배치된 카드 콜라이더 활성화
+    // 카드 콜라이더 활성화
     public override void OnCollider()
     {
         Collider2D.enabled = true;
     }
 
-    // 배치된 카드 콜라이더 비활성화
+    // 카드 콜라이더 비활성화
     public override void OffCollider()
     {
 
@@ -219,14 +240,9 @@ public class Card : CardComponent
 
     }
 
-
     // |-----------------------------
 
-    // 매개변수로 받은 Card 타입의 pool을 저장
-    public void SetManagedPool(IObjectPool<Card> pool)
-    {
-        ManagedPool = pool;
-    }
+
 
 
 }

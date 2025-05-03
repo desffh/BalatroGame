@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 // 상점 관리 - 조커 추가, 타로 카드 추가, 행성 카드 추가, 바우처 추가
+
 public class Shop : MonoBehaviour
 {
     // 조커 카드 타입 -> 라운드가 증가할수록 높은 조커가 나오도록
@@ -19,7 +21,7 @@ public class Shop : MonoBehaviour
 
     // |---------------------------------------------------------
     
-    [SerializeField] MyJokerCard myJokerCards;
+    [SerializeField] MyJokerCard myJokerCards; // myCards리스트를 보유한 스크립트
 
     public int currentRound;
 
@@ -35,9 +37,18 @@ public class Shop : MonoBehaviour
 
     [SerializeField] ShopJokerPanel jokerPanel;
 
+    // |---------------------------------------------------------
+
+    [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
+
+
+
+
+
     private void Awake()
     {
         currentRound = Round.Instance.Enty;
+
 
         // |------------------------
         buyButton.gameObject.SetActive(false);
@@ -48,12 +59,11 @@ public class Shop : MonoBehaviour
         emptyPanel.gameObject.SetActive(false);
     }
 
-    [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
-
     public void OpenShop()
     {
         for (int i = 0; i < shopJokers.Count; i++)
         {
+            // 조커가 하나도 없으면 상점에 조커 카드 비활성화
             if (jokerManager.jokerBuffer.Count == 0)
             {
                 shopJokers[i].gameObject.SetActive(false);
@@ -61,16 +71,22 @@ public class Shop : MonoBehaviour
             }
 
             // 1. 조커 정보 가져오기
-            JokerTotalData selected = jokerManager.jokerBuffer[0];
-            jokerManager.jokerBuffer.RemoveAt(0);
+            JokerTotalData selected = jokerManager.PopData();
 
-            // 2. 조커 오브젝트에 데이터 적용
+
+            if (selected == null)
+            {
+                shopJokers[i].gameObject.SetActive(false);
+                continue;
+            }
+
             shopJokers[i].SetJokerData(selected);
-
-            // 3. UI 활성화
             shopJokers[i].gameObject.SetActive(true);
         }
+
+        jokerManager.ShuffleBuffer();
     }
+
 
     // | --------------------------------------------------
 
@@ -188,19 +204,29 @@ public class Shop : MonoBehaviour
         currentTarget = null;
 
         emptyPanel.gameObject.SetActive(false);
+
+        // 상점 리스트에서도 제거
+        //shopJokers.Remove(currentTarget);
     }
 
     // 판매하기 
     public void Sell()
     {
         if (currentTarget == null) return;
-
         Debug.Log("판매되나요?");
+
+
+        var data = currentTarget.GetData();
+
+        jokerManager.PushData(currentTarget.currentData);
+
         // 1. 리스트에서 제거
         myJokerCards.RemoveJokerCard(currentTarget);
 
+        currentTarget.gameObject.SetActive(false);
+
         // 2. 카드 오브젝트 비활성화
-        currentTarget.DisableCard();
+        //currentTarget.DisableCard();
 
         // 3. 돈 환급 (예: 원가의 50% 회수)
         int refundAmount = currentTarget.currentData.baseData.cost / 2;
@@ -212,14 +238,27 @@ public class Shop : MonoBehaviour
         sellButton.gameObject.SetActive(false);
     }
 
+    public void CloseShop()
+    {
+        for(int i = 0; i < shopJokers.Count; i++)
+        {
+            if(shopJokers[i].gameObject.activeSelf == true)
+            {
+                jokerManager.PushData(shopJokers[i].currentData);
+            }
+        }
+    }
+
     private void OnEnable()
     {
         ShopPanel.OnShopOpened += OpenShop;
+        StageButton.OnShopCloseRequest += CloseShop;
     }
 
     private void OnDisable()
     {
         ShopPanel.OnShopOpened -= OpenShop;
+        StageButton.OnShopCloseRequest -= CloseShop;
     }
 
     [SerializeField] private GameObject fullScreenBlocker;
@@ -236,5 +275,9 @@ public class Shop : MonoBehaviour
         currentTarget = null;  // 선택 카드 초기화
     }
 
-
+    public void DeleteSellJoker()
+    {
+        jokerPanel.DeleteSellJokerPopup();
+        OnBlockerClicked();
+    }
 }
