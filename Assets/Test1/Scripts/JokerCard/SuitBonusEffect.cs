@@ -37,6 +37,9 @@ public class SuitBonusEffect : IJokerEffect
             }
 
             TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
+
+            ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
+            showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
         }
 
         // 그렇지 않다면 실패 효과음과 애니메이션 실행

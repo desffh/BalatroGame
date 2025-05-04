@@ -29,6 +29,10 @@ public class HandTypeBonusEffect : IJokerEffect
             TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
+        
+            ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
+            showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
         }
+
     }
 }

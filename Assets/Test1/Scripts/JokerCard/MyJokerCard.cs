@@ -36,4 +36,14 @@ public class MyJokerCard : MonoBehaviour
             Cards.Remove(card);
         }
     }
+
+    public void ResetJokerCard()
+    {
+        for (int i = 0; i < myCards.Count; i++)
+        {
+            Destroy(myCards[i].gameObject);
+        }
+
+        myCards.Clear();
+    }
 }

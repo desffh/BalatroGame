@@ -16,7 +16,8 @@ public static class PopupTextFactory
         {
             // 타입 문자열에 따라 컴포넌트를 동적으로 Add
             { "Normal", go => go.AddComponent<NormalJokerPopup>() },
-            { "Color",  go => go.AddComponent<ColorJokerPopup>() }
+            { "Color",  go => go.AddComponent<ColorJokerPopup>() },
+            { "Poker",  go => go.AddComponent<ColorJokerPopup>() }
         };
 
     // 팝업 생성 메서드

@@ -224,8 +224,6 @@ public class HoldManager : Singleton<HoldManager>
 
             joker.ActivateEffect(selectedCards, currentHandType, this, joker);
 
-            showJokerRankText = joker.GetComponent<ShowJokerRankText>();
-            showJokerRankText.OnSettingRank(joker.currentData.baseData.multiple);
 
             yield return new WaitForSeconds(1f);
         }

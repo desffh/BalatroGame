@@ -17,7 +17,7 @@ public static class JokerEffectFactory
             { "Poker", data => new HandTypeBonusEffect(data.require, data.multiple, data.type) },
 
             // 필요하다면 일반 조커(Normal)도 여기에 추가 가능
-            // { "Normal", data => new AlwaysBonusEffect(data.multiple, data.type) }
+            { "Normal", data => new NormalBonusEffect(data.require, data.multiple, data.type) }
         };
 
     public static IJokerEffect Create(JokerData data)

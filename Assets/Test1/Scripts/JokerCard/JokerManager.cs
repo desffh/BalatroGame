@@ -37,6 +37,7 @@ public class JokerManager : MonoBehaviour
 
     // |------------------------------------------------
 
+    [SerializeField] MyJokerCard myjokercard;
 
     private void Awake() // 스프라이트 딕셔너리에 저장
     {
@@ -123,5 +124,9 @@ public class JokerManager : MonoBehaviour
         jokerBuffer.Add(data);
     }
 
+    public void MyJokerReset()
+    {
+         myjokercard.ResetJokerCard();
+    }
 
 }

@@ -12,8 +12,6 @@ public class GameOverText : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI numhandText;
 
-    [SerializeField] TextMeshProUGUI deleteCardText;
-
     [SerializeField] TextMeshProUGUI buyCardText;
 
     [SerializeField] TextMeshProUGUI entyText;

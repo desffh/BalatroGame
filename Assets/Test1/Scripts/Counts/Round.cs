@@ -117,6 +117,8 @@ public class Round : Singleton<Round>
         currentStages.Enqueue(300); // 300 450 600
         currentStages.Enqueue(800); // 800 1200 1600
         currentStages.Enqueue(1800);// 1800 2700 3600
+        currentStages.Enqueue(3800);// 3800 5700 7600
+        currentStages.Enqueue(7800);// 7800 11700 15600
     }
 
     // 가림판 & 머니 셋팅

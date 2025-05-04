@@ -18,6 +18,7 @@ public class GameReset : MonoBehaviour
         money.ReSetTotalMoney();
         money.MoneyUpdate();
         jokerManager.SetupJokerBuffer();
+        jokerManager.MyJokerReset();
         ScoreManager.Instance.ResetMaxScore();
     }
 }
