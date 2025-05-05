@@ -17,6 +17,8 @@ public class GoStage : MonoBehaviour
         ScoreManager.DestroySelf();
         HandDelete.DestroySelf();
 
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         SceneLoaderUI.Instance.LoadSceneWithLoadingScreen("StageScene");
     }
 }

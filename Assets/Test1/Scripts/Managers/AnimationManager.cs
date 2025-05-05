@@ -105,15 +105,7 @@ public class AnimationManager : Singleton<AnimationManager>
     // 조커 플레이 시 카드 애니메이션
     public void PlayJokerCardAnime(GameObject cardPrefabs)
     {
-        //cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
-        //    cardPrefabs.transform.position.y, cardPrefabs.transform.position.z + 0.1f), 0.1f).
-        //    OnComplete(() =>
-        //    {
-        //        cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
-        //    cardPrefabs.transform.position.y, cardPrefabs.transform.position.z), 0.1f);
-        //    });
-
-        cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f).
+        cardPrefabs.transform.DOScale(new Vector3(1.05f, 1.05f, 1.05f), 0.3f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f); });
     }
 

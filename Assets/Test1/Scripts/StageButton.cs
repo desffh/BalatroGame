@@ -29,21 +29,22 @@ public class StageButton : MonoBehaviour
 
     public void OnClick1()
     {
-        SoundManager.Instance.ButtonClick();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         Stage1Click(0);
     }
     public void OnClick2()
     {
-        SoundManager.Instance.ButtonClick();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         Stage1Click(1);
     }
     public void OnClick3()
-    {      
-        SoundManager.Instance.ButtonClick();
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        SoundManager.Instance.OnBossStageStart();
+        ServiceLocator.Get<IAudioService>().PlayBGM("BossTheme-BossEnty", true);
+
         Stage1Click(2);
     }
     public void Stage1Click(int stage)
@@ -51,7 +52,7 @@ public class StageButton : MonoBehaviour
         if(stage == 0)
         {
             Round.Instance.EntyUp();
-            SoundManager.Instance.PlayGameBGM();
+
         }
 
         Round.Instance.RoundUp();
@@ -87,11 +88,13 @@ public class StageButton : MonoBehaviour
 
     public void NextEntyOn() // 캐시 아웃 버튼을 누르면 상점 나오게
     {
-        SoundManager.Instance.ButtonClick();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        ServiceLocator.Get<IAudioService>().PlayBGM("ShopTheme-Shop", true);
 
         Entycanvas.gameObject.SetActive(false);
         ShopPanel.gameObject.SetActive(true);
-        SoundManager.Instance.OnShopStart();
+
 
         if(Round.Instance.CurrentScores == Round.Instance.stages[2])
         {
@@ -109,8 +112,16 @@ public class StageButton : MonoBehaviour
     // 상점의 다음 라운드 버튼
     public void NextEnty()
     {
-        SoundManager.Instance.ButtonClick();
-        SoundManager.Instance.ResumePreviousBGM();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        if (Round.Instance.Rounds % 3 == 0)
+        {
+            ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);   
+        }
+        else
+        {
+            ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
+        }
 
         OnShopCloseRequest?.Invoke();
 

@@ -26,12 +26,15 @@ public class TitlePopup : MonoBehaviour
 
     // PlayButton 클릭 시 
     public void PlayButtonClick()
-    { 
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
         RunPanel.SetActive(true);
     }
 
     public void DeletePlayClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         RunPanel.SetActive(false);
     }
 
@@ -40,12 +43,16 @@ public class TitlePopup : MonoBehaviour
     // OptionButton 클릭 시 
     public void OptionButtonClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         OptionPanel.SetActive(true);
     }
 
     // 옵션 중 설정 클릭 시 
     public void SoundOptionClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         OptionPanel.SetActive(false);
         SoundOptionPanel.SetActive(true);
     }
@@ -53,12 +60,16 @@ public class TitlePopup : MonoBehaviour
     // 사운드 설정 닫기
     public void DeleteSoundClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         SoundOptionPanel.SetActive(false);
         OptionPanel.SetActive(true);
     }
 
     public void DeleteOptionClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         OptionPanel.SetActive(false);
     }
 
@@ -67,11 +78,28 @@ public class TitlePopup : MonoBehaviour
     // QuitButton 클릭 시 
     public void QuitButtonClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         QuitPanel.SetActive(true);
     }
 
     public void DeleteQuitClick()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         QuitPanel.SetActive(false);
     }
+
+    public void OnQuitClick()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+
+    }
+
+    // |---------------------------
+
 }

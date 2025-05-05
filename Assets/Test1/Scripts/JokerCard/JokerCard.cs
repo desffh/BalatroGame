@@ -63,9 +63,9 @@ public class JokerCard : CardComponent
     }
 
     // 효과 발동 - HoldManager에서 호출
-    public void ActivateEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, JokerCard myjoker)
+    public bool ActivateEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, JokerCard myjoker)
     {
-        effect?.ApplyEffect(selectedCards, currentHandType, holdManager, data.type, myjoker); // 조커 category도 함께 전달
+        return effect?.ApplyEffect(selectedCards, currentHandType, holdManager, data.type, myjoker) ?? false; // 조커 category도 함께 전달
     }
 
     // 데이터 제공용
@@ -111,6 +111,8 @@ public class JokerCard : CardComponent
 
     public override void OnCardClicked()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         Shop shop = FindAnyObjectByType<Shop>();
         if (shop == null) return;
 

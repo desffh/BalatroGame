@@ -15,10 +15,8 @@ public class HandTypeBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        Debug.Log("족보 확인 할게요");
-        //if (jokerCategory != category) return;
 
         if (string.Equals(currentHandType, targetType, StringComparison.OrdinalIgnoreCase))
         {
@@ -32,7 +30,10 @@ public class HandTypeBonusEffect : IJokerEffect
         
             ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
             showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
+
+            return true;
         }
 
+        return false;
     }
 }

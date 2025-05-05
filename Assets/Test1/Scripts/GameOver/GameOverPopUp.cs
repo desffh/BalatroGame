@@ -16,7 +16,7 @@ public class GameOverPopUp : MonoBehaviour
     // 핸드가 0이고 종료되었을때,
     public void GameOver()
     {
-        SoundManager.Instance.StageFail();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-Fail");
 
         GameOverPanel.SetActive(true);
 
@@ -25,6 +25,7 @@ public class GameOverPopUp : MonoBehaviour
 
     public void GameOverExit()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         GameOverPanel.SetActive(false);
     }

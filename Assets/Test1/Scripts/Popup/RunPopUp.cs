@@ -13,6 +13,8 @@ public class RunPopUp : MonoBehaviour
 
     public void OnEnter()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-EnterCard");
+
         Popup.SetActive(true);
     }
 

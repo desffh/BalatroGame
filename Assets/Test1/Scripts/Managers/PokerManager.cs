@@ -35,11 +35,8 @@ public class PokerManager : Singleton<PokerManager>
         base.Awake();
 
         saveNum = new List<int>();
-    }
-
-    public PokerManager()
-    {
         // 족보 리스트 초기화
+
         pokerHands = new List<IPokerHandle>
         {
             new RoyalStraightFlush(),
@@ -55,6 +52,7 @@ public class PokerManager : Singleton<PokerManager>
         };
         saveNum = new List<int>();  // saveNum 리스트는 여기서 한 번만 생성
     }
+
 
     public int plus;
     public int multiple;
@@ -160,7 +158,6 @@ public class PokerManager : Singleton<PokerManager>
     {
         for (int i = 0; i < cardData.SelectCards.Count; i++)
         {
-            SoundManager.Instance.PlayCardSpawn();
             yield return new WaitForSeconds(0.12f);
         }
     }

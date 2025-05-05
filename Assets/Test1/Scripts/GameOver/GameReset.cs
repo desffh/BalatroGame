@@ -12,8 +12,7 @@ public class GameReset : MonoBehaviour
 
     public void GameResets()
     {
-        SoundManager.Instance.ButtonClick();
-
+        ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
         round.RoundReset();
         money.ReSetTotalMoney();
         money.MoneyUpdate();

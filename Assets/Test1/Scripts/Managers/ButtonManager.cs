@@ -51,7 +51,8 @@ public class ButtonManager : Singleton<ButtonManager>
     // 핸드버튼을 클릭했을 때
     public void OnHandButtonClick()
     {
-        SoundManager.Instance.ButtonClick();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         StartCoroutine(CardDeletePoint());
         StartCoroutine(CardDeleteSound());  
     }
@@ -61,7 +62,8 @@ public class ButtonManager : Singleton<ButtonManager>
     {
         for (int i = 0; i < PokerManager.Instance.cardData.SelectCards.Count; i++)
         {
-            SoundManager.Instance.PlayCardSpawn();
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-SpawnCard");
+
             yield return new WaitForSeconds(0.12f);
         }
 
@@ -105,7 +107,7 @@ public class ButtonManager : Singleton<ButtonManager>
     // 버리기 버튼을 클릭했을 때
     public void OnDeleteButtonClick()
     {
-        SoundManager.Instance.ButtonClick();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         isButtonActive = false;
 

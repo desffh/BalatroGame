@@ -195,7 +195,6 @@ public class HoldManager : Singleton<HoldManager>
 
     private IEnumerator ApplyJokerEffectsStep()
     {
-        Debug.Log("조커 효과 적용 단계 진입");
 
         // **한 프레임 대기 후 실행 → 객체들 초기화 시간 확보**
         yield return null;
@@ -205,7 +204,7 @@ public class HoldManager : Singleton<HoldManager>
         // 조커가 리스트에 없다면 코루틴 종료
         if (myJokerCard == null || myJokerCard.Cards.Count == 0)
         {
-            Debug.Log("조커가 없으므로 효과 적용 없이 다음 단계로 진행");
+
             yield break;
         }
 
@@ -215,17 +214,17 @@ public class HoldManager : Singleton<HoldManager>
         
         string currentHandType = PokerManager.Instance.pokerName;
 
-        Debug.Log($"[조커 효과] 현재 핸드타입: {currentHandType}");
-        Debug.Log($"[조커 효과] 선택된 카드 수: {selectedCards.Count}");
 
         foreach (var joker in myJokerCard.Cards)
         {
             Debug.Log($"[조커 효과] 조커 이름: {joker.name}, 조건: {joker.currentData.baseData.require}");
 
-            joker.ActivateEffect(selectedCards, currentHandType, this, joker);
+            bool effectApplied = joker.ActivateEffect(selectedCards, currentHandType, this, joker);
 
-
-            yield return new WaitForSeconds(1f);
+            if (effectApplied)
+            {
+                yield return new WaitForSeconds(1f);
+            }
         }
 
 
@@ -240,7 +239,7 @@ public class HoldManager : Singleton<HoldManager>
         yield return waitForSeconds;
         pokerManager.DeleteMove();
 
-        SoundManager.Instance.ResetSFXPitch();
+
     }
     
 
@@ -342,9 +341,7 @@ public class HoldManager : Singleton<HoldManager>
                 ShowRankText = PokerManager.Instance.cardData.SelectCards[i].GetComponent<ShowRankText>();
                 ShowRankText.OnSettingRank(saveNumber);
 
-                // 여기서 효과음 재생하고 피치 올리기
-                SoundManager.Instance.sfxSource.pitch += 0.04f;
-                SoundManager.Instance.PlayCardCountSFX();  // 별도 함수로 관리
+                ServiceLocator.Get<IAudioServicePitch>().PlaySFXPitch("Sound-CheckCard");
 
                 break;
             }

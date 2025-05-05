@@ -17,10 +17,8 @@ public class SuitBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        Debug.Log("문양 확인 할게요");
-
         var matchedCard = selectedCards.Where(card => card.itemdata.suit == targetSuit).ToList();
 
         if (matchedCard.Count > 0)
@@ -40,10 +38,12 @@ public class SuitBonusEffect : IJokerEffect
 
             ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
             showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
+
+            return true;
         }
 
         // 그렇지 않다면 실패 효과음과 애니메이션 실행
-
+        return false;
     }
 }
 

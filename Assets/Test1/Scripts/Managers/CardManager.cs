@@ -229,7 +229,7 @@ public class CardManager : Singleton<CardManager>
                 totalSpawnedCount++;
             }
 
-            SoundManager.Instance.PlayCardSpawn();
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-SpawnCard");
         }
         CheckTexts();
 
@@ -368,6 +368,8 @@ public class CardManager : Singleton<CardManager>
     // 랭크 정렬 버튼 클릭 시
     public void Allignment()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         myCards = myCards.OrderBy(card => card.itemdata.id).ToList();
         SetOriginOrder();
         CardAlignment(() =>

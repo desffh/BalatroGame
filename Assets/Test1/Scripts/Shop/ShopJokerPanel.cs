@@ -29,6 +29,8 @@ public class ShopJokerPanel : MonoBehaviour
 
     public void DeleteNoBalance()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         Nobalance.SetActive(false);
     }
 
@@ -42,6 +44,8 @@ public class ShopJokerPanel : MonoBehaviour
 
     public void DeleteOverJokerCount()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         OverJokerCount.SetActive(false);
     }
 
@@ -50,11 +54,15 @@ public class ShopJokerPanel : MonoBehaviour
     // 조커 판매하기 버튼을 눌렀을 때
     public void OnSellJokerPopup()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         SellJokerPopup.SetActive(true);
     }
 
     public void DeleteSellJokerPopup()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         SellJokerPopup.SetActive(false);
     }
 

@@ -11,6 +11,7 @@ using System;
 using TMPro;
 
 using UnityEngine.Pool;
+using UnityEngine.EventSystems;
 
 
 // Card에 들어갈 스크립트
@@ -92,7 +93,7 @@ public class Card : CardComponent
     // 마우스가 카드에 닿았을 때 -> 효과음, 팝업 띄우기
     private void OnMouseEnter()
     {
-        SoundManager.Instance.PlayCardEnter();
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-EnterCard");
         cardPopup.MouseEnter();
     }
 
@@ -187,7 +188,14 @@ public class Card : CardComponent
     // 마우스로 클릭하면 CardIDdata 리스트에 카드 넣기 (최대5개) & 사운드
     public void OnMouseDown()
     {
-        SoundManager.Instance.PlayCardClick();
+        // 현재 마우스 포인터가 UI 요소 위에 있을 경우, 아래 코드 실행을 건너뜁니다.
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return; // 클릭 처리하지 않음
+        }
+
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ClickCard");
+
         OnCardClicked();
     }
 

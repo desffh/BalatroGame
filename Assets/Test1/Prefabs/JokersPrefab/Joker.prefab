@@ -93,6 +93,8 @@ GameObject:
   - component: {fileID: 4018067851613429530}
   - component: {fileID: 8015302417771567077}
   - component: {fileID: 6867116986514853954}
+  - component: {fileID: 8955433623321737983}
+  - component: {fileID: 5105810298129925723}
   m_Layer: 5
   m_Name: Joker
   m_TagString: Untagged
@@ -309,6 +311,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RankText: {fileID: 5459481247788473896}
+--- !u!114 &8955433623321737983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839103790593053743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.57254905}
+  m_EffectDistance: {x: 2, y: 2}
+  m_UseGraphicAlpha: 1
+--- !u!114 &5105810298129925723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839103790593053743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0.5372549}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2895764360785230072
 GameObject:
   m_ObjectHideFlags: 0

@@ -161,6 +161,8 @@ public class Shop : MonoBehaviour
     // 구매하기
     public void Buy()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         if (currentTarget == null) return;
 
         // 조커가 5개 이상 & 현재 조커 금액 미만 이면 구매 불가능 
@@ -212,6 +214,8 @@ public class Shop : MonoBehaviour
     // 판매하기 
     public void Sell()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         if (currentTarget == null) return;
         Debug.Log("판매되나요?");
 
@@ -265,6 +269,8 @@ public class Shop : MonoBehaviour
 
     public void OnSellJokerPopups()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         jokerPanel.OnSellJokerPopup();
         fullScreenBlocker.SetActive(false);
     }
@@ -277,6 +283,8 @@ public class Shop : MonoBehaviour
 
     public void DeleteSellJoker()
     {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
         jokerPanel.DeleteSellJokerPopup();
         OnBlockerClicked();
     }

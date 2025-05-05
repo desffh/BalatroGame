@@ -9,22 +9,30 @@ using TMPro;
 public class ViewCard : MonoBehaviour
 {
     [SerializeField] private Image cardImage; // 카드 이미지 (UI)
-    //[SerializeField] public int ID;
-
 
     [SerializeField] public int cardID { get; private set; }
 
+    [SerializeField] public string suit;
+
+    [SerializeField] public int rank;
+
     private CanvasGroup canvasGroup;
+
+    [SerializeField] ViewCardText viewCardText;
 
     private void OnEnable()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-
+        popupTextSetting();
     }
 
     public void Setup(ItemData data)
     {
         cardID = data.inherenceID;
+
+        suit = data.name;
+
+        rank = data.id;
 
         // 카드 이름에 해당하는 스프라이트를 CardSprites에서 가져오기
         string spriteName = data.front;
@@ -63,5 +71,11 @@ public class ViewCard : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
+    }
+
+    // 팝업 텍스트 셋팅
+    public void popupTextSetting()
+    {
+        viewCardText.TextUpdate(suit, rank);
     }
 }

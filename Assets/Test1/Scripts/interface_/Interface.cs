@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 
 // 포커 족보 인터페이스
 public interface IPokerHandle
@@ -74,6 +75,16 @@ public interface IPokerJoker
 
 // |------------------------------------------------------
 
+// 게임 상태 인터페이스
+public interface IGameState
+{
+    void Enter();
+    void Exit();
+}
+
+// |------------------------------------------------------
+
+
 // 팝업 텍스트 인터페이스 
 public interface IPopupText
 {
@@ -84,18 +95,25 @@ public interface IPopupText
 
 // |------------------------------------------------------
 
-// 게임 상태 인터페이스
-public interface IGameState
+// 조커 능력 인터페이스
+public interface IJokerEffect
 {
-    void Enter();
-    void Exit();
+    bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker);
 }
 
 // |------------------------------------------------------
 
-public interface IJokerEffect
+public interface IAudioService
 {
-    void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker);
+    void PlaySFX(string clipName);
+
+    void PlayBGM(string clipName, bool loop = true);
+
+    void StopBGM();
 }
 
+public interface IAudioServicePitch
+{ 
 
+    void PlaySFXPitch(string clipName);
+}

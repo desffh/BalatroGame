@@ -16,10 +16,9 @@ public class NormalBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public void ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
         Debug.Log("문양 확인 할게요");
-
 
         holdManager.MultiplySum += bonus;
 
@@ -29,5 +28,7 @@ public class NormalBonusEffect : IJokerEffect
 
         ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
         showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
+
+        return true;
     }
 }
