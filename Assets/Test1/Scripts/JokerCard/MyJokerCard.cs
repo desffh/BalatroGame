@@ -34,6 +34,7 @@ public class MyJokerCard : MonoBehaviour
         if (Cards.Contains(card))
         {
             Cards.Remove(card);
+            TextManager.Instance.UpdateJokerCards(myCards.Count);
         }
     }
 
@@ -45,5 +46,6 @@ public class MyJokerCard : MonoBehaviour
         }
 
         myCards.Clear();
+        TextManager.Instance.UpdateJokerCards(myCards.Count);
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -51,10 +52,21 @@ public class ScoreManager : Singleton<ScoreManager>
 
         return false;
     }
-    
+
     // 게임 오버 시 호출
     public void BestHand()
     {
         bestHand.BestHandUpdate(MaxScore);
+    }
+
+
+    [SerializeField] private TextMeshProUGUI scoreText;
+
+    public void AnimateScore(int from, int to, float duration = 1f)
+    {
+        DOTween.To(() => from, x => {
+            from = x;
+            scoreText.text = from.ToString();
+        }, to, duration).SetEase(Ease.OutQuad);
     }
 }

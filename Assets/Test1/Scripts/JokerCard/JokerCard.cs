@@ -24,18 +24,12 @@ public class JokerCard : CardComponent
 
     private IPopupText jokerPopup;
 
-    [SerializeField] private bool checkClick = false;
-
-    // |------------------------------
-    //[SerializeField] private MonoBehaviour popupComponent;
-
 
     // |------------------------------
 
     private void Awake()
     {
         jokerImage = GetComponent<Image>();
-        //jokerPopup = popupComponent as IPopupText;
     }
 
     // 외부에서 조커 데이터 설정
@@ -176,5 +170,15 @@ public class JokerCard : CardComponent
     {
         GameObject parent = GameObject.Find("JokersPanel");
         return parent != null && transform.IsChildOf(parent.transform);
+    }
+
+    public void OnEnterJoker()
+    {
+        AnimationManager.Instance.OnEnterJokerCard(gameObject);
+    }
+
+    public void OnExitJoker()
+    {
+        AnimationManager.Instance.OnExitJokerCard(gameObject);
     }
 }

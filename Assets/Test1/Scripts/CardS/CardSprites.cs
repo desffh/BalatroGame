@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CardSprites : Singleton<CardSprites>
 {
-    [SerializeField] private string sheetName = "Textures/card_list_2d";
-
     private Dictionary<string, Sprite> spriteDict = new Dictionary<string, Sprite>();
 
     protected override void Awake()

@@ -27,6 +27,8 @@ public class SuitBonusEffect : IJokerEffect
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
+
             // 문양과 일치하는 카드들의 애니메이션 실행
             foreach (var card in matchedCard)
             {

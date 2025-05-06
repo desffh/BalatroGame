@@ -78,4 +78,14 @@ public class ViewCard : MonoBehaviour
     {
         viewCardText.TextUpdate(suit, rank);
     }
+
+    public void EnterViewCard()
+    {
+        AnimationManager.Instance.OnEnterViewCard(gameObject);
+    }
+
+    public void ExitViewCard()
+    {
+        AnimationManager.Instance.OnExitViewCard(gameObject);
+    }
 }

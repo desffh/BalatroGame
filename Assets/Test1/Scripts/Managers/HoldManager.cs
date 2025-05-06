@@ -158,6 +158,8 @@ public class HoldManager : Singleton<HoldManager>
             interactable.OnButton();
 
             RefillActionQueue();
+
+
         }
     }
 
@@ -256,9 +258,7 @@ public class HoldManager : Singleton<HoldManager>
         pokerManager.ClearSelection();
         pokerManager.saveNum.Clear();
 
-        // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
         CardManager.Instance.AddCardSpawn(() => {
-            //CardManager.Instance.TurnOnAllCardColliders();
         });
 
         UIupdate();
@@ -278,6 +278,7 @@ public class HoldManager : Singleton<HoldManager>
 
     public void TotalScoreCal()
     {
+        int lastScore = totalScore;
 
         totalScore = PlusSum * MultiplySum;
 
@@ -285,7 +286,8 @@ public class HoldManager : Singleton<HoldManager>
 
         Debug.Log(totalScore); // 왜 전체 점수가 0? 
 
-        TextManager.Instance.UpdateText(0, ScoreManager.Instance.TotalScore);
+        ScoreManager.Instance.AnimateScore(lastScore, ScoreManager.Instance.TotalScore);
+        //TextManager.Instance.UpdateText(0, ScoreManager.Instance.TotalScore);
     }
     
 

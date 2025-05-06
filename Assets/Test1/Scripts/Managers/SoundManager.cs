@@ -41,6 +41,9 @@ public class SoundManager : MonoBehaviour, IAudioService, IAudioServicePitch
 
     public void Start()
     {
+        bgmSource.volume = 0.5f;
+        sfxSource.volume = 0.5f;
+
         ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
     }
 
@@ -80,4 +83,16 @@ public class SoundManager : MonoBehaviour, IAudioService, IAudioServicePitch
     {
         bgmSource.Stop();
     }
+    
+    // |------------------------------
+    public void SetBGMVolume(float volume)
+    {
+        bgmSource.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        sfxSource.volume = volume;
+    }
+
 }

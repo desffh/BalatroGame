@@ -101,14 +101,35 @@ public class AnimationManager : Singleton<AnimationManager>
         moveTween = seq;
     }
 
+    // 카드에 마우스가 들어왔을 때
+    public void OnEnterCard(GameObject cardPrefabs)
+    {
+        if (cardPrefabs.GetComponent<Card>().isAnimating) return;
+        Transform t = cardPrefabs.transform;
+        t.DOKill();
+
+        t.DOScale(new Vector3(0.75f, 0.75f, 0.75f), 0.05f);
+    }
+
+
+    // 카드에서 마우스를 뗏을 때
+    public void OnExitCard(GameObject cardPrefabs)
+    {
+        if (cardPrefabs.GetComponent<Card>().isAnimating) return;
+
+        Transform t = cardPrefabs.transform;
+
+        t.DOKill();
+
+        t.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.05f);
+    }
 
     // 조커 플레이 시 카드 애니메이션
     public void PlayJokerCardAnime(GameObject cardPrefabs)
     {
-        cardPrefabs.transform.DOScale(new Vector3(1.05f, 1.05f, 1.05f), 0.3f).
+        cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.3f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f); });
     }
-
 
 
     public void CardAnime(Transform cardTransform)
@@ -116,9 +137,15 @@ public class AnimationManager : Singleton<AnimationManager>
         if (DOTween.IsTweening(cardTransform))
             DOTween.Kill(cardTransform); // 기존 트윈 제거
 
-        cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
+        cardTransform.GetComponent<Card>().isAnimating = true;
+
+        // Sequence 생성
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
            cardTransform.transform.position.y - 0.5f,
-           cardTransform.transform.position.z), 0.2f);
+           cardTransform.transform.position.z), 0.2f).
+           OnComplete(() => { cardTransform.GetComponent<Card>().isAnimating = false; }));
     }
 
     // 카드를 다시 눌렀을 때 제자리 애니메이션
@@ -126,10 +153,16 @@ public class AnimationManager : Singleton<AnimationManager>
     {
         if (DOTween.IsTweening(cardTransform))
             DOTween.Kill(cardTransform); // 기존 트윈 제거
+        
+        cardTransform.GetComponent<Card>().isAnimating = true;
 
-        cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
+        // Sequence 생성
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(cardTransform.DOMove(new Vector3(cardTransform.transform.position.x,
            cardTransform.transform.position.y + 0.5f,
-           cardTransform.transform.position.z), 0.2f);
+           cardTransform.transform.position.z), 0.2f).
+           OnComplete(() => { cardTransform.GetComponent<Card>().isAnimating = false; }));
     }
 
     // 카드를 다 눌렀을 때 애니메이션 
@@ -137,7 +170,48 @@ public class AnimationManager : Singleton<AnimationManager>
     {
         cardTransform.DOKill(); // 기존 Tween 제거
 
-        cardTransform.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
-            OnComplete(() => { cardTransform.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
+        cardTransform.GetComponent<Card>().isAnimating = true;
+
+        // Sequence 생성
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(cardTransform.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
+            OnComplete(() => { cardTransform.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); }).
+            OnComplete(() => { cardTransform.GetComponent<Card>().isAnimating = false; }));
     }
+
+    // 타이핑 모션
+    public void TMProText(TextMeshProUGUI text, float duration)
+    {
+        text.maxVisibleCharacters = 0;
+
+        DOTween.To(x => text.maxVisibleCharacters = (int)x, 0f, text.text.Length, duration);
+    }
+
+    // 뷰 카드 
+    public void OnEnterViewCard(GameObject cardPrefabs)
+    {
+        cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.2f);
+    }
+    public void OnExitViewCard(GameObject cardPrefabs)
+    {
+        cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f);
+    }
+
+    // |-------------------
+
+    // 조커에 마우스가 들어왔을 때
+    public void OnEnterJokerCard(GameObject cardPrefabs)
+    {
+        cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.2f);
+    }
+
+    // 조커에 마우스가 나갔을 때
+    public void OnExitJokerCard(GameObject cardPrefabs)
+    {
+        cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f);
+    }
+
+    // |-------------------
+
 }

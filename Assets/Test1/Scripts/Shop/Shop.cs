@@ -288,4 +288,22 @@ public class Shop : MonoBehaviour
         jokerPanel.DeleteSellJokerPopup();
         OnBlockerClicked();
     }
+
+    // 리롤 버튼을 누를 시
+    public void Reroll()
+    {
+        if (money.TotalMoney < 5)
+        {
+            jokerPanel.OnNoReroll();
+            return;
+        }
+
+        money.MinusMoney(5);
+
+        // 머니 UI업데이트
+        money.MoneyUpdate();
+
+        CloseShop();
+        OpenShop();
+    }
 }

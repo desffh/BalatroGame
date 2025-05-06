@@ -10,6 +10,8 @@ public class ShopJokerPanel : MonoBehaviour
     [SerializeField] GameObject OverJokerCount; // 조커 갯수 최대 팝업 (5개)
 
     [SerializeField] GameObject SellJokerPopup; // 조커 판매 시 팝업 
+
+    [SerializeField] GameObject RerollPopup; // 리롤 안될 시 팝업
     private void Start()
     {
         Nobalance.SetActive(false);
@@ -17,11 +19,14 @@ public class ShopJokerPanel : MonoBehaviour
         OverJokerCount.SetActive(false);
 
         SellJokerPopup.SetActive(false);
+    
+        RerollPopup.SetActive(false);
     }
+
 
     // |-------------------------
 
-    // 구매 금액이 모자랄 때
+    // 구매 금액이 모자랄 때 (조커)
     public void OnNoBalance()
     {
         Nobalance.SetActive(true);
@@ -65,6 +70,20 @@ public class ShopJokerPanel : MonoBehaviour
 
         SellJokerPopup.SetActive(false);
     }
-
     
+    // |-------------------------
+
+    // 구매 금액이 모자랄 때 (리롤)
+    public void OnNoReroll()
+    {
+        RerollPopup.SetActive(true);
+    }
+
+    public void DeleteReroll()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        RerollPopup.SetActive(false);
+    }
+
 }

@@ -15,7 +15,7 @@ public class ButtonManager : Singleton<ButtonManager>
     [SerializeField] HandCardPoints HandCardPoints;
 
 
-
+    [SerializeField] GameObject OptionButton;
     
 
     // 버튼 활성화 상태 여부
@@ -25,6 +25,7 @@ public class ButtonManager : Singleton<ButtonManager>
     {
         Handbutton.interactable = false;
         Treshbutton.interactable = false;
+        OptionButton.SetActive(false);
     }
 
     private void Update()
@@ -52,6 +53,8 @@ public class ButtonManager : Singleton<ButtonManager>
     public void OnHandButtonClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        Calculation();
 
         StartCoroutine(CardDeletePoint());
         StartCoroutine(CardDeleteSound());  
@@ -110,6 +113,8 @@ public class ButtonManager : Singleton<ButtonManager>
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         isButtonActive = false;
+
+        Calculation();
 
         // 카드 클릭 비활성화
         CardManager.Instance.TurnOffAllCardColliders();
@@ -178,6 +183,13 @@ public class ButtonManager : Singleton<ButtonManager>
 
     // |-----------------------------------------
 
-    
+    public void Calculation()
+    {
+        OptionButton.SetActive(true);
+    }
 
+    public void OnOptionButton()
+    {
+        OptionButton.SetActive(false);
+    }
 }

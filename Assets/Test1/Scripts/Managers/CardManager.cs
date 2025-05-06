@@ -8,6 +8,7 @@ using UnityEngine.Pool;
 using TMPro;
 using Unity.VisualScripting;
 using System.Runtime.Serialization.Formatters;
+using static UnityEngine.UI.Image;
 
 
 
@@ -41,6 +42,45 @@ public class CardManager : Singleton<CardManager>
     // 부모 게임 오브젝트 할당 (배치될 위치)
     [SerializeField] GameObject ParentCardPrefab;
 
+
+    [SerializeField] private TMP_Text spadeText;
+    [SerializeField] private TMP_Text clubText;
+    [SerializeField] private TMP_Text heartText;
+    [SerializeField] private TMP_Text diamondText;
+
+    // 문양 갯수 관리 딕셔너리
+    public Dictionary<string, int> GetSuitCounts()
+    {
+        Dictionary<string, int> suitCounts = new Dictionary<string, int>()
+    {
+        { "스페이드", 0 },
+        { "클로버", 0 },
+        { "하트", 0 },
+        { "다이아", 0 }
+    };
+
+        foreach (var item in itemBuffer)
+        {
+            if (suitCounts.ContainsKey(item.suit))
+            {
+                suitCounts[item.suit]++;
+            }
+        }
+
+        return suitCounts;
+    }
+
+    // 뷰 카드 내부 텍스트 갱신 (갯수의 변동이 있을 때 마다 호출)
+    public void UpdateSuitCountUI()
+    {
+        var counts = GetSuitCounts();
+
+        spadeText.text = $"{counts["스페이드"]}/13";
+        clubText.text = $"{counts["클로버"]}/13";
+        heartText.text = $"{counts["하트"]}/13";
+        diamondText.text = $"{counts["다이아"]}/13";
+    }
+
     // |------------------------------
 
     // 오브젝트 풀링 변수
@@ -70,6 +110,7 @@ public class CardManager : Singleton<CardManager>
     {
         SetupViewerCards();
         ReactivateAllViewerCards(); // 처음엔 뷰 카드 다 보이도록
+
     }
 
     // |------------------------------
@@ -117,6 +158,8 @@ public class CardManager : Singleton<CardManager>
     // 풀에 오브젝트를 반납할 때 사용되는 함수
     private void OnReleaseCard(Card card)
     {
+        card.KillTween();
+
         card.isInUse = false;
 
         //card.OffCollider();
@@ -127,6 +170,8 @@ public class CardManager : Singleton<CardManager>
     // 풀에서 오브젝트 파괴 시 호출 될 함수
     private void OnDestroyCard(Card card)
     {
+        card.KillTween();
+
         Destroy(card.gameObject);
     }
 
@@ -165,6 +210,7 @@ public class CardManager : Singleton<CardManager>
     // 버퍼에 카드 넣기 (52)
     void SetupItemBuffer()
     {
+
         // 크기 동적할당
         if (itemBuffer == null)
         {
@@ -182,7 +228,14 @@ public class CardManager : Singleton<CardManager>
             // 각각의 스프레드 시트 정보를 담은 카드들을 itemBuffer에 저장
             ItemData item = ItemDataReader.DataList[i];
 
-            itemBuffer.Add(item);
+            itemBuffer.Add(new ItemData
+            {
+                name = item.name,
+                id = item.id,
+                suit = item.suit,
+                front = item.front,
+                inherenceID = item.inherenceID
+            });
         }
         // 아이템 버퍼 안의 카드 섞기
         for (int i = 0; i < itemBuffer.Count; i++)
@@ -192,14 +245,29 @@ public class CardManager : Singleton<CardManager>
             itemBuffer[i] = itemBuffer[rand];
             itemBuffer[rand] = temp;
         }
+        //Debug.Log($"DataList 개수: {ItemDataReader.DataList.Count}");
+
+        //Debug.LogWarning($"[SetupItemBuffer 호출됨] Frame: {Time.frameCount}");
     }
+
+
+
+
 
     // 버퍼에서 카드 뽑기 (풀에서 카드 빌리기)
     public ItemData PopItem()
     {
         ItemData item = itemBuffer[0];
         itemBuffer.RemoveAt(0); // 리스트 메서드 (0번째 요소 제거)
-        return item;
+       
+        return new ItemData
+        {
+            name = item.name,
+            id = item.id,
+            suit = item.suit,
+            front = item.front,
+            inherenceID = item.inherenceID
+        };
     }
 
     public int totalSpawnedCount = 0; // 카드 뿌린 총 개수
@@ -226,7 +294,7 @@ public class CardManager : Singleton<CardManager>
             {
                 myCards.Add(card);
 
-                totalSpawnedCount++;
+                ++totalSpawnedCount;
             }
 
             ServiceLocator.Get<IAudioService>().PlaySFX("Sound-SpawnCard");
@@ -234,6 +302,7 @@ public class CardManager : Singleton<CardManager>
         CheckTexts();
 
         TextManager.Instance.BufferUpdate(); // 항상 텍스트 갱신
+        UpdateSuitCountUI();
 
         // 카드 정렬
         SetOriginOrder();
@@ -340,7 +409,7 @@ public class CardManager : Singleton<CardManager>
         {
             for (int i = 0; i < myCards.Count; i++)
             {
-                Debug.Log("내 카드 클릭 초기화");
+                //Debug.Log("내 카드 클릭 초기화");
                 myCards[i].GetComponent<Card>().checkCard = false;
             }
         }
@@ -348,6 +417,8 @@ public class CardManager : Singleton<CardManager>
 
     private IEnumerator SpawnCardsSequentially(System.Action onComplete = null)
     {
+        ButtonManager.Instance.Calculation();
+
         for (int i = myCards.Count; i < 8; i++)
         {
             AddCard();
@@ -356,6 +427,7 @@ public class CardManager : Singleton<CardManager>
             CardAlignment(() =>
             {
                 TurnOnAllCardColliders();
+                ButtonManager.Instance.OnOptionButton();
             });
 
                 yield return new WaitForSeconds(0.15f);
@@ -430,7 +502,6 @@ public class CardManager : Singleton<CardManager>
 
         // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
         AddCardSpawn(() => {
-            //TurnOnAllCardColliders();
         });
 
         ButtonManager.Instance.ButtonInactive();
@@ -444,6 +515,7 @@ public class CardManager : Singleton<CardManager>
         // UI 모두 업데이트
         HoldManager.Instance.UIupdate();
         HoldManager.Instance.TotalScoreupdate();
+        UpdateSuitCountUI();
 
         HoldManager.Instance.CheckReset();
 
@@ -515,6 +587,7 @@ public class CardManager : Singleton<CardManager>
             {
                 //Debug.Log("카드 숨기기");
                 matchedViewer.Hide();
+                UpdateSuitCountUI();
             }
         }
     }
@@ -539,5 +612,8 @@ public class CardManager : Singleton<CardManager>
             viewerCard.GetComponent<ViewCard>().Setup(ItemDataReader.DataList[i]);
         }
     }
+
+    // |-------------------------
+
 
 }

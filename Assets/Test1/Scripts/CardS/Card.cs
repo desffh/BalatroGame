@@ -47,6 +47,8 @@ public class Card : CardComponent
 
     [SerializeField] CardPopup cardPopup;
 
+
+
     // |------------------------------
 
     // 오브젝트 풀링
@@ -90,17 +92,23 @@ public class Card : CardComponent
 
     // |------------------------------
 
+
+    public bool isAnimating = false;
+
+
     // 마우스가 카드에 닿았을 때 -> 효과음, 팝업 띄우기
     private void OnMouseEnter()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-EnterCard");
         cardPopup.MouseEnter();
+        AnimationManager.Instance.OnEnterCard(gameObject);
     }
 
     // 마우스가 카드를 떠났을 때 -> 팝업 닫기
     private void OnMouseExit()
     {
         cardPopup.MouseExit();
+        AnimationManager.Instance.OnExitCard(gameObject);
     }
 
     // |------------------------------
@@ -109,7 +117,15 @@ public class Card : CardComponent
     public void Setup(ItemData item)
     {
         // 구조체에 itemdata 저장
-        this.itemdata = item;
+        this.itemdata = new ItemData()
+        { 
+            name = item.name,
+            id = item.id,
+            suit = item.suit,
+            front = item.front,
+            inherenceID = item.inherenceID,
+        };
+
 
         // 스프라이트 이름 가져오기
         string spriteName = item.front;
@@ -145,10 +161,19 @@ public class Card : CardComponent
     private Tween moveTween;
 
 
-
     // 카드 정렬 애니메이션
     public void MoveTransform(PRS prs, bool useAnimation, float duration, System.Action onComplete = null)
     {
+
+        if (moveTween != null && moveTween.IsActive())
+        {
+            moveTween.Kill();
+            moveTween = null;
+        }
+
+        if (this == null || transform == null) return; // 예외 방지
+
+
         if (useAnimation)
         {
             if (TryGetComponent<Collider2D>(out var collider))
@@ -229,7 +254,9 @@ public class Card : CardComponent
         else // 카드 꽉 참 
         {
             AnimationManager.Instance.NoCardAnime(cardPrefabs);
+
         }
+
     }
 
     // |------------------------------
@@ -251,6 +278,29 @@ public class Card : CardComponent
     // |-----------------------------
 
 
+    // 트윈 방지를 위한 DOKill
+    public void KillTween()
+    {
+        if (moveTween != null && moveTween.IsActive())
+        {
+            moveTween.Kill();
+            moveTween = null;
+        }
+    }
 
+    // |-----------------------------
+
+    //// 카드 클릭 후 잠시 비활성화
+    //public void DisableColliderTemporarily(float delay)
+    //{
+    //    Collider2D.enabled = false;
+    //    StartCoroutine(ReenableColliderAfterDelay(delay));
+    //}
+    //
+    //private IEnumerator ReenableColliderAfterDelay(float delay)
+    //{
+    //    yield return new WaitForSeconds(delay);
+    //    Collider2D.enabled = true;
+    //}
 
 }

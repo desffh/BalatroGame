@@ -34,11 +34,7 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log("PlayOn »£√‚");
 
         //playState = true;
-        
-        if (OnStageChanged != null)
-        {
-            OnStageChanged.Invoke();
-        }
+
     }
 
     public void PlayOff()

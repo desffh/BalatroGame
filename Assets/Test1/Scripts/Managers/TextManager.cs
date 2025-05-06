@@ -59,7 +59,6 @@ public class TextManager : Singleton<TextManager>
    {
        // 일단 한번 호출해서 UI 싹 갱신
        HandCardUpdate();
-       BufferUpdate();
    }
 
 
@@ -86,7 +85,7 @@ public class TextManager : Singleton<TextManager>
     }
 
     // 조커 텍스트 업데이트
-    public void UpdateJokerCards(int count)
+    public void UpdateJokerCards(int count = 0)
     {
         int total = 5;
 

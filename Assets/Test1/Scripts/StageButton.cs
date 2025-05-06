@@ -18,13 +18,20 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] GameObject ShopPanel; // »óÁ¡ Äµ¹ö½º
 
+    [SerializeField] TextMeshProUGUI text;
 
+    [SerializeField] TextMeshProUGUI shoptext;
 
     public static event System.Action OnShopCloseRequest;
 
     private void Awake()
     {
         button = GetComponent<Button>();
+    }
+    private void Start()
+    {
+        OnEntyCanvas();
+        Typing(text);
     }
 
     public void OnClick1()
@@ -95,6 +102,7 @@ public class StageButton : MonoBehaviour
         Entycanvas.gameObject.SetActive(false);
         ShopPanel.gameObject.SetActive(true);
 
+        Typing(shoptext);
 
         if(Round.Instance.CurrentScores == Round.Instance.stages[2])
         {
@@ -126,14 +134,19 @@ public class StageButton : MonoBehaviour
         OnShopCloseRequest?.Invoke();
 
         ShopPanel.gameObject.SetActive(false);
-        stagecanvas.gameObject.SetActive(true);
+        OnEntyCanvas();
 
     }
 
     public void OnEntyCanvas()
     {
         stagecanvas.gameObject.SetActive(true);
+        Typing(text);
     }
 
+    public void Typing(TextMeshProUGUI texts)
+    {
+        AnimationManager.Instance.TMProText(texts, 0.8f);
+    }
 
 }
