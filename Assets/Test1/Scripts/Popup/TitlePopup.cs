@@ -13,6 +13,8 @@ public class TitlePopup : MonoBehaviour
 
     [SerializeField] GameObject SoundOptionPanel;
 
+    [SerializeField] GameObject GuidePanel;
+
     private void Start()
     {
         OptionPanel.SetActive(false);
@@ -22,6 +24,8 @@ public class TitlePopup : MonoBehaviour
         RunPanel.SetActive(false);
 
         SoundOptionPanel.SetActive(false);
+
+        GuidePanel.SetActive(false);
     }
 
     // PlayButton 클릭 시 
@@ -101,5 +105,19 @@ public class TitlePopup : MonoBehaviour
     }
 
     // |---------------------------
+    // GuideButton 클릭 시 
+    public void GuideButtonClick()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
+        GuidePanel.SetActive(true);
+    }
+
+
+    public void DeleteGuideClick()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        GuidePanel.SetActive(false);
+    }
 }
