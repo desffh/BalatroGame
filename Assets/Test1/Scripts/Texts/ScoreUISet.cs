@@ -4,6 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+// TotalUIPanel > ScoreSet 내부에 있는 스크립트 -> 나중에 위치 수정
+
+// 엔티 ScoreUISet, ClearPanel 에 사용되기 때문
+
 public class ScoreUISet : MonoBehaviour
 {
     [SerializeField] Image blindImage;
@@ -20,6 +25,13 @@ public class ScoreUISet : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI rewardText;
 
+    // |---------------------------------
+
+    [SerializeField] Image clearblindImage;
+
+    [SerializeField] TextMeshProUGUI clearscoreText;
+
+    [SerializeField] TextMeshProUGUI clearrewardText;
 
     private void Start()
     {
@@ -39,11 +51,15 @@ public class ScoreUISet : MonoBehaviour
         entynameText.text = entyname;
         scoreText.text = score.ToString();
         rewardText.text = reward;
+
+        clearscoreText.text = score.ToString();
+        clearrewardText.text = reward;
     }
     
     public void EntyImageSetting(Sprite blind, Color color)
     {
         blindImage.sprite = blind;
+        clearblindImage.sprite = blind;
 
         backgroundColor.color = color;
 

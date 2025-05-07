@@ -24,6 +24,7 @@ public class JokerCard : CardComponent
 
     private IPopupText jokerPopup;
 
+    public bool isCalculating = false;
 
     // |------------------------------
 
@@ -100,6 +101,7 @@ public class JokerCard : CardComponent
     // UI에서 클릭될 때 호출
     public void OnMouse()
     {
+        if (isCalculating) return; // 계산중이면 클릭 무시
         OnCardClicked();
     }
 
@@ -181,4 +183,7 @@ public class JokerCard : CardComponent
     {
         AnimationManager.Instance.OnExitJokerCard(gameObject);
     }
+
+    // |----------------------------
+
 }

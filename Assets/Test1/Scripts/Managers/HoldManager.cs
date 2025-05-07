@@ -43,6 +43,7 @@ public class HoldManager : Singleton<HoldManager>
 
     ShowJokerRankText showJokerRankText;
 
+    MyJokerCard myJokerCard;
 
     protected override void Awake()
     {
@@ -92,6 +93,7 @@ public class HoldManager : Singleton<HoldManager>
     // 이벤트 : 1. 큐에 값 다 넣기 2. 계산 후 텍스트 누적 3. 카드 날라간 뒤 비활성화
     public void Calculation()
     {
+        
         calculation.Invoke();
         //Debug.Log("계산 시작");
     }
@@ -99,6 +101,14 @@ public class HoldManager : Singleton<HoldManager>
     // 등록된 이벤트
     public void CalSetting()
     {
+        myJokerCard = FindAnyObjectByType<MyJokerCard>();
+
+        foreach (var joker in myJokerCard.Cards) // 계산 시작 시 
+        {
+            joker.isCalculating = true;
+            Debug.Log("조커카드 클릭 안돼요");
+        }
+        
         var result = PokerManager.Instance.GetPokerResult();
 
         foreach (var n in result.SaveNum)
@@ -201,7 +211,6 @@ public class HoldManager : Singleton<HoldManager>
         // **한 프레임 대기 후 실행 → 객체들 초기화 시간 확보**
         yield return null;
 
-        var myJokerCard = FindAnyObjectByType<MyJokerCard>();
 
         // 조커가 리스트에 없다면 코루틴 종료
         if (myJokerCard == null || myJokerCard.Cards.Count == 0)
@@ -229,12 +238,14 @@ public class HoldManager : Singleton<HoldManager>
             }
         }
 
+        foreach (var joker in myJokerCard.Cards)
+        {
+            joker.isCalculating = false;
+            Debug.Log("조커카드 클릭돼요");
+        }
 
         Debug.Log("조커 루프 완료");
     }
-
-
-
 
     IEnumerator DelayedMove()
     {
@@ -278,16 +289,18 @@ public class HoldManager : Singleton<HoldManager>
 
     public void TotalScoreCal()
     {
-        int lastScore = totalScore;
+        int lastScore = ScoreManager.Instance.TotalScore;
 
         totalScore = PlusSum * MultiplySum;
 
         ScoreManager.Instance.AddScore(totalScore);
 
-        Debug.Log(totalScore); // 왜 전체 점수가 0? 
+        //Debug.Log(totalScore); // 왜 전체 점수가 0? 
 
         ScoreManager.Instance.AnimateScore(lastScore, ScoreManager.Instance.TotalScore);
         //TextManager.Instance.UpdateText(0, ScoreManager.Instance.TotalScore);
+        
+        Debug.Log($"이전 점수 : {lastScore} , 현재 점수 : {ScoreManager.Instance.TotalScore}");
     }
     
 

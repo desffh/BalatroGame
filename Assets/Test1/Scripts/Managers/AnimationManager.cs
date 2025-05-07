@@ -131,14 +131,18 @@ public class AnimationManager : Singleton<AnimationManager>
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f); });
     }
 
-
+    // 카드를 눌렀을 때 올라가는 애니메이션
     public void CardAnime(Transform cardTransform)
     {
+
         if (DOTween.IsTweening(cardTransform))
             DOTween.Kill(cardTransform); // 기존 트윈 제거
 
         cardTransform.GetComponent<Card>().isAnimating = true;
 
+        // 초기 크기 설정
+        cardTransform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        
         // Sequence 생성
         Sequence seq = DOTween.Sequence();
 
@@ -155,6 +159,9 @@ public class AnimationManager : Singleton<AnimationManager>
             DOTween.Kill(cardTransform); // 기존 트윈 제거
         
         cardTransform.GetComponent<Card>().isAnimating = true;
+
+        // 초기 크기 설정
+        cardTransform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
         // Sequence 생성
         Sequence seq = DOTween.Sequence();

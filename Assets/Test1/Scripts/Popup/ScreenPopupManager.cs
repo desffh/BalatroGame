@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -16,6 +17,8 @@ public class ScreenPopupManager : MonoBehaviour
     [SerializeField] PanelHandler clearPanel;
 
     [SerializeField] PanelHandler SoundOptionPanel;
+
+    [SerializeField] TextMeshProUGUI pointText;
     // |----------------------------------
 
     private void Start()
@@ -143,11 +146,18 @@ public class ScreenPopupManager : MonoBehaviour
 
     }
 
+    // clear 패널 호출 + 텍스트 애니메이션
     public void EndPanelShow(PanelHandler popupWindow)
     {
         popupWindow.transform.DOKill(); // 기존 트윈 제거
 
         popupWindow.gameObject.SetActive(true); // 반드시 먼저 활성화
+
+        popupWindow.onPanelShowComplete = () =>
+        {
+            AnimationManager.Instance.TMProText(pointText, 0.7f);
+            
+        };
 
         popupWindow.EndPanelShow();
     }

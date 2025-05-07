@@ -15,7 +15,7 @@ public class ButtonManager : Singleton<ButtonManager>
     [SerializeField] HandCardPoints HandCardPoints;
 
 
-    [SerializeField] GameObject OptionButton;
+    [SerializeField] GameObject OptionButton; // 투명 막
     
 
     // 버튼 활성화 상태 여부

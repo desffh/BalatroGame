@@ -17,7 +17,7 @@ public class Money : MonoBehaviour
 
     private void Awake()
     {
-        totalMoney = 10;
+        totalMoney = 0;
     }
 
     public void Start()

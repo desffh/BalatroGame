@@ -5,6 +5,9 @@ using DG.Tweening;
 
 public class PanelHandler : MonoBehaviour
 {
+    // clearPanel 애니메이션 완료된 후 호출
+    public System.Action onPanelShowComplete;
+
     void Awake()
     {
         DOTween.Init();
@@ -50,6 +53,13 @@ public class PanelHandler : MonoBehaviour
         var seq = DOTween.Sequence();
 
         seq.Append(transform.DOMoveY(540f, 0.7f));
+        
+        // 애니메이션이 끝났을 때 호출될 콜백
+        seq.OnComplete(() =>
+        {
+            if (onPanelShowComplete != null)
+                onPanelShowComplete.Invoke();
+        });
 
         seq.Play();
     }

@@ -8,7 +8,7 @@ public class MyJokerCard : MonoBehaviour
 {
     [SerializeField] public List<JokerCard> myCards;
 
-
+    
     public List<JokerCard> Cards
     {
         get { return myCards; }

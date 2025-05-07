@@ -108,14 +108,14 @@ public class CardManager : Singleton<CardManager>
 
     private void Start()
     {
+        // 뷰 카드 스프라이트 셋팅
         SetupViewerCards();
-        ReactivateAllViewerCards(); // 처음엔 뷰 카드 다 보이도록
-
+        ReactivateAllViewerCards();
     }
 
     // |------------------------------
 
-    // 사용한 카드들은 usedCards에 추가 (나중에 풀에 반환 될 카드들)
+    // 사용한 카드들은 usedCards에 추가 (나중에 풀에 반환 될 카드들) -> 다 쓴 카드들
     public void OnCardUsed(Card card)
     {
         if (!usedCards.Contains(card))
@@ -127,8 +127,8 @@ public class CardManager : Singleton<CardManager>
             Debug.LogWarning($"[중복사용]: {card.name}");
         }
 
-        // 사용된 카드들의 뷰 카드 비활성화 처리
-        SyncViewerCards();
+        OffViewerCards();
+
     }
 
     // (풀이 비었을 때) 카드 생성 시 호출 될 함수
@@ -293,12 +293,18 @@ public class CardManager : Singleton<CardManager>
             if (!myCards.Contains(card))
             {
                 myCards.Add(card);
-
+                
+                Debug.Log("내 카드 뷰카드 안보이게할게");
+                OffViewerCards2(card.itemdata.inherenceID);
+                
                 ++totalSpawnedCount;
             }
 
             ServiceLocator.Get<IAudioService>().PlaySFX("Sound-SpawnCard");
+            
         }
+
+
         CheckTexts();
 
         TextManager.Instance.BufferUpdate(); // 항상 텍스트 갱신
@@ -306,6 +312,7 @@ public class CardManager : Singleton<CardManager>
 
         // 카드 정렬
         SetOriginOrder();
+
     }
 
     // 리스트 전체 정렬 (먼저 추가한 카드가 제일 뒷쪽에 보임)
@@ -437,13 +444,28 @@ public class CardManager : Singleton<CardManager>
         onComplete?.Invoke(); // 콜라이더 켜기
     }
 
-    // 랭크 정렬 버튼 클릭 시
+    // 랭크 정렬 버튼 클릭 시 (오름차순 정렬 : 작은 숫자 ~ 큰 숫자)
     public void Allignment()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         myCards = myCards.OrderBy(card => card.itemdata.id).ToList();
         SetOriginOrder();
+        CardAlignment(() =>
+        {
+            TurnOnAllCardColliders();
+        });
+    }
+
+    // 수트 정렬 버튼 클릭 시 (내림차순 정렬 : 다이아 < 클로버 < 하트 < 스페이드)
+    public void AllignmentSuit()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        myCards = myCards.OrderByDescending(card => card.itemdata.inherenceID).ToList();
+
+        SetOriginOrder();
+
         CardAlignment(() =>
         {
             TurnOnAllCardColliders();
@@ -499,11 +521,16 @@ public class CardManager : Singleton<CardManager>
 
         // 카드 채우기
         SetupItemBuffer();
+        
+        // 뷰 카드 보이게 초기화
+        ReactivateAllViewerCards();
+
+        //SetupViewerCards();           // 뷰 카드 정보 설정
 
         // 카드 뿌리고, 정렬 끝나고, 콜라이더 켜기
         AddCardSpawn(() => {
-        });
 
+        });
         ButtonManager.Instance.ButtonInactive();
 
         // 랭크 정렬 버튼 활성화
@@ -521,10 +548,6 @@ public class CardManager : Singleton<CardManager>
 
         HoldManager.Instance.RefillActionQueue();
 
-
-        // 뷰 카드 초기화
-        ReactivateAllViewerCards();
-        SetupViewerCards();           // 뷰 카드 정보 설정
     }
 
 
@@ -568,20 +591,14 @@ public class CardManager : Singleton<CardManager>
 
     // |-------------------------
 
-    //뷰 카드 함수
-    public void SyncViewerCards()
+    // 뷰 카드 끄기 (사용된 카드) -usedCards -> 카드가 버려질 때 마다 호출
+    public void OffViewerCards()
     {
-        // 먼저 모두 보이게 설정
-        foreach (ViewCard viewer in viewerCards)
-        {
-            viewer.GetComponent<ViewCard>().Show();
-        }
-    
         // 사용된 카드와 inherenceID가 같은 뷰어 카드만 숨김
         foreach (Card usedCard in usedCards)
         {
             int usedID = usedCard.itemdata.inherenceID;
-    
+
             ViewCard matchedViewer = viewerCards.FirstOrDefault(v => v.cardID == usedID);
             if (matchedViewer != null)
             {
@@ -591,6 +608,23 @@ public class CardManager : Singleton<CardManager>
             }
         }
     }
+
+    // 뷰 카드 끄기 (배치된 카드) -myCards -> 카드가 배치될 때 마다 호출
+    public void OffViewerCards2(int inherenceID)
+    { 
+        // 배치된 카드와 inherenceID가 같은 뷰어 카드만 숨김
+
+        ViewCard matchedViewer = viewerCards.FirstOrDefault(v => v.cardID == inherenceID);
+
+        if (matchedViewer != null)
+        {
+            matchedViewer.Hide();
+            UpdateSuitCountUI();
+        }
+    }
+
+
+    // 스테이지가 시작할 때마다 호출 (초기화) ----------------------
 
     // 뷰 카드의 이미지 모두 보이게 초기화 (스테이지 새로 시작할때마다 호출)
     public void ReactivateAllViewerCards()

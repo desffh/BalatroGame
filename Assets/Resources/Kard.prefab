@@ -70,6 +70,7 @@ MonoBehaviour:
   checkCard: 0
   isInUse: 0
   cardPopup: {fileID: 4610209607889900206}
+  isAnimating: 0
 --- !u!114 &-982333530242807510
 MonoBehaviour:
   m_ObjectHideFlags: 0
