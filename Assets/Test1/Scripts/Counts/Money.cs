@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// 전체 돈 관리 (돈 추가 / 돈 감소)
 public class Money : MonoBehaviour
 {
     // 전체 머니
@@ -17,7 +18,7 @@ public class Money : MonoBehaviour
 
     private void Awake()
     {
-        totalMoney = 0;
+        totalMoney = 10;
     }
 
     public void Start()

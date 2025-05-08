@@ -25,7 +25,7 @@ public class VolumeSliderUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SoundManager 를 찾을 수 없습니다. ServiceLocator를 확인하세요.");
+            Debug.Log("찾을 수 없음");
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PokerJokerPopup : MonoBehaviour, IPopupText
+public class ChipJokerPopup : MonoBehaviour, IPopupText
 {
     [SerializeField] GameObject popup;
 
@@ -12,7 +12,7 @@ public class PokerJokerPopup : MonoBehaviour, IPopupText
 
     [SerializeField] public TextMeshProUGUI jokerMoneyText;
 
-    public string type => "Poker";
+    public string type => "PokerChip";
 
     public void Initialize(string name, string info, int multiple, int cost)
     {
@@ -26,7 +26,7 @@ public class PokerJokerPopup : MonoBehaviour, IPopupText
         jokerInfoText.fontSize = 26;
 
         jokerInfoText.text = $"<color=#0000FF>{info}</color>" + "(을)를 사용하여 득점 시  +" +
-            $"<color=#0000FF>{multiple}</color>" + " 배수";
+            $"<color=#0000FF>{multiple}</color>" + " 칩";
 
         jokerMoneyText.text = $"<color=#FFA500>${cost}</color>";
 

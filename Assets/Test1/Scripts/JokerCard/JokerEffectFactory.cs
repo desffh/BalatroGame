@@ -16,8 +16,11 @@ public static class JokerEffectFactory
             // type이 "Poker"면 족보 효과(HandTypeBonusEffect) 생성
             { "Poker", data => new HandTypeBonusEffect(data.require, data.multiple, data.type) },
 
-            // 필요하다면 일반 조커(Normal)도 여기에 추가 가능
-            { "Normal", data => new NormalBonusEffect(data.require, data.multiple, data.type) }
+            // 일반 조커 생성
+            { "Normal", data => new NormalBonusEffect(data.require, data.multiple, data.type) },
+            // 칩 조커 생성
+            { "PokerChip", data => new ChipBonusEffect(data.require, data.multiple, data.type) }
+
         };
 
     public static IJokerEffect Create(JokerData data)

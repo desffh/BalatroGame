@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 카드 이미지 설정 담당 
+// 
+// 런타임 시 이미지를 모두 배열에 저장해두고 필요할 때 키값으로 이미지 사용하기
+
 public class CardSprites : Singleton<CardSprites>
 {
     private Dictionary<string, Sprite> spriteDict = new Dictionary<string, Sprite>();

@@ -38,7 +38,7 @@ public class ScreenPopupManager : MonoBehaviour
 
     // |----------------------------------
 
-    // 런 정보 클릭 시 
+    // 런 정보 클릭 시 열기
     public void RunOnClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -47,6 +47,7 @@ public class ScreenPopupManager : MonoBehaviour
 
     }
 
+    // 런 정보 닫기
     public void RunDeleteClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -57,7 +58,7 @@ public class ScreenPopupManager : MonoBehaviour
     
     // |----------------------------------
 
-    // 옵션 버튼 클릭 시 
+    // 옵션 버튼 클릭 시 열기
     public void OptionButtonClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -65,6 +66,7 @@ public class ScreenPopupManager : MonoBehaviour
         OnButtonClick(OptionPanel);
     }
 
+    // 옵션 닫기
     public void DeleteOptionClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -74,7 +76,7 @@ public class ScreenPopupManager : MonoBehaviour
 
     // |----------------------------------
 
-    // 프리뷰 카드 클릭 시 
+    // 프리뷰 카드 클릭 시 열기
     public void ViewCardClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -82,6 +84,7 @@ public class ScreenPopupManager : MonoBehaviour
         OnButtonClick(ViewCardsPanel);
     }
 
+    // 프리뷰 카드 닫기
     public void DeleteViewCard()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -106,7 +109,7 @@ public class ScreenPopupManager : MonoBehaviour
     {
         onClearPanel();
 
-        yield return null;
+        yield return null; // 다음 프레임에
     }
 
     // |----------------------------------
@@ -127,7 +130,9 @@ public class ScreenPopupManager : MonoBehaviour
 
     }
 
+    // |--------------------------------------
 
+    // 팝업 애니메이션 닫기
     public void OnCloseButtonClick(PanelHandler popupWindow)
     {
         popupWindow.transform.DOKill(); // 기존 트윈 제거
@@ -136,6 +141,7 @@ public class ScreenPopupManager : MonoBehaviour
 
     }
 
+    // 팝업 애니메이션 열기
     public void OnButtonClick(PanelHandler popupWindow)
     {
         popupWindow.transform.DOKill(); // 기존 트윈 제거

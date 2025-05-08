@@ -454,6 +454,7 @@ public class CardManager : Singleton<CardManager>
         CardAlignment(() =>
         {
             TurnOnAllCardColliders();
+            ButtonManager.Instance.OnOptionButton();
         });
     }
 
@@ -469,6 +470,7 @@ public class CardManager : Singleton<CardManager>
         CardAlignment(() =>
         {
             TurnOnAllCardColliders();
+            ButtonManager.Instance.OnOptionButton();
         });
     }
 

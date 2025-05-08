@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+// 팝업 패널 애니메이션 담당
 public class PanelHandler : MonoBehaviour
 {
     // clearPanel 애니메이션 완료된 후 호출
@@ -14,6 +15,7 @@ public class PanelHandler : MonoBehaviour
 
     }
 
+    // 팝업 패널 열기 애니메이션
     public void Show()
     {
         gameObject.SetActive(true);
@@ -28,6 +30,7 @@ public class PanelHandler : MonoBehaviour
         seq.Play();
     }
 
+    // 팝업 패널 닫기 애니메이션 
     public void Hide()
     {
         var seq = DOTween.Sequence();

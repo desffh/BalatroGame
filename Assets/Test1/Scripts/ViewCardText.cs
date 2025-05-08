@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// 뷰 카드 팝업 텍스트 설정 담당
 public class ViewCardText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI nameText;

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 카드 배치 시 order값 조정 
+// 
+// 최근 카드가 제일 위에 렌더링되도록 설정
 public class Order : MonoBehaviour
 {
     [SerializeField] Renderer CardRenderer;

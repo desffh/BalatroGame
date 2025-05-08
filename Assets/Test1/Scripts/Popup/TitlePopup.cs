@@ -28,13 +28,14 @@ public class TitlePopup : MonoBehaviour
         GuidePanel.SetActive(false);
     }
 
-    // PlayButton 클릭 시 
+    // PlayButton 클릭 시 RunPanel 열기 
     public void PlayButtonClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
         RunPanel.SetActive(true);
     }
 
+    // RunPanel 닫기
     public void DeletePlayClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -52,7 +53,7 @@ public class TitlePopup : MonoBehaviour
         OptionPanel.SetActive(true);
     }
 
-    // 옵션 중 설정 클릭 시 
+    // 옵션 - 설정 클릭 시 
     public void SoundOptionClick()
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");

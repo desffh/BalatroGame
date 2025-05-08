@@ -46,6 +46,7 @@ public class ScoreUISet : MonoBehaviour
         }
     }
 
+    // 현재 엔티의 블라인드 이름, 목표 점수, 달성 보상 텍스트 업데이트
     public void EntyTextSetting(string entyname, int score, string reward)
     {
         entynameText.text = entyname;
@@ -56,6 +57,7 @@ public class ScoreUISet : MonoBehaviour
         clearrewardText.text = reward;
     }
     
+    // 현재 엔티의 블라인드 이미지, 컬러 업데이트
     public void EntyImageSetting(Sprite blind, Color color)
     {
         blindImage.sprite = blind;

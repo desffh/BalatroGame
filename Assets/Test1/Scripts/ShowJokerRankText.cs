@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// 조커 점수 텍스트 설정 담당
 public class ShowJokerRankText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI RankText;
-
-    private void Awake()
-    {
-
-    }
 
     private void Start()
     {
@@ -21,6 +17,13 @@ public class ShowJokerRankText : MonoBehaviour
     public void OnSettingRank(int rank)
     {
         RankText.text = "+ " + rank.ToString() + "배수";
+
+        OnRankText();
+    }
+
+    public void OnSettingChip(int chip)
+    {
+        RankText.text = "+ " + chip.ToString() + "칩";
 
         OnRankText();
     }

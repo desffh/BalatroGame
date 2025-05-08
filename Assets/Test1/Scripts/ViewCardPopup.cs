@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// ºä Ä«µåÀÇ ÆË¾÷ ¿­±â / ´Ý±â ´ã´ç
 public class ViewCardPopup : MonoBehaviour
 {
     [SerializeField] GameObject viewCardPopup;

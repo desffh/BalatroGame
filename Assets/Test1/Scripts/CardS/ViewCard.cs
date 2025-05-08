@@ -26,6 +26,9 @@ public class ViewCard : MonoBehaviour
         popupTextSetting();
     }
 
+    // |-----------------------------------------------------
+
+    // 뷰 카드 이미지 & 데이터 설정
     public void Setup(ItemData data)
     {
         cardID = data.inherenceID;
@@ -48,7 +51,7 @@ public class ViewCard : MonoBehaviour
         }
     }
 
-
+    // 뷰 카드 보이기
     public void Show()
     {
         if (canvasGroup == null)
@@ -66,12 +69,15 @@ public class ViewCard : MonoBehaviour
         canvasGroup.interactable = true;
     }
 
+    // 뷰 카드 숨기기
     public void Hide()
     {
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
     }
+
+    // |-------------------------------------------------
 
     // 팝업 텍스트 셋팅
     public void popupTextSetting()

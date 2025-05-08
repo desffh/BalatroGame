@@ -290,17 +290,4 @@ public class Card : CardComponent
 
     // |-----------------------------
 
-    //// 카드 클릭 후 잠시 비활성화
-    //public void DisableColliderTemporarily(float delay)
-    //{
-    //    Collider2D.enabled = false;
-    //    StartCoroutine(ReenableColliderAfterDelay(delay));
-    //}
-    //
-    //private IEnumerator ReenableColliderAfterDelay(float delay)
-    //{
-    //    yield return new WaitForSeconds(delay);
-    //    Collider2D.enabled = true;
-    //}
-
 }

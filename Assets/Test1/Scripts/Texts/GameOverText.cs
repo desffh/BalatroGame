@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 게임 오버 팝업에 들어 갈 모든 정보 갱신
+// 게임 오버 팝업에 들어 갈 모든 정보 갱신 담당
 public class GameOverText : MonoBehaviour
 {
     // 게임 종료 팝업에 들어 갈 텍스트 & 블라인드 이미지 
