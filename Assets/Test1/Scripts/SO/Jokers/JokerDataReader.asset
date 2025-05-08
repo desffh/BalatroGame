@@ -15,11 +15,16 @@ MonoBehaviour:
   associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
   associatedWorksheet: Jokers
   START_ROW_LENGTH: 2
-  END_ROW_LENGTH: 17
+  END_ROW_LENGTH: 27
   DataList:
   - name: "\uC77C\uBC18 \uC870\uCEE4"
     cost: 2
     multiple: 4
+    require: 
+    type: Normal
+  - name: "\uC77C\uBC18 \uC870\uCEE4"
+    cost: 4
+    multiple: 1
     require: 
     type: Normal
   - name: "\uC8FC\uD669 \uC870\uCEE4"
@@ -95,5 +100,50 @@ MonoBehaviour:
   - name: "\uBC18\uCABD\uC9DC\uB9AC \uC870\uCEE4"
     cost: 5
     multiple: 20
-    require: 3
+    require: 
     type: Hand
+  - name: "\uCD94\uC0C1\uD654 \uC870\uCEE4"
+    cost: 4
+    multiple: 3
+    require: 
+    type: Jokers
+  - name: "\uD640\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 31
+    require: 
+    type: Even
+  - name: "\uC9DD\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: Odd
+  - name: "\uAE43\uBC1C"
+    cost: 5
+    multiple: 30
+    require: 
+    type: NoDelete
+  - name: "\uC2E0\uBE44\uC758 \uC815\uC810"
+    cost: 5
+    multiple: 15
+    require: 
+    type: NoDelete
+  - name: "\uC6CC\uD0A4\uD1A0\uD0A4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: MultipleChip
+  - name: "\uD559\uC790 \uC870\uCEE4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: MultipleChip
+  - name: "\uC8FC\uC790"
+    cost: 5
+    multiple: 0
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8"
+    type: StringChip
+  - name: "\uC544\uC774\uC2A4\uD06C\uB9BC"
+    cost: 5
+    multiple: 100
+    require: 
+    type: NumChip

@@ -18,8 +18,6 @@ public class NormalBonusEffect : IJokerEffect
 
     public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
     {
-        Debug.Log("문양 확인 할게요");
-
         holdManager.MultiplySum += bonus;
 
         AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);           
