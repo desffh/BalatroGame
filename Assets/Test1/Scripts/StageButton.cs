@@ -22,7 +22,13 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI shoptext;
 
+
+    // 상점이 닫힐 때 호출되는 대리자
     public static event System.Action OnShopCloseRequest;
+
+    // 매 라운드가 시작될 때 마다 호출되는 대리자
+    public static event System.Action OnRoundStart;
+
 
     private void Awake()
     {
@@ -87,6 +93,9 @@ public class StageButton : MonoBehaviour
 
         // 초기화
         CardManager.Instance.SetupNextStage();
+
+        // 라운드 시작!
+        OnRoundStart.Invoke();
     }
 
 

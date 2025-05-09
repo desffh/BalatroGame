@@ -19,8 +19,6 @@ public class HoldManager : Singleton<HoldManager>
     // 랭크 정렬 버튼 참조
     [SerializeField] public Interactable interactable;
 
-
-
     // 계산 이벤트
     public UnityEvent calculation;
 
@@ -30,10 +28,6 @@ public class HoldManager : Singleton<HoldManager>
 
     // 숫자를 담고 하나씩 빼기 위한 큐
     private Queue<int> Num;
-
-    [SerializeField] public int PlusSum;
-    [SerializeField] public int MultiplySum;
-    private int totalScore;
 
     [SerializeField] AnimationManager animationManager;
 
@@ -54,9 +48,6 @@ public class HoldManager : Singleton<HoldManager>
     private void Start()        
     {
         waitForSeconds = new WaitForSeconds(1.0f);
-
-        PlusSum = 0;
-        MultiplySum = 0;
 
         Num = new Queue<int>();
 
@@ -79,7 +70,7 @@ public class HoldManager : Singleton<HoldManager>
 
     public bool StageEnd()
     {
-        if (totalScore < Round.Instance.CurrentScores && HandDelete.Instance.Hand <= 0)
+        if (ScoreManager.Instance.CurrentScore < Round.Instance.CurrentScores && StateManager.Instance.HandDelete.Hand <= 0)
         {
             Round.Instance.GameOverText();
             gameOverPopUp.GameOver();
@@ -115,9 +106,6 @@ public class HoldManager : Singleton<HoldManager>
         {
             Num.Enqueue(n);
         }
-
-        PlusSum = result.Plus;
-        MultiplySum = result.Multiple;
 
         StartCoroutine(ExecuteActions());
     }
@@ -230,7 +218,7 @@ public class HoldManager : Singleton<HoldManager>
         {
             Debug.Log($"[조커 효과] 조커 이름: {joker.name}, 조건: {joker.currentData.baseData.require}");
 
-            bool effectApplied = joker.ActivateEffect(selectedCards, currentHandType, this, joker);
+            bool effectApplied = joker.ActivateEffect(selectedCards, currentHandType, StateManager.Instance, joker);
 
             if (effectApplied)
             {
@@ -291,14 +279,9 @@ public class HoldManager : Singleton<HoldManager>
     {
         int lastScore = ScoreManager.Instance.TotalScore;
 
-        totalScore = PlusSum * MultiplySum;
-
-        ScoreManager.Instance.AddScore(totalScore);
-
-        //Debug.Log(totalScore); // 왜 전체 점수가 0? 
+        ScoreManager.Instance.AddScore(StateManager.Instance.MultipleChip.MULTIPLYSum * StateManager.Instance.MultipleChip.PLUSSum);
 
         ScoreManager.Instance.AnimateScore(lastScore, ScoreManager.Instance.TotalScore);
-        //TextManager.Instance.UpdateText(0, ScoreManager.Instance.TotalScore);
         
         Debug.Log($"이전 점수 : {lastScore} , 현재 점수 : {ScoreManager.Instance.TotalScore}");
     }
@@ -325,12 +308,12 @@ public class HoldManager : Singleton<HoldManager>
         {
             // 큐에서 빼면서 체크
             int saveNumber = Num.Dequeue();
-            PlusSum += saveNumber;
+            StateManager.Instance.MultipleChip.PlusPlusSum(saveNumber);
 
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
 
-            TextManager.Instance.UpdateText(1, PlusSum);
+            //TextManager.Instance.UpdateText(1, StateManager.Instance.MultipleChip.PLUSSum);
             
             // 애니메이션이 끝나기 전까지는 텍스트가 업데이트 되지 않기 때문에 텍스트 업데이트 이후에 로직 설정
             if (animationManager.moveTween != null && animationManager.moveTween.IsPlaying()) return;
@@ -373,18 +356,6 @@ public class HoldManager : Singleton<HoldManager>
         {
             savenumberCheck[i] = false;
         }
-    }
-
-    // 족보 룰 점수
-    public void PokerCalculate(int plus, int multiple)
-    {
-        if (pokerManager.cardData.SelectCards.Count > 0)
-        {
-            PlusSum += plus;
-            
-            MultiplySum += multiple;
-        }
-        //textManager.PokerUpdate(PlusSum, MultiplySum);
     }
 
     public void StartDeleteCard()

@@ -28,6 +28,14 @@ public class ShowJokerRankText : MonoBehaviour
         OnRankText();
     }
 
+    public void OnSettingDelete(int delete)
+    {
+        RankText.text = "+ " + delete.ToString() + "버리기";
+        OnRankText();
+    }
+
+
+    // 텍스트 활성화 & 애니메이션
     public void OnRankText()
     {
         RankText.gameObject.SetActive(true);

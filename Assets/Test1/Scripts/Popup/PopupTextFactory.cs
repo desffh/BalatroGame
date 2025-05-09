@@ -19,7 +19,8 @@ public static class PopupTextFactory
             { "Normal", go => go.AddComponent<NormalJokerPopup>() },
             { "Color",  go => go.AddComponent<ColorJokerPopup>() },
             { "Poker",  go => go.AddComponent<ColorJokerPopup>() },
-            { "PokerChip", go => go.AddComponent<ChipJokerPopup>() }
+            { "PokerChip", go => go.AddComponent<ChipJokerPopup>() },
+            { "PlusDelete", go => go.AddComponent<DeletePopup>() }
         };
 
     // 팝업 생성 메서드

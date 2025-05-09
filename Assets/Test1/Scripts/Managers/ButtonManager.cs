@@ -30,7 +30,7 @@ public class ButtonManager : Singleton<ButtonManager>
 
     private void Update()
     {
-       if(isButtonActive == true && HandDelete.Instance.Hand > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0) 
+       if(isButtonActive == true && StateManager.Instance.HandDelete.Hand > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0) 
        {
             Handbutton.interactable = true;
        }
@@ -38,7 +38,7 @@ public class ButtonManager : Singleton<ButtonManager>
        {
             Handbutton.interactable = false;
        }
-       if(isButtonActive == true && HandDelete.Instance.Delete > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0)
+       if(isButtonActive == true && StateManager.Instance.HandDelete.Delete > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0)
         {
             Treshbutton.interactable = true;
         }

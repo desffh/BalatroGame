@@ -17,13 +17,13 @@ public class SuitBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager stateManager, string jokerCategory, JokerCard myJoker)
     {
         var matchedCard = selectedCards.Where(card => card.itemdata.suit == targetSuit).ToList();
 
         if (matchedCard.Count > 0)
         {
-            holdManager.MultiplySum += bonus;
+            stateManager.MultipleChip.PlusMultiple(bonus);
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
@@ -36,7 +36,7 @@ public class SuitBonusEffect : IJokerEffect
                 Debug.Log($"[조커: {targetSuit}] 문양 일치 → 애니메이션 대상: {card.name}");
             }
 
-            TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
+            TextManager.Instance.UpdateText(2, stateManager.MultipleChip.MULTIPLYSum);
 
             ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
             showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);

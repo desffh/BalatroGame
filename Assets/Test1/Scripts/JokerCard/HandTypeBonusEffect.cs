@@ -15,16 +15,16 @@ public class HandTypeBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager stateManager, string jokerCategory, JokerCard myJoker)
     {
 
         if (string.Equals(currentHandType, targetType, StringComparison.OrdinalIgnoreCase))
         {
-            holdManager.MultiplySum += bonus;
+            stateManager.MultipleChip.PlusMultiple(bonus);
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
-            TextManager.Instance.UpdateText(2, holdManager.MultiplySum);
+            TextManager.Instance.UpdateText(2, stateManager.MultipleChip.MULTIPLYSum);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
         

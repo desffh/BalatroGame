@@ -20,6 +20,7 @@ public class ViewCard : MonoBehaviour
 
     [SerializeField] ViewCardText viewCardText;
 
+
     private void OnEnable()
     {
         canvasGroup = GetComponent<CanvasGroup>();

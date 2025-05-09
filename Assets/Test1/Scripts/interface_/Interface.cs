@@ -98,11 +98,35 @@ public interface IPopupText
 // 조커 능력 인터페이스
 public interface IJokerEffect
 {
-    bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker);
+    bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager holdManager, string jokerCategory, JokerCard myJoker);
 }
+
+
+// 나중에 다른 매니저를 만들어서 HoldManager말고 다른 매니저를 참조하게 하자
+//
+// -> 핸드, 버리기, 머니 등을 모두 관여할 수 있게 
+//
+// 조커 카드 판매 시 호출 
+public interface IExitEffect
+{
+    // HoldManager : 직접적인 계산 과정을 담당
+
+    // JokerCard : 조커카드의 정보, 애니메이션을 처리할 수 있다
+
+    void ExitEffect(JokerCard jokerCard);
+}
+
+
+// 조커 효과 리셋
+public interface IResettableEffect
+{
+    void ResetEffect();
+}
+
 
 // |------------------------------------------------------
 
+// 오디오 등록용 인터페이스 - 서비스 로케이터
 public interface IAudioService
 {
     void PlaySFX(string clipName);
@@ -112,6 +136,7 @@ public interface IAudioService
     void StopBGM();
 }
 
+// 효과음 피치 조절용 인터페이스 - 서비스 로케이터
 public interface IAudioServicePitch
 { 
 

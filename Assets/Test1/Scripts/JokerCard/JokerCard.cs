@@ -17,6 +17,8 @@ public class JokerCard : CardComponent
 
     private JokerData data;
     private Sprite sprite;
+
+    // 타입 인터페이스
     private IJokerEffect effect;
 
     public int unlockRound; // 등장 가능한 라운드
@@ -57,8 +59,15 @@ public class JokerCard : CardComponent
         effect = JokerEffectFactory.Create(data);
     }
 
+    // 조커 타입 반환
+    public IJokerEffect GetEffect()
+    {
+        return effect;
+    }
+
+
     // 효과 발동 - HoldManager에서 호출
-    public bool ActivateEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, JokerCard myjoker)
+    public bool ActivateEffect(List<Card> selectedCards, string currentHandType, StateManager holdManager, JokerCard myjoker)
     {
         return effect?.ApplyEffect(selectedCards, currentHandType, holdManager, data.type, myjoker) ?? false; // 조커 category도 함께 전달
     }

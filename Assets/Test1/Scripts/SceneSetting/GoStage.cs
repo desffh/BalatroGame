@@ -15,7 +15,7 @@ public class GoStage : MonoBehaviour
         GameManager.DestroySelf();
         PokerManager.DestroySelf();
         ScoreManager.DestroySelf();
-        HandDelete.DestroySelf();
+        StateManager.DestroySelf();
 
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 

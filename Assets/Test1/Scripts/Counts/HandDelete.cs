@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandDelete : Singleton<HandDelete>
+public class HandDelete : MonoBehaviour
 {
     // 핸드 횟수 & 버리기 횟수
 
@@ -10,8 +10,9 @@ public class HandDelete : Singleton<HandDelete>
     [SerializeField] int delete;
 
     public int Hand => hand;
-    public int Delete => delete;
     
+    // 조커 카드가 값 변경 가능
+    public int Delete => delete;
     // |------------------------------
 
     private void Start()
@@ -48,6 +49,15 @@ public class HandDelete : Singleton<HandDelete>
             TextManager.Instance.UpdateText(4, delete);
         }
     }
+
+    // 버리기 추가
+    public void UpCountDelete()
+    {
+        ++delete;
+        TextManager.Instance.UpdateText(4, delete);
+    }
+
+    // |-------------------------------------------------
 
     // 핸드 & 버리기 셋팅 (난이도 추가 시 호출)
     public void SetCounts(int handCount, int deleteCount)

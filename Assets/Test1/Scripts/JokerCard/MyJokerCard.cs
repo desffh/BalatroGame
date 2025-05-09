@@ -14,6 +14,18 @@ public class MyJokerCard : MonoBehaviour
         get { return myCards; }
     }
 
+    private void OnEnable()
+    {
+        StageButton.OnRoundStart += ResetAllJokerEffects;
+    }
+
+    private void OnDisable()
+    {
+        StageButton.OnRoundStart -= ResetAllJokerEffects;
+    }
+
+    // |------------------------------------
+
     public void Start()
     {
         myCards = new List<JokerCard>(5);
@@ -47,5 +59,19 @@ public class MyJokerCard : MonoBehaviour
 
         myCards.Clear();
         TextManager.Instance.UpdateJokerCards(myCards.Count);
+    }
+
+    // 조커 효과 리셋
+    private void ResetAllJokerEffects()
+    {
+        foreach (var card in myCards)
+        {
+            IJokerEffect effect = card.GetEffect(); // 인터페이스 가져오기 
+        
+            if (effect is IResettableEffect resettable) // 리셋 인터페이스가 있는 조커만
+            {
+                resettable.ResetEffect();
+            }
+        }
     }
 }

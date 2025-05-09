@@ -16,15 +16,15 @@ public class ChipBonusEffect : IJokerEffect
         this.category = category;
     }
 
-    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, HoldManager holdManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager stateManager, string jokerCategory, JokerCard myJoker)
     {
         if (string.Equals(currentHandType, targetType, StringComparison.OrdinalIgnoreCase))
         {
-            holdManager.PlusSum += bonus;
+            stateManager.MultipleChip.PlusPlusSum(bonus);
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
-            TextManager.Instance.UpdateText(1, holdManager.PlusSum);
+            TextManager.Instance.UpdateText(1, stateManager.MultipleChip.PLUSSum);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 칩 +{bonus}");
 

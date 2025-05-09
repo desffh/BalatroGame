@@ -6,11 +6,12 @@ using System.Linq;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+
+
+// 포커 이름, 저장된 SaveNum을 HoldManager로 전달
 public class PokerResult
 {
     public List<int> SaveNum = new();
-    public int Plus;
-    public int Multiple;
     public string PokerName;
 }
 
@@ -183,8 +184,8 @@ public class PokerManager : Singleton<PokerManager>
             if (temp.Count > 0)
             {
                 result.SaveNum = temp.OrderBy(x => x).ToList();
-                result.Plus = hand.plus;
-                result.Multiple = hand.multiple;
+                StateManager.Instance.MultipleChip.SettingChip(hand.plus);
+                StateManager.Instance.MultipleChip.SettingMultiple(hand.multiple);
                 result.PokerName = hand.pokerName;
                 return result;
             }
@@ -192,8 +193,6 @@ public class PokerManager : Singleton<PokerManager>
 
         // 족보가 없으면 하이카드
         result.SaveNum.Add(selected.Max(c => c.itemdata.id));
-        result.Plus = 0;
-        result.Multiple = 1;
         result.PokerName = "하이카드";
         return result;
     }

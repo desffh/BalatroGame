@@ -539,7 +539,7 @@ public class CardManager : Singleton<CardManager>
         HoldManager.Instance.interactable.OnButton();
 
         // 핸드 & 버리기 카운트 초기화 
-        HandDelete.Instance.ResetCounts();
+        StateManager.Instance.ResetCounts();
 
         // UI 모두 업데이트
         HoldManager.Instance.UIupdate();

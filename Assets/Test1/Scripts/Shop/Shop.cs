@@ -217,10 +217,22 @@ public class Shop : MonoBehaviour
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         if (currentTarget == null) return;
+
         Debug.Log("판매되나요?");
 
-
         var data = currentTarget.GetData();
+
+
+        var effect = currentTarget.GetEffect(); // IJokerEffect 타입 가져오기
+
+        // IExitEffect가 있는 조커만 해제
+        if (effect is IExitEffect deactive)
+        {
+            // 있다면 조커카드 판매 시 호출되는 함수 실행
+
+            // HoldManager, JokerCard 
+            deactive.ExitEffect(currentTarget);
+        }
 
         jokerManager.PushData(currentTarget.currentData);
 

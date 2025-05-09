@@ -18,6 +18,10 @@ public static class JokerEffectFactory
 
             // 老馆 炼目 积己
             { "Normal", data => new NormalBonusEffect(data.require, data.multiple, data.type) },
+
+            // 滚府扁 眠啊 炼目 积己
+            { "PlusDelete", data => new PlusDeleteEffect(data.require, data.multiple, data.type) },
+
             // 抹 炼目 积己
             { "PokerChip", data => new ChipBonusEffect(data.require, data.multiple, data.type) }
 
