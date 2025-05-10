@@ -70,7 +70,9 @@ public class HoldManager : Singleton<HoldManager>
 
     public bool StageEnd()
     {
-        if (ScoreManager.Instance.CurrentScore < Round.Instance.CurrentScores && StateManager.Instance.HandDelete.Hand <= 0)
+        int returnhands = StateManager.Instance.handDeleteSetting.GetHand();
+
+        if (ScoreManager.Instance.CurrentScore < Round.Instance.CurrentScores && returnhands <= 0)
         {
             Round.Instance.GameOverText();
             gameOverPopUp.GameOver();
@@ -218,7 +220,16 @@ public class HoldManager : Singleton<HoldManager>
         {
             Debug.Log($"[조커 효과] 조커 이름: {joker.name}, 조건: {joker.currentData.baseData.require}");
 
-            bool effectApplied = joker.ActivateEffect(selectedCards, currentHandType, StateManager.Instance, joker);
+            var context = new JokerEffectContext
+            {
+                StateManager = StateManager.Instance,
+                MyJoker = joker,
+                MyJokerCard = myJokerCard,
+                CurrentHandType = currentHandType,
+                SelectedCards = selectedCards
+            };
+
+            bool effectApplied = joker.ActivateEffect(context);
 
             if (effectApplied)
             {
@@ -279,7 +290,11 @@ public class HoldManager : Singleton<HoldManager>
     {
         int lastScore = ScoreManager.Instance.TotalScore;
 
-        ScoreManager.Instance.AddScore(StateManager.Instance.MultipleChip.MULTIPLYSum * StateManager.Instance.MultipleChip.PLUSSum);
+
+        int multiple = StateManager.Instance.multiplyChipSetting.GetMultiply();
+        int plus = StateManager.Instance.multiplyChipSetting.GetChip();
+
+        ScoreManager.Instance.AddScore(multiple * plus);
 
         ScoreManager.Instance.AnimateScore(lastScore, ScoreManager.Instance.TotalScore);
         
@@ -291,8 +306,8 @@ public class HoldManager : Singleton<HoldManager>
     {
         TextManager.Instance.stringUpdateText(0);
 
-        TextManager.Instance.UpdateText(1);
-        TextManager.Instance.UpdateText(2);
+        StateManager.Instance.multiplyChipSetting.Reset();
+
 
         //textManager.BufferUpdate();
     }
@@ -308,8 +323,8 @@ public class HoldManager : Singleton<HoldManager>
         {
             // 큐에서 빼면서 체크
             int saveNumber = Num.Dequeue();
-            StateManager.Instance.MultipleChip.PlusPlusSum(saveNumber);
 
+            StateManager.Instance.multiplyChipSetting.AddPlus(saveNumber);
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
 

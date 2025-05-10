@@ -46,8 +46,8 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(screenManager.OnClearPanel());
 
         // 수정!!!!!!!! 결과 팝업이 뜨고 계산한 뒤 머니 추가로 
-        money.AddMoney(Round.Instance.Money);
-        money.MoneyUpdate();
+        
+        StateManager.Instance.moneyViewSetting.Add(Round.Instance.Money);
     }
 
 

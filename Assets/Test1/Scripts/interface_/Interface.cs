@@ -98,9 +98,8 @@ public interface IPopupText
 // 조커 능력 인터페이스
 public interface IJokerEffect
 {
-    bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager holdManager, string jokerCategory, JokerCard myJoker);
+    bool ApplyEffect(JokerEffectContext context);
 }
-
 
 // 나중에 다른 매니저를 만들어서 HoldManager말고 다른 매니저를 참조하게 하자
 //
@@ -123,6 +122,22 @@ public interface IResettableEffect
     void ResetEffect();
 }
 
+// 조커 효과에 사용 될 컨텍스트들
+public class JokerEffectContext
+{
+    public StateManager StateManager; // 머니, 핸드, 버리기, 칩, 배수 사용 가능
+
+    public JokerCard MyJoker; // 조커 카드 접근 가능
+
+    public MyJokerCard MyJokerCard; // 내 조커 카드 목록에 접근 가능 
+
+    public string CurrentHandType; // 조커의 타입
+
+    public List<Card> SelectedCards; // 현재 선택된 카드들 (계산중인)
+}
+
+
+
 
 // |------------------------------------------------------
 
@@ -141,4 +156,50 @@ public interface IAudioServicePitch
 { 
 
     void PlaySFXPitch(string clipName);
+}
+
+// |------------------------------------------------------
+
+// MVP - 리셋용
+public interface IReset
+{
+    void Reset();
+}
+
+// Hand - Delete 용
+public interface IHandDeleteSetting : IReset
+{
+    void MinusHand();
+    void MinusDelete();
+    void PlusDelete();
+
+    int GetHand();
+    int GetDelete();
+
+
+}
+
+// Multiply - Chip 용
+public interface IMultiplyChipSetting : IReset 
+{
+    void SetPlus(int value = 0);
+    void SetMultiply(int value = 0);
+    void AddPlus(int value);
+    void AddMultiply(int value);
+
+    int GetChip();
+    int GetMultiply();
+}
+
+public interface IPlus
+{
+    void Add(int value);
+}
+
+// Money 용 -> 리셋, 추가, 제거
+public interface IMoneySetting : IReset, IPlus
+{
+    void Remove(int value);
+
+    int GetMoney();
 }

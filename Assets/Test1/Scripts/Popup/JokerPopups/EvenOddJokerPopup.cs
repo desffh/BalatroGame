@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ColorJokerPopup : MonoBehaviour, IPopupText
+public class EvenOddJokerPopup : MonoBehaviour, IPopupText
 {
     [SerializeField] GameObject popup;
 
@@ -12,9 +12,10 @@ public class ColorJokerPopup : MonoBehaviour, IPopupText
 
     [SerializeField] public TextMeshProUGUI jokerMoneyText;
 
-    public string type => "Color";
+    // 이 타입은 별로 상관없음 -> 나중에 없애자
+    public string type => "Even";
 
-    public void Initialize(string name, string info, int multiple, int cost )
+    public void Initialize(string name, string info, int multiple, int cost)
     {
 
         if (jokerNameText == null) jokerNameText = FindTMPByName("NameText");
@@ -25,8 +26,17 @@ public class ColorJokerPopup : MonoBehaviour, IPopupText
 
         jokerInfoText.fontSize = 26;
 
-        jokerInfoText.text = $"<color=#0000FF>{info}</color>" + "(을)를 사용하여 득점 시  +" +
-            $"<color=#0000FF>{multiple}</color>" + " 배수";
+        if (name == "짝수 조커")
+        {
+            jokerInfoText.text = "플레이 한 카드에 짝수 포함 시 +" +
+                $"<color=#0000FF>{multiple}</color>" + " 배수";
+        }
+        else if(name == "홀수 조커")
+        {
+            jokerInfoText.text = "플레이 한 카드에 홀수 포함 시 +" +
+                $"<color=#0000FF>{multiple}</color>" + " 칩";
+        }
+
 
         jokerMoneyText.text = $"<color=#FFA500>${cost}</color>";
 

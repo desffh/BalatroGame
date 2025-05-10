@@ -18,8 +18,8 @@ public class GameReset : MonoBehaviour
     {
         ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
         round.RoundReset();
-        money.ReSetTotalMoney();
-        money.MoneyUpdate();
+
+        StateManager.Instance.moneyViewSetting.Reset();
         jokerManager.SetupJokerBuffer();
         jokerManager.MyJokerReset();
         ScoreManager.Instance.ResetMaxScore();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DeletePopup : MonoBehaviour, IPopupText
+public class ColorJokerPopup : MonoBehaviour, IPopupText
 {
     [SerializeField] GameObject popup;
 
@@ -12,9 +12,10 @@ public class DeletePopup : MonoBehaviour, IPopupText
 
     [SerializeField] public TextMeshProUGUI jokerMoneyText;
 
-    public string type => "PlusDelete";
+    public string type => "Color";
 
-    public void Initialize(string name, string info, int multiple, int cost)
+
+    public void Initialize(string name, string info, int multiple, int cost )
     {
 
         if (jokerNameText == null) jokerNameText = FindTMPByName("NameText");
@@ -25,7 +26,8 @@ public class DeletePopup : MonoBehaviour, IPopupText
 
         jokerInfoText.fontSize = 26;
 
-        jokerInfoText.text = $"라운드 마다 " + $"+<color=#0000FF>{multiple}</color>" + " 버리기";
+        jokerInfoText.text = $"<color=#0000FF>{info}</color>" + "(을)를 사용하여 득점 시  +" +
+            $"<color=#0000FF>{multiple}</color>" + " 배수";
 
         jokerMoneyText.text = $"<color=#FFA500>${cost}</color>";
 

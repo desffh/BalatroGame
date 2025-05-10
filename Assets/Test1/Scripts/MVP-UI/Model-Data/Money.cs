@@ -3,34 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Model/Money")]
+
 // 전체 돈 관리 (돈 추가 / 돈 감소)
-public class Money : MonoBehaviour
+public class Money : ScriptableObject
 {
     // 전체 머니
-    [SerializeField] private int totalMoney;
+    [SerializeField] private int totalMoney = 10;
     
     public int TotalMoney => totalMoney;
-    
-    // 머니 텍스트 참조
-    [SerializeField] MoneyText moneyText;
-
-    // |------------------------------------
-
-    private void Awake()
-    {
-        totalMoney = 10;
-    }
-
-    public void Start()
-    {
-        TextManager.Instance.UpdateText(7, totalMoney);
-    }
-    
-    // 머니 텍스트 업데이트
-    public void MoneyUpdate()
-    {
-        moneyText.UpdateText(totalMoney);
-    }
 
     // |------------------------------------
 
@@ -44,9 +25,6 @@ public class Money : MonoBehaviour
     public void AddMoney(int money)
     {
         totalMoney += money;
-
-        // 획득한 머니 텍스트 업데이트
-        moneyText.UpdatecashOutText(money);
     }
 
     // 머니 차감 

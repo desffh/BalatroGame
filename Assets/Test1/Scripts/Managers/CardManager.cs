@@ -294,7 +294,7 @@ public class CardManager : Singleton<CardManager>
             {
                 myCards.Add(card);
                 
-                Debug.Log("내 카드 뷰카드 안보이게할게");
+                //Debug.Log("내 카드 뷰카드 안보이게할게");
                 OffViewerCards2(card.itemdata.inherenceID);
                 
                 ++totalSpawnedCount;
@@ -539,7 +539,7 @@ public class CardManager : Singleton<CardManager>
         HoldManager.Instance.interactable.OnButton();
 
         // 핸드 & 버리기 카운트 초기화 
-        StateManager.Instance.ResetCounts();
+        StateManager.Instance.handDeleteSetting.Reset();    
 
         // UI 모두 업데이트
         HoldManager.Instance.UIupdate();

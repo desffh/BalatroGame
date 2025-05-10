@@ -171,17 +171,16 @@ public class Shop : MonoBehaviour
             jokerPanel.OnOverJokerCount();
             return;
         }
-        else if(money.TotalMoney < currentTarget.currentData.baseData.cost)
+        else if(StateManager.Instance.moneyViewSetting.GetMoney() < currentTarget.currentData.baseData.cost)
         {
             jokerPanel.OnNoBalance();
             return;
         }
         
         // 현재 머니에서 차감
-        money.MinusMoney(currentTarget.currentData.baseData.cost);
 
-        // 머니 UI업데이트
-        money.MoneyUpdate();
+        StateManager.Instance.moneyViewSetting.Remove(currentTarget.currentData.baseData.cost);
+
 
         // 데이터 복사
         JokerData data = currentTarget.GetData();
@@ -246,8 +245,8 @@ public class Shop : MonoBehaviour
 
         // 3. 돈 환급 (예: 원가의 50% 회수)
         int refundAmount = currentTarget.currentData.baseData.cost / 2;
-        money.AddMoney(refundAmount);
-        money.MoneyUpdate();
+
+        StateManager.Instance.moneyViewSetting.Add(refundAmount);
 
         // 4. 상태 초기화
         currentTarget = null;
@@ -304,16 +303,13 @@ public class Shop : MonoBehaviour
     // 리롤 버튼을 누를 시
     public void Reroll()
     {
-        if (money.TotalMoney < 5)
+        if (StateManager.Instance.moneyViewSetting.GetMoney() < 5)
         {
             jokerPanel.OnNoReroll();
             return;
         }
 
-        money.MinusMoney(5);
-
-        // 머니 UI업데이트
-        money.MoneyUpdate();
+        StateManager.Instance.moneyViewSetting.Remove(5);
 
         CloseShop();
         OpenShop();

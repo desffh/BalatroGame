@@ -113,16 +113,18 @@ public class PokerManager : Singleton<PokerManager>
 
             EvaluatePokerHands(selected.ToList());
 
-            TextManager.Instance.UpdateText(1, plus);
-            TextManager.Instance.UpdateText(2, multiple);
+            StateManager.Instance.multiplyChipSetting.SetPlus(plus);
+            StateManager.Instance.multiplyChipSetting.SetMultiply(multiple);
+
             TextManager.Instance.stringUpdateText(0, pokerName);
         }
         else
         {
             saveNum.Clear();
 
-            TextManager.Instance.UpdateText(1);       // 기본값 초기화
-            TextManager.Instance.UpdateText(2);
+            StateManager.Instance.multiplyChipSetting.SetPlus();
+            StateManager.Instance.multiplyChipSetting.SetMultiply();
+
             TextManager.Instance.stringUpdateText(0);
         }
     }
@@ -184,8 +186,13 @@ public class PokerManager : Singleton<PokerManager>
             if (temp.Count > 0)
             {
                 result.SaveNum = temp.OrderBy(x => x).ToList();
-                StateManager.Instance.MultipleChip.SettingChip(hand.plus);
-                StateManager.Instance.MultipleChip.SettingMultiple(hand.multiple);
+
+
+
+                StateManager.Instance.multiplyChipSetting.SetPlus(hand.plus);
+                StateManager.Instance.multiplyChipSetting.SetMultiply(hand.multiple);
+
+
                 result.PokerName = hand.pokerName;
                 return result;
             }

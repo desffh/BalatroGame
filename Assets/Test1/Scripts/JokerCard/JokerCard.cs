@@ -67,9 +67,9 @@ public class JokerCard : CardComponent
 
 
     // 효과 발동 - HoldManager에서 호출
-    public bool ActivateEffect(List<Card> selectedCards, string currentHandType, StateManager holdManager, JokerCard myjoker)
+    public bool ActivateEffect(JokerEffectContext context)
     {
-        return effect?.ApplyEffect(selectedCards, currentHandType, holdManager, data.type, myjoker) ?? false; // 조커 category도 함께 전달
+        return effect?.ApplyEffect(context) ?? false; // 조커 category도 함께 전달
     }
 
     // 데이터 제공용
@@ -82,7 +82,7 @@ public class JokerCard : CardComponent
         SetupPopupComponent();
 
         // 팝업 생성
-        jokerPopup = PopupTextFactory.Create(data.type, gameObject);
+        jokerPopup = JokerPopupTextFactory.Create(data.type, gameObject);
 
         if (jokerPopup != null)
         {

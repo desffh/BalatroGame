@@ -15,7 +15,7 @@ MonoBehaviour:
   associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
   associatedWorksheet: Jokers
   START_ROW_LENGTH: 2
-  END_ROW_LENGTH: 17
+  END_ROW_LENGTH: 21
   DataList:
   - name: "\uC77C\uBC18 \uC870\uCEE4"
     cost: 2
@@ -97,3 +97,23 @@ MonoBehaviour:
     multiple: 80
     require: "\uD50C\uB7EC\uC2DC"
     type: PokerChip
+  - name: "\uBC18\uCABD\uC9DC\uB9AC \uC870\uCEE4"
+    cost: 5
+    multiple: 20
+    require: 
+    type: Hand
+  - name: "\uCD94\uC0C1\uD654 \uC870\uCEE4"
+    cost: 4
+    multiple: 3
+    require: 
+    type: Jokers
+  - name: "\uD640\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 31
+    require: 
+    type: Odd
+  - name: "\uC9DD\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: Even

@@ -1,7 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MoneyText : NumTextUpdater
+// Money의 텍스트 업데이트 담당
+
+public class MoneyView : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI moneyText;
 
@@ -10,7 +14,7 @@ public class MoneyText : NumTextUpdater
     // |-----------------------------------------
 
     // 전체 머니 텍스트 업데이트
-    public override void UpdateText(int text)
+    public void UpdateText(int text)
     {
         moneyText.text = "$" + text.ToString();
         AnimationManager.Instance.CaltransformAnime(moneyText);

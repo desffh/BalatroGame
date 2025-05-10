@@ -30,7 +30,10 @@ public class ButtonManager : Singleton<ButtonManager>
 
     private void Update()
     {
-       if(isButtonActive == true && StateManager.Instance.HandDelete.Hand > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0) 
+        int returnhands = StateManager.Instance.handDeleteSetting.GetHand();
+        int returndeletes = StateManager.Instance.handDeleteSetting.GetDelete();
+
+       if(isButtonActive == true && returnhands > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0) 
        {
             Handbutton.interactable = true;
        }
@@ -38,7 +41,7 @@ public class ButtonManager : Singleton<ButtonManager>
        {
             Handbutton.interactable = false;
        }
-       if(isButtonActive == true && StateManager.Instance.HandDelete.Delete > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0)
+       if(isButtonActive == true && returndeletes > 0 && PokerManager.Instance.cardData.SelectCards.Count > 0)
         {
             Treshbutton.interactable = true;
         }
@@ -52,6 +55,8 @@ public class ButtonManager : Singleton<ButtonManager>
     // 핸드버튼을 클릭했을 때
     public void OnHandButtonClick()
     {
+        StateManager.Instance.handDeleteSetting.MinusHand();
+
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         Calculation();
@@ -110,6 +115,8 @@ public class ButtonManager : Singleton<ButtonManager>
     // 버리기 버튼을 클릭했을 때
     public void OnDeleteButtonClick()
     {
+        StateManager.Instance.handDeleteSetting.MinusDelete();
+
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         isButtonActive = false;

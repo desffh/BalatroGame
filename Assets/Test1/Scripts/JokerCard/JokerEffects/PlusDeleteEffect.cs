@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 // 일반 조커 : 버리기 횟수 추가 카드
 public class PlusDeleteEffect : IJokerEffect, IExitEffect, IResettableEffect
@@ -18,17 +19,22 @@ public class PlusDeleteEffect : IJokerEffect, IExitEffect, IResettableEffect
         this.type = category;
     }
 
-    public bool ApplyEffect(List<Card> selectedCards, string currentHandType, StateManager stateManager, string jokerCategory, JokerCard myJoker)
+    public bool ApplyEffect(JokerEffectContext context)
     {
+        var stateManager = context.StateManager;
+        var myJoker = context.MyJoker;
+
+
         if (isApplied == true)
             return false; // 이미 적용되었으면 아무것도 하지 않음
 
         // 버리기 횟수 추가
-        stateManager.UpCountDelete();
+
+        stateManager.handDeleteSetting.PlusDelete();
 
         AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
-        TextManager.Instance.UpdateText(4, stateManager.HandDelete.Delete);
+
 
         ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
 
@@ -45,9 +51,8 @@ public class PlusDeleteEffect : IJokerEffect, IExitEffect, IResettableEffect
         if(isApplied)
         {
             // 버리기 횟수 감소
-            StateManager.Instance.DeCountDelete();
 
-            TextManager.Instance.UpdateText(4, StateManager.Instance.HandDelete.Delete);
+            StateManager.Instance.handDeleteSetting.MinusDelete();
         }
     }
 

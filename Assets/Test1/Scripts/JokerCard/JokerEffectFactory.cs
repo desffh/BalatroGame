@@ -23,8 +23,11 @@ public static class JokerEffectFactory
             { "PlusDelete", data => new PlusDeleteEffect(data.require, data.multiple, data.type) },
 
             // 칩 조커 생성
-            { "PokerChip", data => new ChipBonusEffect(data.require, data.multiple, data.type) }
+            { "PokerChip", data => new ChipBonusEffect(data.require, data.multiple, data.type) },
 
+            { "Odd", data => new EvenOddBonusEffect(data.require, data.multiple, data.type) },
+
+            { "Even", data => new EvenOddBonusEffect(data.require, data.multiple, data.type) }
         };
 
     public static IJokerEffect Create(JokerData data)

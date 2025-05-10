@@ -174,7 +174,7 @@ public class Round : Singleton<Round>
 
     public void OnEnty()
     {
-        TextManager.Instance.UpdateText(5, enty);
+        TextManager.Instance.UpdateText(3, enty);
     }
 
     public void EntyUp()
@@ -183,7 +183,7 @@ public class Round : Singleton<Round>
     }
     public void OnRound()
     {
-        TextManager.Instance.UpdateText(6, round);
+        TextManager.Instance.UpdateText(4, round);
     }
 
     public void RoundUp()
