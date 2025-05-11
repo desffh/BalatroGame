@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85be5277ce1828d49a64385d3aa77dbb, type: 3}
+  m_Name: JokerDataReader
+  m_EditorClassIdentifier: 
+  associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
+  associatedWorksheet: Jokers
+  START_ROW_LENGTH: 2
+  END_ROW_LENGTH: 26
+  DataList:
+  - name: "\uC77C\uBC18 \uC870\uCEE4"
+    cost: 2
+    multiple: 4
+    require: 
+    type: Normal
+  - name: "\uC220\uACE0\uB798"
+    cost: 4
+    multiple: 1
+    require: 
+    type: PlusDelete
+  - name: "\uC8FC\uD669 \uC870\uCEE4"
+    cost: 5
+    multiple: 3
+    require: "\uB2E4\uC774\uC544"
+    type: Color
+  - name: "\uBE68\uAC15 \uC870\uCEE4"
+    cost: 5
+    multiple: 3
+    require: "\uD558\uD2B8"
+    type: Color
+  - name: "\uBCF4\uB77C \uC870\uCEE4"
+    cost: 5
+    multiple: 3
+    require: "\uC2A4\uD398\uC774\uB4DC"
+    type: Color
+  - name: "\uCD08\uB85D \uC870\uCEE4"
+    cost: 5
+    multiple: 3
+    require: "\uD074\uB85C\uBC84"
+    type: Color
+  - name: "\uCF8C\uD65C\uD55C \uC870\uCEE4"
+    cost: 3
+    multiple: 8
+    require: "\uD398\uC5B4"
+    type: Poker
+  - name: "\uC5C9\uB6B1\uD55C \uC870\uCEE4"
+    cost: 4
+    multiple: 12
+    require: "\uD2B8\uB9AC\uD50C"
+    type: Poker
+  - name: "\uBBF8\uCE5C \uC870\uCEE4"
+    cost: 4
+    multiple: 10
+    require: "\uD22C \uD398\uC5B4"
+    type: Poker
+  - name: "\uC815\uC2E0\uB098\uAC04 \uC870\uCEE4"
+    cost: 4
+    multiple: 12
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8"
+    type: Poker
+  - name: "\uAD34\uC9DC \uC870\uCEE4"
+    cost: 4
+    multiple: 10
+    require: "\uD50C\uB7EC\uC2DC"
+    type: Poker
+  - name: "\uAD50\uD65C\uD55C \uC870\uCEE4"
+    cost: 3
+    multiple: 50
+    require: "\uD398\uC5B4"
+    type: PokerChip
+  - name: "\uC545\uB784\uD55C \uC870\uCEE4"
+    cost: 4
+    multiple: 100
+    require: "\uD2B8\uB9AC\uD50C"
+    type: PokerChip
+  - name: "\uC601\uB9AC\uD55C \uC870\uCEE4"
+    cost: 4
+    multiple: 80
+    require: "\uD22C \uD398\uC5B4"
+    type: PokerChip
+  - name: "\uAE30\uB9CC\uC801\uC778 \uC870\uCEE4"
+    cost: 4
+    multiple: 100
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8"
+    type: PokerChip
+  - name: "\uAC04\uAD50\uD55C \uC870\uCEE4"
+    cost: 4
+    multiple: 80
+    require: "\uD50C\uB7EC\uC2DC"
+    type: PokerChip
+  - name: "\uBC18\uCABD\uC9DC\uB9AC \uC870\uCEE4"
+    cost: 5
+    multiple: 20
+    require: 
+    type: Hand
+  - name: "\uCD94\uC0C1\uD654 \uC870\uCEE4"
+    cost: 4
+    multiple: 3
+    require: 
+    type: Jokers
+  - name: "\uD640\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 31
+    require: 
+    type: Odd
+  - name: "\uC9DD\uC218 \uC870\uCEE4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: Even
+  - name: "\uAE43\uBC1C"
+    cost: 5
+    multiple: 30
+    require: 
+    type: NoDelete
+  - name: "\uC2E0\uBE44\uC758 \uC815\uC810"
+    cost: 5
+    multiple: 15
+    require: 
+    type: NoDelete
+  - name: "\uC6CC\uD0A4\uD1A0\uD0A4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: MultipleChip
+  - name: "\uD559\uC790 \uC870\uCEE4"
+    cost: 4
+    multiple: 4
+    require: 
+    type: MultipleChip
+  - name: "\uC8FC\uC790"
+    cost: 5
+    multiple: 0
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8"
+    type: UpgradeChip
