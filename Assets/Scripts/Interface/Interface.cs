@@ -106,6 +106,7 @@ public interface IJokerEffect
 // -> 핸드, 버리기, 머니 등을 모두 관여할 수 있게 
 //
 // 조커 카드 판매 시 호출 
+
 public interface IExitEffect
 {
     // HoldManager : 직접적인 계산 과정을 담당
@@ -202,4 +203,23 @@ public interface IMoneySetting : IReset, IPlus
     void Remove(int value);
 
     int GetMoney();
+}
+
+public interface IRoundEntySetting : IReset
+{
+    void EntyAdd();
+
+    void RoundAdd();
+
+    int GetEnty();
+
+    int GetRound();
+}
+
+// |------------------------------------------------------
+
+// 보스 블라인드 디버프
+public interface IBossDebuff
+{
+    void ApplyDebuff();
 }

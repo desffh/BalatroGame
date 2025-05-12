@@ -11,6 +11,8 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] ScreenPopupManager screenManager;
 
+    [SerializeField] StageButton stageButton;
+
     protected override void Awake()
     {
         base.Awake();
@@ -27,7 +29,6 @@ public class GameManager : Singleton<GameManager>
         get { return playState; }
     }
 
-    [SerializeField] Money money;
 
     public void PlayOn()
     {
@@ -47,7 +48,7 @@ public class GameManager : Singleton<GameManager>
 
         // 수정!!!!!!!! 결과 팝업이 뜨고 계산한 뒤 머니 추가로 
         
-        StateManager.Instance.moneyViewSetting.Add(Round.Instance.Money);
+        StateManager.Instance.moneyViewSetting.Add(stageButton.blind.money);
     }
 
 

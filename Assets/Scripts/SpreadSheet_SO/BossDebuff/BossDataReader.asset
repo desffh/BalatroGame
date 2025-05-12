@@ -15,5 +15,47 @@ MonoBehaviour:
   associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
   associatedWorksheet: BossDebuff
   START_ROW_LENGTH: 2
-  END_ROW_LENGTH: 27
-  DataList: []
+  END_ROW_LENGTH: 8
+  DataList:
+  - blindname: "\uAC08\uACE0\uB9AC"
+    debuffname: Hook
+    money: 5
+    require: 
+    requireNum: 2
+    blindImage: BossBlind_Hook
+  - blindname: "\uD074\uB7FD"
+    debuffname: Club
+    money: 5
+    require: "\uD074\uB85C\uBC84"
+    requireNum: 0
+    blindImage: BossBlind_Club
+  - blindname: "\uC790\uADF9"
+    debuffname: Goad
+    money: 5
+    require: "\uC2A4\uD398\uC774\uB4DC"
+    requireNum: 0
+    blindImage: BossBlind_Goad
+  - blindname: "\uBB3C"
+    debuffname: Water
+    money: 5
+    require: 
+    requireNum: 0
+    blindImage: BossBlind_Water
+  - blindname: "\uBC14\uB298"
+    debuffname: Needle
+    money: 5
+    require: 
+    requireNum: 1
+    blindImage: BossBlind_Needle
+  - blindname: "\uBA38\uB9AC"
+    debuffname: Head
+    money: 5
+    require: "\uD558\uD2B8"
+    requireNum: 0
+    blindImage: BossBlind_Head
+  - blindname: "\uC774\uBE68"
+    debuffname: Tooth
+    money: 5
+    require: 
+    requireNum: 1
+    blindImage: BossBlind_Tooth

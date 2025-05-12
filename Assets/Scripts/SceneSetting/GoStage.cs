@@ -10,7 +10,6 @@ public class GoStage : MonoBehaviour
         HoldManager.DestroySelf();
         CardManager.DestroySelf();
         TextManager.DestroySelf();
-        Round.DestroySelf();
         AnimationManager.DestroySelf();
         GameManager.DestroySelf();
         PokerManager.DestroySelf();

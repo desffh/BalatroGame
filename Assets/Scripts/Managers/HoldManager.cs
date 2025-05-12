@@ -39,6 +39,8 @@ public class HoldManager : Singleton<HoldManager>
 
     MyJokerCard myJokerCard;
 
+    [SerializeField] StageButton stageButton;
+
     protected override void Awake()
     {
         base.Awake();
@@ -72,9 +74,9 @@ public class HoldManager : Singleton<HoldManager>
     {
         int returnhands = StateManager.Instance.handDeleteSetting.GetHand();
 
-        if (ScoreManager.Instance.CurrentScore < Round.Instance.CurrentScores && returnhands <= 0)
+        if (ScoreManager.Instance.CurrentScore < stageButton.blind.score && returnhands <= 0)
         {
-            Round.Instance.GameOverText();
+            stageButton.GameOverText();
             gameOverPopUp.GameOver();
             ScoreManager.Instance.BestHand();
 
@@ -121,8 +123,10 @@ public class HoldManager : Singleton<HoldManager>
             yield return StartCoroutine(actionQueue.Dequeue().Invoke());
         }
 
-        if (ScoreManager.Instance.CheckStageClear(Round.Instance.CurrentScores) == false)
+        if (ScoreManager.Instance.CheckStageClear(stageButton.blind.score) == false)
         {
+            Debug.Log(stageButton.blind.score);
+
             ActionSetting.Invoke();
         }
     }
@@ -228,12 +232,27 @@ public class HoldManager : Singleton<HoldManager>
                 CurrentHandType = currentHandType,
                 SelectedCards = selectedCards
             };
+            var effect = joker.GetEffect(); // IJokerEffect 타입
 
             bool effectApplied = joker.ActivateEffect(context);
 
+
             if (effectApplied)
             {
-                yield return new WaitForSeconds(1f);
+                // 애니메이션 시퀀스를 별도로 가져와서 기다림
+                if (effect is JokerCardEffect concreteEffect)
+                {
+                    var seq = concreteEffect.GetAnimationSequence();
+
+                    if (seq != null)
+                    {
+                        yield return seq.WaitForCompletion(); // 애니메이션이 모두 끝날 때까지 대기
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(1f); // fallback
+                }
             }
         }
 

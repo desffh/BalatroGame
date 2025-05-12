@@ -23,7 +23,7 @@ public class Shop : MonoBehaviour
     
     [SerializeField] MyJokerCard myJokerCards; // myCards리스트를 보유한 스크립트
 
-    public int currentRound;
+
 
     // |---------------------------------------------------------
 
@@ -47,9 +47,6 @@ public class Shop : MonoBehaviour
 
     private void Awake()
     {
-        currentRound = Round.Instance.Enty;
-
-
         // |------------------------
         buyButton.gameObject.SetActive(false);
     }
@@ -57,6 +54,8 @@ public class Shop : MonoBehaviour
     private void Start()
     {
         emptyPanel.gameObject.SetActive(false);
+
+        jokerManager.ShuffleBuffer();
     }
 
     public void OpenShop()

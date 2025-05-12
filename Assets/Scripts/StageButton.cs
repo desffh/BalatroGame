@@ -1,104 +1,145 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 
+// 블라인드 선택 버튼을 누를 때 실행되는 함수들
+
 public class StageButton : MonoBehaviour
 {
+    [SerializeField] private Button[] blindButtons; // 총 3개
 
-    [SerializeField] Button button;
+    [SerializeField] private TextMeshProUGUI [] scoreText; // 목표점수 텍스트
 
-    [SerializeField] Button nextEnty;
+    [SerializeField] private StageManager stageManager;
 
-    [SerializeField] Canvas stagecanvas; // 엔티3개 나오는 캔버스
+    [SerializeField] private ScoreUISet scoreUiSet;
+
+    [SerializeField] private TextMeshProUGUI text;
+
+    [SerializeField] private TextMeshProUGUI shoptext;
 
     [SerializeField] GameObject Entycanvas; // 결과창 캔버스
 
-    [SerializeField] GameObject ShopPanel; // 상점 캔버스
+    [SerializeField] private Canvas stagecanvas;
 
-    [SerializeField] TextMeshProUGUI text;
+    [SerializeField] private GameObject ShopPanel;
 
-    [SerializeField] TextMeshProUGUI shoptext;
-
+    [SerializeField] Button nextEnty; // 다음 엔티
 
     // 상점이 닫힐 때 호출되는 대리자
     public static event System.Action OnShopCloseRequest;
 
     // 매 라운드가 시작될 때 마다 호출되는 대리자
+    //
+    // -> 라운드마다 초기화를 필요로 하는 조커에 함수 발동
     public static event System.Action OnRoundStart;
 
+    // ----------- 활성화 할 패널 ---------------------------
 
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-    }
+    [SerializeField] GameObject[] stagepanels;
+
+    public BlindRound blind;
+
+    //---
+
+
     private void Start()
     {
         OnEntyCanvas();
         Typing(text);
+
+        // 블라인드 패널에 첫 스코어 셋팅
+        ScoreTextSetting(); 
+        PanelSetting();
     }
 
-    public void OnClick1()
+    public void OnBlindClick0()
     {
+        // 엔티 증가
+        StageManager.Instance.EntyAdd();
+        OnBlindClick(0);
+
+    }
+    public void OnBlindClick1() => OnBlindClick(1);
+    public void OnBlindClick2() => OnBlindClick(2);
+
+
+    public void OnBlindClick(int blindIndex)
+    {
+        // 라운드 증가
+        StageManager.Instance.RoundAdd();
+
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        Stage1Click(0);
-    }
-    public void OnClick2()
-    {
-        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+        blind = stageManager.GetBlindAtCurrentEnty(blindIndex);
 
-        Stage1Click(1);
-    }
-    public void OnClick3()
-    {
-        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        ServiceLocator.Get<IAudioService>().PlayBGM("BossTheme-BossEnty", true);
+        Debug.Log(blind.blindColor);
 
-        Stage1Click(2);
-    }
-    public void Stage1Click(int stage)
-    {
-        if(stage == 0)
+        scoreUiSet.EntyTextSetting(blind.blindName, blind.score, new string('$', blind.money));
+        scoreUiSet.EntyImageSetting(blind.blindImage, blind.blindColor);
+
+        if (blind.isBoss)
         {
-            Round.Instance.EntyUp();
-
+            ServiceLocator.Get<IAudioService>().PlayBGM("BossTheme-BossEnty", true);
+            
+            
+            
+            //blind.bossDebuff?.ApplyDebuff(BossDebuffContext);
         }
 
-        Round.Instance.RoundUp();
+        Panels(blindIndex);
 
-        // 현재 스테이지 목표 점수 설정
-        Round.Instance.Score(stage);
-
-        // 현재 스테이지 블라인드 이름 설정 
-        Round.Instance.BlindName = Round.Instance.blindNames[stage];
-        
-        // 현재 스테이지 머니 갯수 설정 
-        Round.Instance.Money = Round.Instance.moneys[stage];
-
-        // 현재 스테이지 텍스트 설정
-        Round.Instance.ScoreTextSetting(stage);
-
-        // 현재 스테이지 색상 & 블라인드 이미지 설정
-        Round.Instance.ImageSetting(stage);
-
-        // 스테이지 플레이 시작
         GameManager.Instance.PlayOn();
-        
-        // 스테이지 창 비활성화
         stagecanvas.gameObject.SetActive(false);
-
-        // 초기화
         CardManager.Instance.SetupNextStage();
 
-        // 라운드 시작!
-        OnRoundStart.Invoke();
+        // 매 라운드가 시작될 때 마다 호출되는 대리자
+        //
+        // -> 라운드마다 초기화를 필요로 하는 조커에 함수 발동
+        OnRoundStart?.Invoke();
     }
 
+    // 가림막 패널 활성화
+    public void Panels(int stage)
+    {
+        stagepanels[stage].SetActive(true);
 
+        stagepanels[(stage + 1) % 3].SetActive(false);
+    }
+
+    // 가림판 패널 초기 셋팅
+    public void PanelSetting()
+    {
+        for (int i = 0; i < stagepanels.Length; i++)
+        {
+            stagepanels[i].SetActive(true);
+        }
+
+        stagepanels[0].SetActive(false);
+    }
+
+    public void OnEntyCanvas()
+    {
+        stagecanvas.gameObject.SetActive(true);
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-Enty");
+
+
+        Typing(text);
+    }
+
+    private void Typing(TextMeshProUGUI text)
+    {
+        AnimationManager.Instance.TMProText(text, 0.8f);
+
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-BlindText");
+
+    }
 
     // -------------------- 캐시 아웃 버튼 -----------------------
 
@@ -113,11 +154,8 @@ public class StageButton : MonoBehaviour
 
         Typing(shoptext);
 
-        if(Round.Instance.CurrentScores == Round.Instance.stages[2])
-        {
-            Round.Instance.isStage();
-            Round.Instance.ScoreSetting();
-        }
+        // 목표 점수 다시 셋팅
+        stageManager.AdvanceBlind();
     }
 
     public void NextEntyOff()
@@ -131,31 +169,46 @@ public class StageButton : MonoBehaviour
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        if (Round.Instance.Rounds % 3 == 0)
-        {
-            ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);   
-        }
-        else
+        // 다음 라운드가 스몰 블라인드라면 
+        if (stageManager.GetRound() % 3 == 0)
         {
             ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
+            
+            // 다음 엔티 갈 때 
+            ScoreTextSetting();
+
+
         }
+
 
         OnShopCloseRequest?.Invoke();
 
         ShopPanel.gameObject.SetActive(false);
         OnEntyCanvas();
-
     }
 
-    public void OnEntyCanvas()
+
+    // 게임 오버 팝업 업데이트|-------------------------------------
+
+    [SerializeField] GameOverText gameOverText;
+
+    public void GameOverText()
     {
-        stagecanvas.gameObject.SetActive(true);
-        Typing(text);
+        gameOverText.EntyUpdate(StageManager.Instance.GetEnty());
+        gameOverText.RoundUpdate(StageManager.Instance.GetRound());
+        gameOverText.BlindUpdate(blind.blindName, blind.blindImage);
     }
 
-    public void Typing(TextMeshProUGUI texts)
+    // 라운드, 엔티 횟수 리셋 |----------------------------------------------
+
+
+    public void ScoreTextSetting()
     {
-        AnimationManager.Instance.TMProText(texts, 0.8f);
-    }
+        EntyStage entys = stageManager.Getblind();
 
+        for (int i = 0; i < entys.blindScore.Length; i++)
+        {
+            scoreText[i].text = entys.blindScore[i].ToString();
+        }
+    }
 }

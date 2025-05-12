@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24004e2fd2e6b6849abc86d251768afc, type: 3}
-  m_Name: MoneySO
+  m_Script: {fileID: 11500000, guid: 8128c5d65c60f44488f6a418886c38f5, type: 3}
+  m_Name: Round_EntyData
   m_EditorClassIdentifier: 
-  totalMoney: 182
+  enty: 0
+  round: 0
