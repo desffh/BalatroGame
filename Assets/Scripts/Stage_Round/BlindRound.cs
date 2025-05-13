@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 개별 블라인드 정보 -> 컨텍스트 패턴
+
+[System.Serializable]
 public class BlindRound
 {
     public string blindName;

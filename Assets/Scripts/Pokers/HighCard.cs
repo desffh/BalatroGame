@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -8,19 +9,22 @@ public class HighCard : IPokerHandle
     public string pokerName => "하이 카드";
     public int plus =>  5;
     public int multiple => 1;
+
+
     public void PokerHandle(List<Card> cards, List<int> saveNum)
     {
-        Dictionary<int, int> cardCount = CardCount.Hand(cards);
+        if (cards.Count == 0)
+            return;
 
-            //하이 카드 처리
-            if (cards.Count != 0)
-            {
-                //Debug.Log("하이 카드");
-                var lastElement = cardCount.LastOrDefault(); // 마지막 요소
+        // 카드 중에서 가장 숫자가 큰 카드 선택
+        var highCard = cards
+            .OrderByDescending(c => c.itemdata.id)
+            .FirstOrDefault();
 
-                saveNum.Add(lastElement.Key); // 가장 큰 값
-            }
-        return;
+        if (highCard != null)
+        {
+            saveNum.Add(highCard.itemdata.id);
+        }
     }
 
 }

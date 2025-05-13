@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class straightFlush : IsStrightPlush, IPokerHandle
@@ -7,6 +8,8 @@ public class straightFlush : IsStrightPlush, IPokerHandle
     public string pokerName => "스트레이트 플러쉬";
     public int plus => 100;
     public int multiple => 8;
+
+
     public void PokerHandle(List<Card> cards, List<int> saveNum)
     {
         Dictionary<int, int> cardCount = CardCount.Hand(cards);
@@ -17,9 +20,11 @@ public class straightFlush : IsStrightPlush, IPokerHandle
             {
                 //Debug.Log("스트레이트 플러쉬");
 
+
                 //스트레이트 플러쉬
                 for (int i = 0; i < cards.Count; i++)
                 {
+
                     saveNum.Add(cards[i].itemdata.id);
                 }
             }
@@ -27,4 +32,6 @@ public class straightFlush : IsStrightPlush, IPokerHandle
         return;
 
     }
+
+   
 }

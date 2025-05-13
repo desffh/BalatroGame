@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,58 +12,53 @@ public class FourCard : IsStrightPlush, IPokerHandle
     public int plus => 60;
     public int multiple => 7;
 
+
     public void PokerHandle(List<Card> cards, List<int> saveNum)
     {
-        Dictionary<int, int> cardCount = CardCount.Hand(cards);
+        var cardCount = CardCount.Hand(cards);
+
+        // 숫자 4개인 항목이 하나라도 있으면 포카드
+        var fourCardNumbers = cardCount
+            .Where(x => x.Value == 4)
+            .Select(x => x.Key)
+            .ToList();
+
+        if (fourCardNumbers.Count == 0)
+            return;
+
+        // 해당 숫자와 일치하는 카드만 추출 (4장만)
+        var matchedCards = cards
+            .Where(card => fourCardNumbers.Contains(card.itemdata.id))
+            .ToList();
 
 
-        //포카드 처리
-
-        if (cards.Count == 5)
+        if (matchedCards.Count == 4)
         {
-            if (cardCount.Count() == 2)
+
+            foreach (var card in matchedCards)
             {
-                var lastElement = cardCount.LastOrDefault(); // 마지막 요소
-                var firstElement = cardCount.FirstOrDefault(); // 처음 요소
-
-                if (cardCount.Count() == 2)
+                saveNum.Add(card.itemdata.id);
+            }
+        }
+        else
+        {
+            // 카드가 5장이고 (4+1 구조일 가능성)
+            if (cards.Count == 5 && cardCount.Count == 2)
+            {
+                // cardCount 중 Value == 4인 키를 찾기
+                var four = cardCount.FirstOrDefault(x => x.Value == 4);
+                if (four.Key != 0)
                 {
-                    if (lastElement.Value == 4)
+                    matchedCards = cards
+                        .Where(c => c.itemdata.id == four.Key)
+                        .ToList();
+
+                    foreach (var card in matchedCards)
                     {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            saveNum.Add(lastElement.Key);  // 포카드
-                        }
-
-                        //Debug.Log("포카드");
-
+                        saveNum.Add(card.itemdata.id);
                     }
-                    else if (firstElement.Value == 4)
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            saveNum.Add(firstElement.Key);  // 포카드
-                        }
-
-                        //Debug.Log("포카드");
-                    }
-
                 }
             }
         }
-        else if (cardCount.Values.Contains(4))
-        {
-            //Debug.Log("포카드");
-
-            // 4과 똑같은 벨류값을 가진애 찾기
-            foreach (var item in cardCount.Where(x => x.Value == 4))
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    saveNum.Add(item.Key);
-                }
-            }
-        }
-        return;
     }
 }

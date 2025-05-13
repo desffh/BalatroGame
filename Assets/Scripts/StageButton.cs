@@ -88,9 +88,6 @@ public class StageButton : MonoBehaviour
         {
             ServiceLocator.Get<IAudioService>().PlayBGM("BossTheme-BossEnty", true);
             
-            
-            
-            //blind.bossDebuff?.ApplyDebuff(BossDebuffContext);
         }
 
         Panels(blindIndex);

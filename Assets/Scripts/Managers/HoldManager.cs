@@ -54,6 +54,7 @@ public class HoldManager : Singleton<HoldManager>
         Num = new Queue<int>();
 
         RefillActionQueue();
+
     }
 
 
@@ -180,12 +181,14 @@ public class HoldManager : Singleton<HoldManager>
         {
             if(Num.Count <= 0)
             {
+
                 yield break;
             }
             yield return waitForSeconds;
 
             Calculate();
         }
+
     }
 
     IEnumerator DelayedTotalScoreCal()
@@ -335,7 +338,39 @@ public class HoldManager : Singleton<HoldManager>
         TextManager.Instance.UpdateText(0);
     }
 
-    
+
+
+    // 디버프 적용하기
+    public int ApplyBossDebuff(int saveNumber)
+    {
+        IBossDebuff currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(2).bossDebuff;
+
+        if (currentDebuff == null) return saveNumber;
+
+        var selectedCards = pokerManager.cardData.SelectCards;
+
+        for (int i = 0; i < selectedCards.Count; i++)
+        {
+            var card = selectedCards[i];
+
+            // 아직 처리되지 않은 카드 중에서 saveNumber와 동일한 id를 가진 카드
+            if (!savenumberCheck[i] && card.itemdata.id == saveNumber)
+            {
+                // 이 카드에 디버프 적용 여부 확인
+                return currentDebuff.ApplyDebuff(card) ? 0 : saveNumber;
+            }
+        }
+
+        // 못 찾았으면 그대로
+        return saveNumber;
+    }
+
+
+
+
+
+
+
     public void Calculate()
     {
         if (Num.Count > 0)
@@ -343,12 +378,16 @@ public class HoldManager : Singleton<HoldManager>
             // 큐에서 빼면서 체크
             int saveNumber = Num.Dequeue();
 
-            StateManager.Instance.multiplyChipSetting.AddPlus(saveNumber);
+
+            // 디버프 적용: 문양이 조건에 부합하면 점수 0으로 대체
+            int finalScore = ApplyBossDebuff(saveNumber);
+
+            // 값 더하기 (MVP)
+            StateManager.Instance.multiplyChipSetting.AddPlus(finalScore);
+            
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
 
-            //TextManager.Instance.UpdateText(1, StateManager.Instance.MultipleChip.PLUSSum);
-            
             // 애니메이션이 끝나기 전까지는 텍스트가 업데이트 되지 않기 때문에 텍스트 업데이트 이후에 로직 설정
             if (animationManager.moveTween != null && animationManager.moveTween.IsPlaying()) return;
 
@@ -356,32 +395,58 @@ public class HoldManager : Singleton<HoldManager>
      
     }
 
-    // 애니메이션을 호출하기 위해 사용
+
+    // 애니메이션을 호출하기 위해 사용 -> 디버프로 인해 saveNumber가 0이 되었을 경우 애니메이션이 실행되지 않음 & 0번부터 애니메이션이 들어감 -> 처음부터 들어가야함
+    //
+    // -> X 인덱스 기반으로 처리 (어차피 계산될 때 카드들은 오름차순으로 정렬됨)
+    //
+    // -> 안돼. 인덱스 기반으로 처리하면 saveNum에 들어가지 않은 애들도 애니메이션 나옴
     private GameObject game;
 
     private bool[] savenumberCheck = new bool[5];
+
+    // 매개변수로 saveNum의 값 들어옴
     public GameObject SaveNumber(int saveNumber)
     {
-        for (int i = 0; i < pokerManager.cardData.SelectCards.Count; i++)
+        var selectedCards = pokerManager.cardData.SelectCards;
+        var currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(2).bossDebuff;
+
+        for (int i = 0; i < selectedCards.Count; i++)
         {
-            if (savenumberCheck[i] == false && pokerManager.cardData.SelectCards[i].itemdata.id == saveNumber)
+            var card = selectedCards[i];
+
+            if (!savenumberCheck[i] && card.itemdata.id == saveNumber)
             {
-                game = pokerManager.cardData.SelectCards[i].gameObject;
-
                 savenumberCheck[i] = true;
+                game = card.gameObject;
 
-                ShowRankText = PokerManager.Instance.cardData.SelectCards[i].GetComponent<ShowRankText>();
-                ShowRankText.OnSettingRank(saveNumber);
+                int finalScore = saveNumber;
+
+                if (currentDebuff != null && currentDebuff.ApplyDebuff(card))
+                {
+                    finalScore = 0;
+                    Debug.Log($"[디버프 적용] {card.itemdata.suit}{card.itemdata.id} → 점수: 0");
+                }
+                else
+                {
+                    Debug.Log($"[디버프 없음] {card.itemdata.suit}{card.itemdata.id} → 점수: {finalScore}");
+                }
+
+                ShowRankText = card.GetComponent<ShowRankText>();
+                ShowRankText.OnSettingRank(finalScore);
 
                 ServiceLocator.Get<IAudioServicePitch>().PlaySFXPitch("Sound-CheckCard");
-
-                break;
+                return game;
             }
         }
-        return game;
+
+        return null;
     }
-    
-    
+
+
+
+
+
 
     // 애니메이션 판단여부 bool배열 초기화
     public void CheckReset()

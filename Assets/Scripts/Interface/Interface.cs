@@ -221,5 +221,5 @@ public interface IRoundEntySetting : IReset
 // 보스 블라인드 디버프
 public interface IBossDebuff
 {
-    void ApplyDebuff();
+    bool ApplyDebuff(Card card);
 }

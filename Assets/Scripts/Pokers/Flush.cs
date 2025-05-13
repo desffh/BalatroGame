@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 
 public class Flush : IsStrightPlush, IPokerHandle
@@ -9,15 +11,19 @@ public class Flush : IsStrightPlush, IPokerHandle
 
     public int plus => 35;
     public int multiple => 4;
+    
 
     public void PokerHandle(List<Card> cards, List<int> saveNum)
     {
         Dictionary<int, int> cardCount = CardCount.Hand(cards);
 
+
         if (cards.Count == 5)
         {
             if (isFlush(cards))
             {
+
+
                 //Debug.Log("ÇÃ·¯½¬");
                 for (int i = 0; i < cards.Count; i++)
                 {

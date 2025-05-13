@@ -23,6 +23,8 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
     [SerializeField] private int currentBlindIndex = 0;
 
 
+    
+
     // 각 entyStage마다 -> BlindRound (일반2 + 보스1)
     //
     // 각 라운드 정보를 담은 BlindRound
@@ -50,12 +52,13 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
         Debug.Log($"Awake() 시작 - entyStages.Count: {entyStages?.Count}");
 
         SetEntyStages();
+
+        GenerateAllBlindRounds();
     }
 
     private void Start()
     {
 
-        GenerateAllBlindRounds();
 
         Reset();
         
@@ -113,7 +116,9 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
                 blindImage = Resources.Load<Sprite>($"Blind/{boss.blindImage}"),
                 blindColor = enty.normalColors[2],
                 isBoss = true,
-                //bossDebuff = BossDebuffFactory.Create(boss)
+
+                // 보스 디버프 생성
+                bossDebuff = BossDebuffFactory.Create(boss)
             });
 
             // BlindRound를 담는 리스트에 추가

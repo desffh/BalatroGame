@@ -20,11 +20,23 @@ public static class BossDebuffFactory
     private static readonly Dictionary<BossDebuffType, Func<BossData, IBossDebuff>> debuffMap
         = new()
     {
-
+            { BossDebuffType.Club, data => new ClubDebuff() },
 
     };
 
+    // BossData를 기반으로 디버프 생성
+    public static IBossDebuff Create(BossData data)
+    {
+        var type = data.ToDebuffType();
 
+        if (type.HasValue && debuffMap.TryGetValue(type.Value, out var creator))
+        {
+            return creator.Invoke(data);
+        }
+
+        Debug.LogWarning($"[BossDebuffFactory] 디버프 생성 실패: {data.debuffname}");
+        return null;
+    }
 }
 
 

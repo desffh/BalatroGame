@@ -36,6 +36,11 @@ public class PokerManager : Singleton<PokerManager>
         base.Awake();
 
         saveNum = new List<int>();
+        saveNum = new List<int>();  // saveNum 리스트는 여기서 한 번만 생성
+    }
+
+    private void Start()
+    {
         // 족보 리스트 초기화
 
         pokerHands = new List<IPokerHandle>
@@ -51,10 +56,8 @@ public class PokerManager : Singleton<PokerManager>
             new OnePair(),
             new HighCard()
         };
-        saveNum = new List<int>();  // saveNum 리스트는 여기서 한 번만 생성
+        
     }
-
-
     public int plus;
     public int multiple;
     public string pokerName;
