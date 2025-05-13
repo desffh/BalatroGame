@@ -10,8 +10,6 @@ public class GameReset : MonoBehaviour
 {
     [SerializeField] JokerManager jokerManager;
 
-    [SerializeField] Money money;
-
     [SerializeField] StageButton stageButton;
 
     public void GameResets()
@@ -20,9 +18,17 @@ public class GameReset : MonoBehaviour
         
         // 엔티, 라운드 리셋
         StageManager.Instance.Reset();
-        //stageButton.ReSettings();
+
+        stageButton.ReSettings();
+        
         StateManager.Instance.moneyViewSetting.Reset();
+        
+        // 조커 버퍼 셋팅
         jokerManager.SetupJokerBuffer();
+        
+        // 조커 셔플
+        jokerManager.ShuffleBuffer();
+        
         jokerManager.MyJokerReset();
         ScoreManager.Instance.ResetMaxScore();
     }

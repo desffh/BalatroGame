@@ -45,6 +45,9 @@ public class StageButton : MonoBehaviour
 
     public BlindRound blind;
 
+
+    [SerializeField] private Image bossBlindImage;
+
     //---
 
 
@@ -56,6 +59,8 @@ public class StageButton : MonoBehaviour
         // 블라인드 패널에 첫 스코어 셋팅
         ScoreTextSetting(); 
         PanelSetting();
+
+        BossImageSetting();
     }
 
     public void OnBlindClick0()
@@ -180,7 +185,21 @@ public class StageButton : MonoBehaviour
         OnShopCloseRequest?.Invoke();
 
         ShopPanel.gameObject.SetActive(false);
+
+        // |---
+
+        // 엔티 활성화 될 때 보스 이미지 설정
+        BossImageSetting();
+
         OnEntyCanvas();
+    }
+
+    // 엔티의 보스 블라인드 이미지 설정
+    public void BossImageSetting()
+    {
+        BlindRound blindInfo =  stageManager.BossBlindInfo(2);
+
+        bossBlindImage.sprite = blindInfo.blindImage;
     }
 
 

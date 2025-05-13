@@ -156,6 +156,9 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
     }
 
 
+
+
+
     // 현재 블라인드 이동 (0 1 2)
     public void AdvanceBlind()
     {
@@ -173,7 +176,15 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
         return blindRoundsPerEnty[currentEntyIndex][blindIndex].isBoss;
     }
 
-    public void EntyAdd()
+    // 현재 보스 반환 (2)
+    public BlindRound BossBlindInfo(int blindIndex)
+    {
+        return blindRoundsPerEnty[currentEntyIndex][blindIndex];
+
+    }
+
+
+        public void EntyAdd()
     {
         data.UpEnty();
         view.UpdateEnty(data.Enty);
@@ -191,6 +202,9 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
 
         view.UpdateEnty(data.Enty);
         view.UpdateRound(data.Round);
+
+        currentBlindIndex = 0;
+        currentEntyIndex = 0;
     }
 
     public int GetEnty()
