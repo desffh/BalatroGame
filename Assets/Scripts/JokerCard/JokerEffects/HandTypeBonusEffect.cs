@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class HandTypeBonusEffect : IJokerEffect
 {
@@ -17,23 +18,20 @@ public class HandTypeBonusEffect : IJokerEffect
 
     public bool ApplyEffect(JokerEffectContext context)
     {
-        var stateManager = context.StateManager;
-        var myJoker = context.MyJoker;
-        var jokerCategory = context.CurrentHandType;
+        if (context.HandTypes == null) return false;
 
-
-        // string.Equals(a, b, StringComparison.OrdinalIgnoreCase) 대소문자 구분없이 문자열 구분
-
-        if (string.Equals(jokerCategory, targetType, StringComparison.OrdinalIgnoreCase))
+        // 현재 족보들 중 하나라도 targetType과 일치하면 발동
+        if (context.HandTypes.Any(type => string.Equals(type, targetType, StringComparison.OrdinalIgnoreCase)))
         {
-            stateManager.multiplyChipSetting.AddMultiply(bonus);
+            context.StateManager.multiplyChipSetting.AddMultiply(bonus);
 
-            AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
+            AnimationManager.Instance.PlayJokerCardAnime(context.MyJoker.gameObject);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
-        
-            ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
-            showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);
+
+            var showText = context.MyJoker.GetComponent<ShowJokerRankText>();
+
+            showText.OnSettingRank(context.MyJoker.currentData.baseData.multiple);
 
             return true;
         }

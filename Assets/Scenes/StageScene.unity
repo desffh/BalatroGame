@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -18417,6 +18418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jokerManager: {fileID: 725096965}
   money: {fileID: 0}
+  stageButton: {fileID: 1422452429}
 --- !u!4 &1367090332
 Transform:
   m_ObjectHideFlags: 0
@@ -19041,6 +19043,13 @@ MonoBehaviour:
   - {fileID: 4947552271294512179}
   - {fileID: 1708613772}
   - {fileID: 707470044}
+  blind:
+    blindName: 
+    score: 0
+    money: 0
+    blindImage: {fileID: 0}
+    blindColor: {r: 0, g: 0, b: 0, a: 0}
+    isBoss: 0
   gameOverText: {fileID: 869159943}
 --- !u!4 &1422452430
 Transform:

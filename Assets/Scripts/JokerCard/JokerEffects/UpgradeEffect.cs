@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UpgradeEffect : IJokerEffect
@@ -16,21 +17,23 @@ public class UpgradeEffect : IJokerEffect
         this.category = category;
     }
 
+    // 족보와 조커의 요구 족보가 같다면
     public bool ApplyEffect(JokerEffectContext context)
     {
-        var stateManager = context.StateManager;
+        JokerCard myJoker = context.MyJoker;
 
-        var myJoker = context.MyJoker;
+        StateManager stateManager = context.StateManager;
 
-        var jokerCategory = context.CurrentHandType;
 
-        // 족보 타입이 스트레이트면 실행
-        if (string.Equals(jokerCategory, targetType, StringComparison.OrdinalIgnoreCase))
+        if (context.HandTypes == null) return false;
+
+        // 현재 족보들 중 하나라도 targetType과 일치하면 발동
+        if (context.HandTypes.Any(type => string.Equals(type, targetType, StringComparison.OrdinalIgnoreCase)))
         {
             // 스트레이트가 나올 때 마다 15칩 추가 
             myJoker.data.multiple += 15;
 
-            bonus = myJoker.data.multiple;  
+            bonus = myJoker.data.multiple;
 
             Debug.Log("현재 조커의 누적 칩 : " + bonus);
 
@@ -44,7 +47,6 @@ public class UpgradeEffect : IJokerEffect
             return true;
         }
 
-        // 족보가 스트레이트 아니면 false로 탈출
         return false;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ChipBonusEffect : IJokerEffect
@@ -16,23 +17,23 @@ public class ChipBonusEffect : IJokerEffect
         this.category = category;
     }
 
+    // 족보와 조커의 요구 족보가 같다면
     public bool ApplyEffect(JokerEffectContext context)
     {
-        var stateManager = context.StateManager;
-        var myJoker = context.MyJoker;
-        var jokerCategory = context.CurrentHandType;
+        if (context.HandTypes == null) return false;
 
-        if (string.Equals(jokerCategory, targetType, StringComparison.OrdinalIgnoreCase))
+        // 현재 족보들 중 하나라도 targetType과 일치하면 발동
+        if (context.HandTypes.Any(type => string.Equals(type, targetType, StringComparison.OrdinalIgnoreCase)))
         {
+            context.StateManager.multiplyChipSetting.AddPlus(bonus);
 
-            stateManager.multiplyChipSetting.AddPlus(bonus);
+            AnimationManager.Instance.PlayJokerCardAnime(context.MyJoker.gameObject);
 
-            AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
+            Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
 
-            Debug.Log($"[조커: {targetType}] 족보 일치 → 칩 +{bonus}");
+            var showText = context.MyJoker.GetComponent<ShowJokerRankText>();
 
-            ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
-            showJokerRankText.OnSettingChip(myJoker.currentData.baseData.multiple);
+            showText.OnSettingChip(context.MyJoker.currentData.baseData.multiple);
 
             return true;
         }

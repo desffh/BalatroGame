@@ -60,6 +60,7 @@ public class PokerManager : Singleton<PokerManager>
     }
     public int plus;
     public int multiple;
+
     public string pokerName;
 
     // 카드 리스트를 평가하여 족보 이름과 점수를 출력
@@ -85,6 +86,31 @@ public class PokerManager : Singleton<PokerManager>
             }
         }
     }
+
+    // |---
+
+    // 현재 족보가 포함하는 하위 족보까지 반환
+    public List<string> GetContainedHandTypes()
+    {
+        switch (pokerName)
+        {
+            case "스트레이트 플러시":
+                return new List<string> { "스트레이트", "플러시", "스트레이트 플러시" };
+            case "풀 하우스":
+                return new List<string> { "페어", "트리플", "풀 하우스" };
+            case "포 카드":
+                return new List<string> { "페어", "트리플", "포 카드" };
+            case "플러시":
+                return new List<string> { "플러시" };
+            case "스트레이트":
+                return new List<string> { "스트레이트" };
+            case "투 페어":
+                return new List<string> { "페어", "투 페어" };
+            default:
+                return new List<string> { pokerName };
+        }
+    }
+
 
     public void SelectCard(Card card)
     {
@@ -112,8 +138,6 @@ public class PokerManager : Singleton<PokerManager>
 
         if (selected.Count > 0)
         {
-            
-
             EvaluatePokerHands(selected.ToList());
 
             StateManager.Instance.multiplyChipSetting.SetPlus(plus);

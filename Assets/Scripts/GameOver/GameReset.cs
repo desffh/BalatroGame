@@ -10,15 +10,17 @@ public class GameReset : MonoBehaviour
 {
     [SerializeField] JokerManager jokerManager;
 
-    
-
     [SerializeField] Money money;
+
+    [SerializeField] StageButton stageButton;
 
     public void GameResets()
     {
         ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
+        
+        // 엔티, 라운드 리셋
         StageManager.Instance.Reset();
-
+        //stageButton.ReSettings();
         StateManager.Instance.moneyViewSetting.Reset();
         jokerManager.SetupJokerBuffer();
         jokerManager.MyJokerReset();

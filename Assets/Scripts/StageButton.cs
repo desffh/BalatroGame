@@ -126,7 +126,6 @@ public class StageButton : MonoBehaviour
         stagecanvas.gameObject.SetActive(true);
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-Enty");
 
-
         Typing(text);
     }
 
@@ -207,5 +206,17 @@ public class StageButton : MonoBehaviour
         {
             scoreText[i].text = entys.blindScore[i].ToString();
         }
+    }
+
+    public void ReSettings()
+    {
+        // 스코어 셋팅 다시하기
+        ScoreTextSetting();
+
+        // 가림판 초기 셋팅 
+        PanelSetting();
+
+        // 엔티 캔버스 활성화
+        OnEntyCanvas();
     }
 }

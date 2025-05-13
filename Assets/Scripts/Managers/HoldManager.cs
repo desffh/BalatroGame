@@ -219,9 +219,9 @@ public class HoldManager : Singleton<HoldManager>
         yield return new WaitForSeconds(1f);
 
         List<Card> selectedCards = pokerManager.cardData.SelectCards.ToList();
-        
-        string currentHandType = PokerManager.Instance.pokerName;
 
+        // 현재 족보의 하위 족보 가져오기
+        List<string> handTypes = PokerManager.Instance.GetContainedHandTypes();
 
         foreach (var joker in myJokerCard.Cards)
         {
@@ -232,7 +232,7 @@ public class HoldManager : Singleton<HoldManager>
                 StateManager = StateManager.Instance,
                 MyJoker = joker,
                 MyJokerCard = myJokerCard,
-                CurrentHandType = currentHandType,
+                HandTypes = handTypes,
                 SelectedCards = selectedCards
             };
             var effect = joker.GetEffect(); // IJokerEffect 타입
@@ -343,9 +343,18 @@ public class HoldManager : Singleton<HoldManager>
     // 디버프 적용하기
     public int ApplyBossDebuff(int saveNumber)
     {
-        IBossDebuff currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(2).bossDebuff;
+        // 현재 블라인드 기준
+        int blindIndex = StageManager.Instance.GetCurrentBlindIndex();
 
-        if (currentDebuff == null) return saveNumber;
+        BlindRound currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(blindIndex);
+
+
+        // null이고, 보스가 아니라면 원래 itemdata.id 반환
+        if (currentDebuff == null || !currentDebuff.isBoss || currentDebuff.bossDebuff == null)
+            return saveNumber;
+
+        // 보스가 아니라면 null 값
+        IBossDebuff bossDebuff = currentDebuff.bossDebuff;  
 
         var selectedCards = pokerManager.cardData.SelectCards;
 
@@ -356,20 +365,15 @@ public class HoldManager : Singleton<HoldManager>
             // 아직 처리되지 않은 카드 중에서 saveNumber와 동일한 id를 가진 카드
             if (!savenumberCheck[i] && card.itemdata.id == saveNumber)
             {
+                Debug.Log("여기 실행되었어요");
                 // 이 카드에 디버프 적용 여부 확인
-                return currentDebuff.ApplyDebuff(card) ? 0 : saveNumber;
+                return bossDebuff.ApplyDebuff(card) ? 0 : saveNumber;
             }
         }
 
         // 못 찾았으면 그대로
         return saveNumber;
     }
-
-
-
-
-
-
 
     public void Calculate()
     {
@@ -409,7 +413,22 @@ public class HoldManager : Singleton<HoldManager>
     public GameObject SaveNumber(int saveNumber)
     {
         var selectedCards = pokerManager.cardData.SelectCards;
-        var currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(2).bossDebuff;
+
+        // 현재 블라인드 기준
+        int blindIndex = StageManager.Instance.GetCurrentBlindIndex();
+        
+        BlindRound currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(blindIndex);
+
+
+        IBossDebuff bossDebuff = null;
+
+        // 보스인지 아닌지 체크
+        if (currentDebuff != null && currentDebuff.isBoss && currentDebuff.bossDebuff != null)
+        {
+            bossDebuff = currentDebuff.bossDebuff;
+        }
+
+        // |---
 
         for (int i = 0; i < selectedCards.Count; i++)
         {
@@ -422,14 +441,11 @@ public class HoldManager : Singleton<HoldManager>
 
                 int finalScore = saveNumber;
 
-                if (currentDebuff != null && currentDebuff.ApplyDebuff(card))
+                // 보스 디버프가 null이 아니라면 -> 현재 보스 블라인드!!
+                if (currentDebuff != null && bossDebuff != null && bossDebuff.ApplyDebuff(card))
                 {
                     finalScore = 0;
                     Debug.Log($"[디버프 적용] {card.itemdata.suit}{card.itemdata.id} → 점수: 0");
-                }
-                else
-                {
-                    Debug.Log($"[디버프 없음] {card.itemdata.suit}{card.itemdata.id} → 점수: {finalScore}");
                 }
 
                 ShowRankText = card.GetComponent<ShowRankText>();

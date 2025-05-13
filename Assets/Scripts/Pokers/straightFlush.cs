@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class straightFlush : IsStrightPlush, IPokerHandle
 {
-    public string pokerName => "스트레이트 플러쉬";
+    public string pokerName => "스트레이트 플러시";
     public int plus => 100;
     public int multiple => 8;
 

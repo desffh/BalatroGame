@@ -21,9 +21,10 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
     [SerializeField] private int currentEntyIndex = 0;
 
     [SerializeField] private int currentBlindIndex = 0;
-
-
     
+    // 현재 블라인드 읽기 전용
+    public int GetCurrentBlindIndex() => currentBlindIndex;
+
 
     // 각 entyStage마다 -> BlindRound (일반2 + 보스1)
     //
@@ -58,10 +59,7 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
 
     private void Start()
     {
-
-
-        Reset();
-        
+        Reset();       
     }
 
     // baseScores를 토대로 리스트의 기본 점수 셋팅 (스몰 블라인드)
@@ -138,6 +136,7 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
             return null;
         }
 
+        // 각 엔티
         var blindList = blindRoundsPerEnty[currentEntyIndex];
 
         if (blindIndex < 0 || blindIndex >= blindList.Count)
@@ -146,6 +145,7 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
             return null;
         }
 
+        // 엔티[몇 라운드]
         return blindList[blindIndex];
     }
 

@@ -135,6 +135,8 @@ public class JokerEffectContext
     public string CurrentHandType; // 조커의 타입
 
     public List<Card> SelectedCards; // 현재 선택된 카드들 (계산중인)
+
+    public List<string> HandTypes; // 족보 하위 타입 문자열 리스트
 }
 
 
