@@ -102,7 +102,7 @@ public class StageButton : MonoBehaviour
         blind = stageManager.GetBlindAtCurrentEnty(blindIndex);
 
 
-        Debug.Log(blind.blindColor);
+        //Debug.Log(blind.blindColor);
 
         scoreUiSet.EntyTextSetting(blind.blindName, blind.score, new string('$', blind.money));
         scoreUiSet.EntyImageSetting(blind.blindImage, blind.blindColor);

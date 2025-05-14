@@ -54,7 +54,7 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
 
         Init(data, view); 
 
-        Debug.Log($"Awake() 시작 - entyStages.Count: {entyStages?.Count}");
+        //Debug.Log($"Awake() 시작 - entyStages.Count: {entyStages?.Count}");
 
         SetEntyStages();
 
