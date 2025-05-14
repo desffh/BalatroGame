@@ -353,8 +353,12 @@ public class HoldManager : Singleton<HoldManager>
         if (currentDebuff == null || !currentDebuff.isBoss || currentDebuff.bossDebuff == null)
             return saveNumber;
 
-        // 보스가 아니라면 null 값
-        IBossDebuff bossDebuff = currentDebuff.bossDebuff;  
+        // 카드 디버프만 처리 -> 카드 디버프가 아니라면 반환
+        if (currentDebuff.bossDebuff is not ICardDebuff cardDebuff)
+            return saveNumber;
+
+        //// 보스가 아니라면 null 값
+        //IBossDebuff bossDebuff = currentDebuff.bossDebuff;  
 
         var selectedCards = pokerManager.cardData.SelectCards;
 
@@ -367,7 +371,7 @@ public class HoldManager : Singleton<HoldManager>
             {
                 Debug.Log("여기 실행되었어요");
                 // 이 카드에 디버프 적용 여부 확인
-                return bossDebuff.ApplyDebuff(card) ? 0 : saveNumber;
+                return cardDebuff.ApplyDebuff(card) ? 0 : saveNumber;
             }
         }
 
@@ -420,12 +424,13 @@ public class HoldManager : Singleton<HoldManager>
         BlindRound currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(blindIndex);
 
 
-        IBossDebuff bossDebuff = null;
+        ICardDebuff cardDebuff = null;
 
         // 보스인지 아닌지 체크
-        if (currentDebuff != null && currentDebuff.isBoss && currentDebuff.bossDebuff != null)
+        if (currentDebuff != null && currentDebuff.isBoss && currentDebuff.bossDebuff != null &&
+            currentDebuff.bossDebuff is ICardDebuff debuff)
         {
-            bossDebuff = currentDebuff.bossDebuff;
+            cardDebuff = debuff;
         }
 
         // |---
@@ -442,7 +447,7 @@ public class HoldManager : Singleton<HoldManager>
                 int finalScore = saveNumber;
 
                 // 보스 디버프가 null이 아니라면 -> 현재 보스 블라인드!!
-                if (currentDebuff != null && bossDebuff != null && bossDebuff.ApplyDebuff(card))
+                if (currentDebuff != null && cardDebuff != null && cardDebuff.ApplyDebuff(card))
                 {
                     finalScore = 0;
                     Debug.Log($"[디버프 적용] {card.itemdata.suit}{card.itemdata.id} → 점수: 0");

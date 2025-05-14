@@ -17,45 +17,59 @@ MonoBehaviour:
   START_ROW_LENGTH: 2
   END_ROW_LENGTH: 8
   DataList:
-  - blindname: "\uAC08\uACE0\uB9AC"
-    debuffname: Hook
-    money: 5
-    require: 
-    requireNum: 2
-    blindImage: BossBlind_Hook
-  - blindname: "\uD074\uB7FD"
-    debuffname: Club
-    money: 5
-    require: "\uD074\uB85C\uBC84"
-    requireNum: 0
-    blindImage: BossBlind_Club
   - blindname: "\uC790\uADF9"
     debuffname: Goad
     money: 5
     require: "\uC2A4\uD398\uC774\uB4DC"
     requireNum: 0
     blindImage: BossBlind_Goad
-  - blindname: "\uBB3C"
-    debuffname: Water
-    money: 5
-    require: 
-    requireNum: 0
-    blindImage: BossBlind_Water
-  - blindname: "\uBC14\uB298"
-    debuffname: Needle
-    money: 5
-    require: 
-    requireNum: 1
-    blindImage: BossBlind_Needle
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uC2A4\uD398\uC774\uB4DC</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"
   - blindname: "\uBA38\uB9AC"
     debuffname: Head
     money: 5
     require: "\uD558\uD2B8"
     requireNum: 0
     blindImage: BossBlind_Head
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uD558\uD2B8</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"
+  - blindname: "\uBB3C"
+    debuffname: Water
+    money: 5
+    require: 
+    requireNum: 0
+    blindImage: BossBlind_Water
+    blindInfo: "<color=#0000FF>0\uBC88</color>\uC758 <color=#0000FF>\uBC84\uB9AC\uAE30</color>\uB85C
+      \uC2DC\uC791\uD569\uB2C8\uB2E4."
+  - blindname: "\uBC14\uB298"
+    debuffname: Needle
+    money: 5
+    require: 
+    requireNum: 1
+    blindImage: BossBlind_Needle
+    blindInfo: "\uB2E8 <color=#0000FF>1\uBC88</color>\uC758 <color=#0000FF>\uD578\uB4DC</color>\uB9CC
+      \uD50C\uB808\uC774 \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  - blindname: "\uCC3D\uBB38"
+    debuffname: Window
+    money: 5
+    require: "\uB2E4\uC774\uC544"
+    requireNum: 0
+    blindImage: BossBlind_Window
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uB2E4\uC774\uC544</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"
+  - blindname: "\uD074\uB7FD"
+    debuffname: Club
+    money: 5
+    require: "\uD074\uB85C\uBC84"
+    requireNum: 0
+    blindImage: BossBlind_Club
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uD074\uB85C\uBC84</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"
   - blindname: "\uC774\uBE68"
     debuffname: Tooth
     money: 5
     require: 
     requireNum: 1
     blindImage: BossBlind_Tooth
+    blindInfo: "\uD50C\uB808\uC774\uD55C \uCE74\uB4DC\uB9C8\uB2E4 <color=#ff9d00>$1</color>
+      \uC744 \uC783\uC2B5\uB2C8\uB2E4."

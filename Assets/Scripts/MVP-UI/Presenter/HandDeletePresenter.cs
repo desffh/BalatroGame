@@ -57,4 +57,15 @@ public class HandDeletePresenter : IHandDeleteSetting
     public int GetHand() => data.Hand;
     public int GetDelete() => data.Delete;
 
+    public void SetHand(int value = 0)
+    {
+        data.HandSetting(value);
+        view.UpdateHand(data.Hand);
+    }
+
+    public void SetDelete(int value = 0)
+    {
+        data.DeleteSetting(value);
+        view.UpdateDelete(data.Delete);
+    }
 }

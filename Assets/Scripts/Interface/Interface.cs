@@ -176,6 +176,10 @@ public interface IHandDeleteSetting : IReset
     void MinusDelete();
     void PlusDelete();
 
+    void SetHand(int value = 0);
+
+    void SetDelete(int value = 0);
+
     int GetHand();
     int GetDelete();
 
@@ -220,8 +224,19 @@ public interface IRoundEntySetting : IReset
 
 // |------------------------------------------------------
 
-// 보스 블라인드 디버프
-public interface IBossDebuff
+// 최상위 마커 인터페이스 (디버프 타입 구분용)
+public interface IBossDebuff { }
+
+
+// 보스 블라인드 디버프 (카드 점수에 적용)
+public interface ICardDebuff : IBossDebuff
 {
     bool ApplyDebuff(Card card);
+}
+
+
+// 보스 블라인드 디버프 (핸드, 버리기, 머니에 적용)
+public interface ISystemDebuff : IBossDebuff
+{
+    void SystemDebuff();
 }

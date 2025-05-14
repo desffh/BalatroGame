@@ -32,6 +32,10 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
     private List<List<BlindRound>> blindRoundsPerEnty = new();
 
     private int [] baseScores = { 300, 800, 1800, 3800, 7800 };
+    
+    
+    // 테스트용 스코어
+    // private int[] baseScores = { 100, 200, 300, 400, 500 };
 
 
     public void Init(RoundEntyData data, RoundEntyView view)
@@ -113,6 +117,10 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
                 money = boss.money,
                 blindImage = Resources.Load<Sprite>($"Blind/{boss.blindImage}"),
                 blindColor = enty.normalColors[2],
+
+                // 보스라면 보스 설명 텍스트 가져오기
+                blindInfo = boss.blindInfo,
+
                 isBoss = true,
 
                 // 보스 디버프 생성
@@ -123,6 +131,18 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
             blindRoundsPerEnty.Add(group);
         }
     }
+
+    // CardManager에서 사용
+    public void ApplySystemDebuffIfNeeded(IBossDebuff debuff)
+    {
+        if (debuff is ISystemDebuff systemDebuff)
+        {
+            systemDebuff.SystemDebuff();
+        }
+    }
+
+
+
 
     // blindRoundsPerEnty[0] = [ BlindRound0-1, BlindRound0-2, BossRound0 ]
     // blindRoundsPerEnty[1] = [ BlindRound1-1, BlindRound1-2, BossRound1 ]
@@ -176,13 +196,18 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
         return blindRoundsPerEnty[currentEntyIndex][blindIndex].isBoss;
     }
 
-    // 현재 보스 반환 (2)
+    // 현재 블라인드 반환 (2)
     public BlindRound BossBlindInfo(int blindIndex)
     {
         return blindRoundsPerEnty[currentEntyIndex][blindIndex];
 
     }
 
+    // 현재 엔티의 블라인드 반환
+    public BlindRound CurrentBlind()
+    {
+        return blindRoundsPerEnty[currentEntyIndex][currentBlindIndex];
+    }
 
         public void EntyAdd()
     {

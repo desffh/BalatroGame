@@ -45,4 +45,14 @@ public class HandDeleteData : ScriptableObject
         ++delete;
     }
 
+    // 핸드 셋팅
+    public void HandSetting(int value)
+    {
+        hand = value;
+    }
+
+    public void DeleteSetting(int value)
+    {
+        delete = value;
+    }
 }

@@ -21,6 +21,8 @@ public class GameReset : MonoBehaviour
 
         stageButton.ReSettings();
         
+        StateManager.Instance.handDeleteSetting.Reset();
+
         StateManager.Instance.moneyViewSetting.Reset();
         
         // 조커 버퍼 셋팅

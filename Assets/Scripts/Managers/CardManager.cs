@@ -9,6 +9,8 @@ using TMPro;
 using Unity.VisualScripting;
 using System.Runtime.Serialization.Formatters;
 using static UnityEngine.UI.Image;
+using UnityEditor.U2D.Aseprite;
+using JetBrains.Annotations;
 
 
 
@@ -210,7 +212,6 @@ public class CardManager : Singleton<CardManager>
     // 버퍼에 카드 넣기 (52)
     void SetupItemBuffer()
     {
-
         // 크기 동적할당
         if (itemBuffer == null)
         {
@@ -287,7 +288,11 @@ public class CardManager : Singleton<CardManager>
 
             card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
 
-            //card.OffCollider();
+
+            // !!!!보스라면 디버프 이미지를 호출!!!!
+            DebuffSetting(cardObject);
+
+
 
             // myCards 리스트에 저장
             if (!myCards.Contains(card))
@@ -314,6 +319,55 @@ public class CardManager : Singleton<CardManager>
         SetOriginOrder();
 
     }
+
+    // 디버프 이미지 활성화하기 -> StageButton의 OnDebuffImage 이벤트 구독
+    public void DebuffSetting(Card card)
+    {
+        int current = StageManager.Instance.GetCurrentBlindIndex();
+
+        // 현재 블라인드 가져오기
+        BlindRound enty = StageManager.Instance.GetBlindAtCurrentEnty(current);
+
+        if (enty.isBoss == false)
+        {
+            Debug.Log("디버프가 아니에요!! 활성화 안할게");
+
+            card.OffdebuffImage();
+            return;
+        }
+
+        Card dubuffCard = card.GetComponent<Card>();
+
+        IBossDebuff boss = enty.bossDebuff;
+
+        if(boss is ICardDebuff cardDebuff)
+        {
+            // true를 반환한다면
+
+            if(cardDebuff.ApplyDebuff(card))
+            {
+                Debug.Log("디버프 맞아요!! 활성화 할게");
+
+                // 디버프 이미지 활성화
+                dubuffCard.OndebuffImage();
+            }
+            //else
+            //{
+            //    card.OffdebuffImage();
+            //}
+        }
+        else
+        {
+            // 카드 관련 디버프가 아님
+            card.OffdebuffImage();
+        }
+    }
+
+
+
+
+
+    // |-------------------------------
 
     // 리스트 전체 정렬 (먼저 추가한 카드가 제일 뒷쪽에 보임)
     public void SetOriginOrder()
@@ -546,11 +600,39 @@ public class CardManager : Singleton<CardManager>
         HoldManager.Instance.TotalScoreupdate();
         UpdateSuitCountUI();
 
+        // 만약 디버프가 있다면 디버프 실행
+
+
+        SystemDebuffSetting();
+
+
         HoldManager.Instance.CheckReset();
 
         HoldManager.Instance.RefillActionQueue();
 
     }
+
+    public void SystemDebuffSetting()
+    {
+        // 현재 엔티 반환 
+        int debuffboss = StageManager.Instance.GetCurrentBlindIndex();
+        
+        var bossRound = StageManager.Instance.BossBlindInfo(2); // 현재 엔티의 보스 라운드
+
+        var debuff = bossRound.bossDebuff;
+
+
+        // 현재 엔티의 보스 반환
+        var info = StageManager.Instance.GetBlindAtCurrentEnty(debuffboss);
+
+        
+        if(info.isBoss)
+        {
+            StageManager.Instance.ApplySystemDebuffIfNeeded(debuff);
+        }
+
+    }
+
 
 
     // 배치된 카드 & 계산중인 카드 콜라이더 비활성화

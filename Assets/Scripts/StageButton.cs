@@ -48,7 +48,10 @@ public class StageButton : MonoBehaviour
 
     [SerializeField] private Image bossBlindImage;
 
+    [SerializeField] private TextMeshProUGUI bossInfoText;
+
     //---
+
 
 
     private void Start()
@@ -60,7 +63,16 @@ public class StageButton : MonoBehaviour
         ScoreTextSetting(); 
         PanelSetting();
 
+        // |---
+
+        // 보스 블라인드 이미지 설정
+       
         BossImageSetting();
+
+
+        // 보스 블라인드 텍스트 설정
+
+        BossInfoSetting();
     }
 
     public void OnBlindClick0()
@@ -71,8 +83,14 @@ public class StageButton : MonoBehaviour
 
     }
     public void OnBlindClick1() => OnBlindClick(1);
-    public void OnBlindClick2() => OnBlindClick(2);
+    
+    
+    // 보스 블라인드
+    public void OnBlindClick2()
+    {
+        OnBlindClick(2);
 
+    }
 
     public void OnBlindClick(int blindIndex)
     {
@@ -99,6 +117,7 @@ public class StageButton : MonoBehaviour
 
         GameManager.Instance.PlayOn();
         stagecanvas.gameObject.SetActive(false);
+
         CardManager.Instance.SetupNextStage();
 
         // 매 라운드가 시작될 때 마다 호출되는 대리자
@@ -132,6 +151,14 @@ public class StageButton : MonoBehaviour
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-Enty");
 
         Typing(text);
+
+        // 엔티 활성화 될 때 보스 이미지 설정
+        BossImageSetting();
+
+
+        // 보스 블라인드 텍스트 설정
+
+        BossInfoSetting();
     }
 
     private void Typing(TextMeshProUGUI text)
@@ -188,9 +215,9 @@ public class StageButton : MonoBehaviour
 
         // |---
 
-        // 엔티 활성화 될 때 보스 이미지 설정
-        BossImageSetting();
 
+
+        // 블라인드 캔버스 열기 
         OnEntyCanvas();
     }
 
@@ -200,6 +227,13 @@ public class StageButton : MonoBehaviour
         BlindRound blindInfo =  stageManager.BossBlindInfo(2);
 
         bossBlindImage.sprite = blindInfo.blindImage;
+    }
+
+    public void BossInfoSetting()
+    {
+        BlindRound blindInfo = stageManager.BossBlindInfo(2);
+
+        bossInfoText.text = blindInfo.blindInfo;
     }
 
 
@@ -237,5 +271,7 @@ public class StageButton : MonoBehaviour
 
         // 엔티 캔버스 활성화
         OnEntyCanvas();
+
+
     }
 }

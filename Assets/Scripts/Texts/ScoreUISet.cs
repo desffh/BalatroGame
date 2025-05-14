@@ -33,6 +33,8 @@ public class ScoreUISet : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI clearrewardText;
 
+    // |---
+
     private void Start()
     {
         if(scoreText != null)

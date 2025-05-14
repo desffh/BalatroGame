@@ -34,6 +34,9 @@ public class Card : CardComponent
 
     [SerializeField] BoxCollider2D Collider2D;
 
+    // 카드 디버프 이미지
+    [SerializeField] GameObject debuffImage;
+
     public string spriteNameToLoad;
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
@@ -290,4 +293,16 @@ public class Card : CardComponent
 
     // |-----------------------------
 
+    // 디버프 이미지 활성화 
+
+    public void OndebuffImage()
+    {
+        debuffImage.SetActive(true);
+    }
+
+    // 디버프 이미지 비활성화
+    public void OffdebuffImage()
+    {
+        debuffImage.SetActive(false);
+    }
 }

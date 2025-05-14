@@ -23,7 +23,9 @@ public struct BossData
     
     public string blindImage;
 
-    public BossData(string blindname, string debuff, int money, string require, int requirenum, string blindImage)
+    public string blindInfo;
+
+    public BossData(string blindname, string debuff, int money, string require, int requirenum, string blindImage, string info)
     {
         this.blindname = blindname;
         this.debuffname = debuff;
@@ -31,6 +33,7 @@ public struct BossData
         this.require = require;
         this.requireNum = requirenum;
         this.blindImage = blindImage;
+        this.blindInfo = info;
     }
 }
 
@@ -57,6 +60,8 @@ public class BossDataReader : JokerReaderBase
         int requireNum = 0;
 
         string blindImage = string.Empty;
+
+        string info = string.Empty;
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -99,10 +104,15 @@ public class BossDataReader : JokerReaderBase
                         blindImage = list[i].value;
                         break;
                     }
+                case "BlindInfo":
+                    {
+                        info = list[i].value;
+                        break;
+                    }
             }
         }
 
-        DataList.Add(new BossData(blindname, debuffname, money, require, requireNum, blindImage));
+        DataList.Add(new BossData(blindname, debuffname, money, require, requireNum, blindImage, info));
     }
 }
 

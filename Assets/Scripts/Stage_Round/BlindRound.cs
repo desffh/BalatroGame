@@ -17,6 +17,7 @@ public class BlindRound
 
     public Color blindColor;
 
+    public string blindInfo;
 
     public bool isBoss; // 보스 블라인드인지 / 아닌지
 
