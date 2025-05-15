@@ -101,92 +101,15 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
         SetupEffect(); // 효과 객체 생성
     }
 
-    // 카드가 구매되었다면 호출
-    public void MarkAsPurchased()
-    {
-        isPurchased = true;
-    }
+    // |----
 
-
-
-
-
-
-    // 효과 발동 - HoldManager에서 호출
-    public bool ActivateEffect(JokerEffectContext context)
-    {
-        return effect?.ApplyEffect(context) ?? false; // 조커 category도 함께 전달
-    }
-
-
-
-
-
-    private void SetupPopupComponent()
-    {
-        // 1. 기존 컴포넌트 제거
-        var oldPopup = GetComponent<IPopupText>() as MonoBehaviour;
-        if (oldPopup != null)
-            Destroy(oldPopup);
-    }
-
-
-
-
-
-    public void DisableCard() => gameObject.SetActive(false);
-
-
-    // UI에서 클릭될 때 호출
+    // 이벤트 트리거 PointClick 
     public void OnMouse()
     {
-        if (isCalculating) return; // 계산중이면 클릭 무시
+        if (isCalculating) return; // 계산중이면 조커 클릭 무시
 
         OnCardClicked();
     }
-
-    public void OnCardClicked()
-    {
-        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
-
-
-        if (selectionHandler == null)
-        {
-            Debug.LogWarning("[JokerCard] 선택 핸들러가 설정되지 않음.");
-            return;
-        }
-        if (isSelected)
-        {
-            selectionHandler.OnCardDeselected(this);
-            //OffSelected();
-            isSelected = false;
-        }
-        else
-        {
-            selectionHandler.OnCardSelected(this);
-            //OnSelected();
-            isSelected = true;
-        }
-    }
-
-    
-
-    // 상점 영역 확인
-    private bool IsInShop()
-    {
-        GameObject obj = GameObject.Find("ShopCanvas");
-        return obj != null && transform.IsChildOf(obj.transform);
-    }
-
-    // 내 조커 영역 확인
-    private bool IsInMyJokerPanel()
-    {
-        GameObject parent = GameObject.Find("JokersPanel");
-        return parent != null && transform.IsChildOf(parent.transform);
-    }
-
-
-    // |----
 
     // 이벤트 트리거 Enter
     public void OnEnterJoker()
@@ -203,39 +126,32 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     // |----
 
 
-    // 구매하기 버튼을 눌렀을 때 호출 (생성 위치, 내 카드, 핸들러)
+    // IBuyCard 구현 - 구매하기 버튼을 눌렀을 때 호출 (생성 위치, 내 카드, 핸들러)
     public void OnBuy(Transform spawnParent, MyJokerCard cardList, ICardSelectionHandler handler)
     {
-        // 1. 돈 확인
-        if (StateManager.Instance.moneyViewSetting.GetMoney() < cost)
-        {
-            Debug.Log($"금액 부족");
-            return;
-        }
-
-        // 2. 돈 차감
+        // 1. 돈 차감
         StateManager.Instance.moneyViewSetting.Remove(cost);
 
 
-        // 3. 조커 카드 생성
+        // 2. 조커 카드 생성
         GameObject obj = Instantiate(GetPrefab(), spawnParent);
         JokerCard newCard = obj.GetComponent<JokerCard>();
         newCard.SetJokerData(currentData); // 동적 생성된 조커에 데이터 주입
 
 
-        // 4. 핸들러 주입
+        // 3. 핸들러 주입
         newCard.SetSelectionHandler(handler);
 
 
-        // 5. 내 카드 리스트 등록
+        // 4. 내 카드 리스트 등록
         cardList.AddJokerCard(newCard);
 
 
-        // 6. 구매한 카드 비활성화
+        // 5. 구매한 카드 비활성화
         DisableCard();
 
 
-        // 7. 사운드
+        // 6. 사운드
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
 
@@ -247,7 +163,7 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     // |----
 
 
-    // 판매하기 버튼을 눌렀을 때
+    // ISellCard 구현 - 판매하기 버튼을 눌렀을 때
     public void OnSell()
     {
         // 1. 효과 종료 처리 -> 종료 인터페이스가 있다면
@@ -274,43 +190,91 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
         // 5. 돈 환급
         int refund = cost / 2;
         StateManager.Instance.moneyViewSetting.Add(refund);
-     
-        
+
+
         // 6. 사운드
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
     }
 
 
     // |----
+ 
 
-    public GameObject GetPrefab() { return myJokerPrefab; }
-
-
+    // IInstantCard 구현
 
     public void InstantiateCard(Transform parent)
     {
-        var newCard = GameObject.Instantiate(GetPrefab(), parent);
+        var newCard = Instantiate(GetPrefab(), parent);
         var cardScript = newCard.GetComponent<JokerCard>();
         cardScript.SetJokerData(currentData);
     }
 
-    public void OnSelected()
-    {
-        // 버튼 활성화 요청은 Shop이 처리하므로 여기선 시각 처리만
-        GetComponent<Image>().color = Color.yellow;
-    }
+    // Shop에서 구매 시 생성 될 프리팹
+    public GameObject GetPrefab() { return myJokerPrefab; }
 
-    public void OffSelected()
-    {
-        GetComponent<Image>().color = Color.white;
-    }
+    // |----
 
 
-
-    // |----------------------------
+    // ISelectCard 구현
 
     public bool CanBeSold => isPurchased;  // 구매한 적 있으면 판매 가능
     public bool IsInPlayerInventory => IsInMyJokerPanel();
+
+
+    // |----
+
+
+    // 효과 발동 - HoldManager에서 호출
+    public bool ActivateEffect(JokerEffectContext context)
+    {
+        return effect?.ApplyEffect(context) ?? false; // 조커 category도 함께 전달
+    }
+
+
+    private void SetupPopupComponent()
+    {
+        // 1. 기존 컴포넌트 제거
+        var oldPopup = GetComponent<IPopupText>() as MonoBehaviour;
+        if (oldPopup != null)
+            Destroy(oldPopup);
+    }
+
+
+    public void DisableCard() => gameObject.SetActive(false);
+
+
+    public void OnCardClicked()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        if (selectionHandler == null)
+        {
+            Debug.LogWarning("선택 핸들러가 설정되지 않음");
+            return;
+        }
+        if (isSelected) // 이미 선택된 카드라면
+        {
+            // 핸들러에 선택된 조커(ISelectCard타입)를 전달
+
+            selectionHandler.OnCardDeselected(this);
+
+            isSelected = false;
+        }
+        else
+        {
+            selectionHandler.OnCardSelected(this);
+
+            isSelected = true;
+        }
+    }
+
+
+    // 내 조커 영역 확인
+    private bool IsInMyJokerPanel()
+    {
+        GameObject parent = GameObject.Find("JokersPanel");
+        return parent != null && transform.IsChildOf(parent.transform);
+    }
 
 
     // 선택 해제 전용
@@ -322,7 +286,16 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     }
 
 
+    // 카드가 구매되었다면 호출
+    public void MarkAsPurchased()
+    {
+        isPurchased = true;
+    }
+
+
     // |---
+
+
 
     // 팝업 텍스트 설정
     public void PopupSetting()
@@ -343,4 +316,5 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     {
         effect = JokerEffectFactory.Create(data);
     }
+
 }

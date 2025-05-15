@@ -58,7 +58,6 @@ public interface IShopItem { }
 // 상점 카드 인터페이스 (조커카드, 행성카드, 타로카드 가 구현) 
 public interface IShopCard
 {
-
     public string Name { get; }
 
     public int cost { get; }
@@ -86,10 +85,6 @@ public interface IInstantCard
 /// 선택 가능 카드 (조커, 타로팩, 행성팩, 타로카드만)
 public interface ISelectCard
 {
-    // 구매하기 버튼, 판매하기 버튼 활성화용
-    void OnSelected();
-    void OffSelected();
-
     bool CanBeSold { get; }  // 판매 가능한 상태인지
     bool IsInPlayerInventory { get; } // 내 카드 영역에 있는지
 }

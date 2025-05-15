@@ -9,7 +9,7 @@ using UnityEngine;
 public class Money : ScriptableObject
 {
     // 전체 머니
-    [SerializeField] private int totalMoney = 10;
+    [SerializeField] private int totalMoney = 3;
     
     public int TotalMoney => totalMoney;
 
@@ -18,7 +18,7 @@ public class Money : ScriptableObject
     // 머니 리셋
     public void ReSetTotalMoney()
     {
-        totalMoney = 10;
+        totalMoney = 3;
     }
 
     // 머니 획득

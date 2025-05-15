@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 구매 불가 팝업 활성화 / 비활성화
-public class ShopJokerPanel : MonoBehaviour
+public class ShopCardPanel : MonoBehaviour
 {
     [SerializeField] GameObject Nobalance; // 잔액부족 팝업
 
@@ -26,7 +26,7 @@ public class ShopJokerPanel : MonoBehaviour
 
     // |-------------------------
 
-    // 구매 금액이 모자랄 때 (조커)
+    // 구매 금액이 모자랄 때
     public void OnNoBalance()
     {
         Nobalance.SetActive(true);

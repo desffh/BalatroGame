@@ -104,6 +104,8 @@ public class PokerManager : Singleton<PokerManager>
                 return new List<string> { "플러시" };
             case "스트레이트":
                 return new List<string> { "스트레이트" };
+            case "트리플":
+                return new List<string> { "트리플", "페어" };
             case "투 페어":
                 return new List<string> { "페어", "투 페어" };
             default:
