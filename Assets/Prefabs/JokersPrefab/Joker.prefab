@@ -185,7 +185,14 @@ MonoBehaviour:
   nameText: {fileID: 0}
   costText: {fileID: 0}
   abilityText: {fileID: 0}
-  unlockRound: 0
+  data:
+    name: 
+    cost: 0
+    multiple: 0
+    require: 
+    type: 
+  isCalculating: 0
+  myJokerPrefab: {fileID: 2839103790593053743}
 --- !u!114 &9056085076236720140
 MonoBehaviour:
   m_ObjectHideFlags: 0

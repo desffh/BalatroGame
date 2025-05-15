@@ -9,9 +9,9 @@ using static UnityEngine.GraphicsBuffer;
 
 // 상점 관리 - 조커 추가, 타로 카드 추가, 행성 카드 추가, 바우처 추가
 
-public class Shop : MonoBehaviour
+public class Shop : MonoBehaviour, ICardSelectionHandler
 {
-    // 조커 카드 타입 -> 라운드가 증가할수록 높은 조커가 나오도록
+    // 조커 카드 타입
     [SerializeField] List<JokerCard> jokerCards;
 
     [SerializeField] List<JokerCard> shopjokerCards;
@@ -42,7 +42,18 @@ public class Shop : MonoBehaviour
     [SerializeField] private List<JokerCard> shopJokers; // 상점에 있는 조커 카드 오브젝트 2개
 
 
+    [SerializeField] GameObject jokerPacksTransform;
 
+    [SerializeField] GameObject emptyPanel;
+
+    // |---------------------------------------------------------
+
+
+    public Button buyButton; // 인스펙터에 연결
+
+    [SerializeField] private JokerCard currentTarget;
+
+    public JokerCard CurrentTarget => currentTarget;
 
 
     private void Awake()
@@ -80,6 +91,9 @@ public class Shop : MonoBehaviour
             }
 
             shopJokers[i].SetJokerData(selected);
+           
+            shopJokers[i].SetSelectionHandler(this); // Shop은 ICardSelectionHandler 구현체
+
             shopJokers[i].gameObject.SetActive(true);
         }
 
@@ -89,11 +103,6 @@ public class Shop : MonoBehaviour
 
     // | --------------------------------------------------
 
-    public Button buyButton; // 인스펙터에 연결
-
-    [SerializeField] private JokerCard currentTarget;
-
-    public JokerCard CurrentTarget => currentTarget;
 
     // 클릭된 카드인지 판별 
     public void SetTarget(JokerCard card)
@@ -108,12 +117,10 @@ public class Shop : MonoBehaviour
 
     // | --------------------------------------------------
 
-    [SerializeField] GameObject jokerPacksTransform;
-
-    [SerializeField] GameObject emptyPanel;
-
     public void ShowBuyButton(JokerCard target)
     {
+        OffSellButton();
+
         currentTarget = target;
 
         // 위치를 조커 카드 위로 이동
@@ -124,17 +131,6 @@ public class Shop : MonoBehaviour
         emptyPanel.SetActive(true); // 클릭 차단기 켜기
     }
 
-    public void OffBuyButton()
-    {
-        buyButton.gameObject.SetActive(false);
-        emptyPanel.SetActive(false); // 클릭 차단기 끄기
-        // 위치는 오프셋 정하기
-    }
-    public void OnEmptyClicked()
-    {
-        OffBuyButton();       
-        currentTarget = null;  
-    }
 
     // |------------------------------------
 
@@ -142,6 +138,8 @@ public class Shop : MonoBehaviour
 
     public void ONSellButton(JokerCard target)
     {
+        OffBuyButton();
+
         // 위치를 조커 카드 위로 이동
         RectTransform buttonRect = sellButton.GetComponent<RectTransform>();
         buttonRect.position = target.transform.position + new Vector3(165, 50, 0); // 원하는 오프셋
@@ -160,97 +158,28 @@ public class Shop : MonoBehaviour
     // 구매하기
     public void Buy()
     {
-        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
-
-        if (currentTarget == null) return;
-
-        // 조커가 5개 이상 & 현재 조커 금액 미만 이면 구매 불가능 
-        if(myJokerCards.Cards.Count >= 5)
+        if (currentTarget is IBuyCard buyer)
         {
-            jokerPanel.OnOverJokerCount();
-            return;
+            // 조커카드는 생성 위치, 카드 리스트, 핸들러가 필요함
+            buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, this); // 이 Shop은 ICardSelectionHandler를 구현 중
+
+            OffBuyButton();
+            currentTarget = null;
         }
-        else if(StateManager.Instance.moneyViewSetting.GetMoney() < currentTarget.currentData.baseData.cost)
-        {
-            jokerPanel.OnNoBalance();
-            return;
-        }
-        
-        // 현재 머니에서 차감
-
-        StateManager.Instance.moneyViewSetting.Remove(currentTarget.currentData.baseData.cost);
-
-
-        // 데이터 복사
-        JokerData data = currentTarget.GetData();
-        Sprite sprite = currentTarget.GetSprite();
-
-        // 내 조커 영역에 생성
-        GameObject newCard = Instantiate(myJokerPrefab, jokerTransform.transform);
-        JokerCard cardScript = newCard.GetComponent<JokerCard>();
-        
-        // 생성된 조커의 JokerCard 내부에 데이터 저장
-        cardScript.SetJokerData(new JokerTotalData(data, sprite));
-
-        // 내 조커 카드에 담기(정보만)
-        myJokerCards.AddJokerCard(cardScript);
-
-        // 상점 카드 비활성화
-        currentTarget.DisableCard();
-
-
-        // 버튼 숨김
-        buyButton.gameObject.SetActive(false);
-        currentTarget = null;
-
-        emptyPanel.gameObject.SetActive(false);
-
-        // 상점 리스트에서도 제거
-        //shopJokers.Remove(currentTarget);
     }
+
 
     // 판매하기 
     public void Sell()
     {
-        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
-
-        if (currentTarget == null) return;
-
-        Debug.Log("판매되나요?");
-
-        var data = currentTarget.GetData();
-
-
-        var effect = currentTarget.GetEffect(); // IJokerEffect 타입 가져오기
-
-        // IExitEffect가 있는 조커만 해제
-        if (effect is IExitEffect deactive)
+        if (currentTarget is ISellCard seller)
         {
-            // 있다면 조커카드 판매 시 호출되는 함수 실행
-
-            // HoldManager, JokerCard 
-            deactive.ExitEffect(currentTarget);
+            seller.OnSell();
+            OffSellButton();
+            currentTarget = null;
         }
-
-        jokerManager.PushData(currentTarget.currentData);
-
-        // 1. 리스트에서 제거
-        myJokerCards.RemoveJokerCard(currentTarget);
-
-        currentTarget.gameObject.SetActive(false);
-
-        // 2. 카드 오브젝트 비활성화
-        //currentTarget.DisableCard();
-
-        // 3. 돈 환급 (예: 원가의 50% 회수)
-        int refundAmount = currentTarget.currentData.baseData.cost / 2;
-
-        StateManager.Instance.moneyViewSetting.Add(refundAmount);
-
-        // 4. 상태 초기화
-        currentTarget = null;
-        sellButton.gameObject.SetActive(false);
     }
+
 
     public void CloseShop()
     {
@@ -285,10 +214,32 @@ public class Shop : MonoBehaviour
         fullScreenBlocker.SetActive(false);
     }
 
+    // 판매 버튼 비활성화
     public void OnBlockerClicked()
     {
-        OffSellButton();       // 판매 버튼 비활성화
-        currentTarget = null;  // 선택 카드 초기화
+        if (currentTarget != null)
+        {
+            // 선택 해제 처리
+            OnCardDeselected(currentTarget);
+        }
+
+    }
+
+    // 구매 버튼 비활성화
+    public void OnEmptyClicked()
+    {
+        if (currentTarget != null)
+        {
+            // 선택 해제 처리
+            OnCardDeselected(currentTarget);
+        }
+
+    }
+    public void OffBuyButton()
+    {
+        buyButton.gameObject.SetActive(false);
+        emptyPanel.SetActive(false); // 클릭 차단기 끄기
+        // 위치는 오프셋 정하기
     }
 
     public void DeleteSellJoker()
@@ -313,4 +264,41 @@ public class Shop : MonoBehaviour
         CloseShop();
         OpenShop();
     }
+
+    public void OnCardSelected(ISelectCard card)
+    {
+        if (card is JokerCard target)
+        {
+            // currentTarget의 설정을 위한 것
+            SetTarget(target);
+
+            if (card.IsInPlayerInventory && card.CanBeSold)
+            {
+                ONSellButton(target);
+            }
+            else
+            {
+                ShowBuyButton(target);
+            }
+        }
+    }
+
+
+    public void OnCardDeselected(ISelectCard card)
+    {
+        if (card is JokerCard target && target == currentTarget)
+        {
+            if (card.IsInPlayerInventory && card.CanBeSold)
+            {
+                OffSellButton();
+            }
+            else
+            {
+                OffBuyButton();
+            }
+            target.ForceUnselect();
+            ClearTarget();
+        }
+    }
+
 }

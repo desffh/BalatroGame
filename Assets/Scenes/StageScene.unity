@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -22407,10 +22406,10 @@ MonoBehaviour:
   shopJokers:
   - {fileID: 2107453183}
   - {fileID: 1897369134}
-  buyButton: {fileID: 827587247}
-  currentTarget: {fileID: 0}
   jokerPacksTransform: {fileID: 1916215095}
   emptyPanel: {fileID: 2036761146}
+  buyButton: {fileID: 827587247}
+  currentTarget: {fileID: 0}
   sellButton: {fileID: 693522398}
   fullScreenBlocker: {fileID: 50677475}
 --- !u!114 &1715993832

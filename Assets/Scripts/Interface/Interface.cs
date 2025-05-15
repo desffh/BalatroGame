@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 
+// 포커 족보 / 디버프 / 핸드,버리기 등 카운트 관리 인터페이스
+
+
 // 포커 족보 인터페이스
 public interface IPokerHandle
 {
@@ -57,30 +60,15 @@ public abstract class IsStrightPlush
 
 }
 
-// |------------------------------------------------------
-
-
-// 문양이 있다면 카드마다 배수 점수 추가
-public interface IColorJoker
-{
-    void ColorJoker(List<Card> cards, List<Card> saveSuit);
-}
-
-// 족보가 있다면 배수 점수 추가
-public interface IPokerJoker
-{
-    void PokerJoker(List<Card> cards, int saveMultiple);
-}
-
 
 // |------------------------------------------------------
 
-// 게임 상태 인터페이스
-public interface IGameState
-{
-    void Enter();
-    void Exit();
-}
+//// 게임 상태 인터페이스
+//public interface IGameState
+//{
+//    void Enter();
+//    void Exit();
+//}
 
 // |------------------------------------------------------
 
@@ -95,49 +83,7 @@ public interface IPopupText
 
 // |------------------------------------------------------
 
-// 조커 능력 인터페이스
-public interface IJokerEffect
-{
-    bool ApplyEffect(JokerEffectContext context);
-}
 
-// 나중에 다른 매니저를 만들어서 HoldManager말고 다른 매니저를 참조하게 하자
-//
-// -> 핸드, 버리기, 머니 등을 모두 관여할 수 있게 
-//
-// 조커 카드 판매 시 호출 
-
-public interface IExitEffect
-{
-    // HoldManager : 직접적인 계산 과정을 담당
-
-    // JokerCard : 조커카드의 정보, 애니메이션을 처리할 수 있다
-
-    void ExitEffect(JokerCard jokerCard);
-}
-
-
-// 조커 효과 리셋
-public interface IResettableEffect
-{
-    void ResetEffect();
-}
-
-// 조커 효과에 사용 될 컨텍스트들
-public class JokerEffectContext
-{
-    public StateManager StateManager; // 머니, 핸드, 버리기, 칩, 배수 사용 가능
-
-    public JokerCard MyJoker; // 조커 카드 접근 가능
-
-    public MyJokerCard MyJokerCard; // 내 조커 카드 목록에 접근 가능 
-
-    public string CurrentHandType; // 조커의 타입
-
-    public List<Card> SelectedCards; // 현재 선택된 카드들 (계산중인)
-
-    public List<string> HandTypes; // 족보 하위 타입 문자열 리스트
-}
 
 
 
