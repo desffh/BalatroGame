@@ -330,7 +330,7 @@ public class CardManager : Singleton<CardManager>
 
         if (enty.isBoss == false)
         {
-            Debug.Log("디버프가 아니에요!! 활성화 안할게");
+            //Debug.Log("디버프가 아니에요!! 활성화 안할게");
 
             card.OffdebuffImage();
             return;
@@ -346,7 +346,7 @@ public class CardManager : Singleton<CardManager>
 
             if(cardDebuff.ApplyDebuff(card))
             {
-                Debug.Log("디버프 맞아요!! 활성화 할게");
+                //Debug.Log("디버프 맞아요!! 활성화 할게");
 
                 // 디버프 이미지 활성화
                 dubuffCard.OndebuffImage();

@@ -21,6 +21,11 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
     // |----
 
+    // 행성카드팩
+    [SerializeField] private List<PlanetPackUI> planetPackSlots;
+    [SerializeField] private List<PlanetCardPackSO> planetPackDatas;
+
+
     // 상점 팝업 
     [SerializeField] ShopCardPanel jokerPanel;
 
@@ -68,7 +73,18 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
     // |----
 
+    // 상점이 열릴 때 호출 - 이벤트 구독자
     public void OpenShop()
+    {
+        JokerSetting();
+
+        PlanetSetting();
+    }
+
+    // | ----
+
+    // 조커 카드 정보 세팅
+    public void JokerSetting()
     {
         for (int i = 0; i < shopJokers.Count; i++)
         {
@@ -91,7 +107,7 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
             shopJokers[i].SetJokerData(selected);
 
             // Shop은 ICardSelectionHandler 구현체
-            shopJokers[i].SetSelectionHandler(this); 
+            shopJokers[i].SetSelectionHandler(this);
 
             shopJokers[i].gameObject.SetActive(true);
         }
@@ -99,7 +115,17 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
         jokerManager.ShuffleBuffer();
     }
 
-    // | ----
+    // 행성 카드팩 정보 세팅 
+    public void PlanetSetting()
+    {
+        for (int i = 0; i < planetPackSlots.Count; i++)
+        {
+            planetPackSlots[i].Init(planetPackDatas[i]);
+        }    
+    }
+
+    // |----
+
 
     // 구매하기 버튼 활성화
     public void ShowBuyButton(JokerCard target)
