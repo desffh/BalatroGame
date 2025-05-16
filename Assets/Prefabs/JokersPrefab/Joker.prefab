@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1457722827881145944
 RectTransform:
   m_ObjectHideFlags: 0
@@ -182,9 +182,7 @@ MonoBehaviour:
       type: 
     image: {fileID: 0}
   jokerImage: {fileID: 4172849092802093500}
-  nameText: {fileID: 0}
-  costText: {fileID: 0}
-  abilityText: {fileID: 0}
+  myJokerPrefab: {fileID: 2839103790593053743}
   data:
     name: 
     cost: 0
@@ -192,7 +190,6 @@ MonoBehaviour:
     require: 
     type: 
   isCalculating: 0
-  myJokerPrefab: {fileID: 2839103790593053743}
 --- !u!114 &9056085076236720140
 MonoBehaviour:
   m_ObjectHideFlags: 0

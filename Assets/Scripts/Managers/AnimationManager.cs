@@ -208,13 +208,13 @@ public class AnimationManager : Singleton<AnimationManager>
     // |-------------------
 
     // 조커에 마우스가 들어왔을 때
-    public void OnEnterJokerCard(GameObject cardPrefabs)
+    public void OnEnterShopCard(GameObject cardPrefabs)
     {
         cardPrefabs.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 0.2f);
     }
 
     // 조커에 마우스가 나갔을 때
-    public void OnExitJokerCard(GameObject cardPrefabs)
+    public void OnExitShopCard(GameObject cardPrefabs)
     {
         cardPrefabs.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f);
     }

@@ -11,5 +11,9 @@ public class PlanetCardPackSO : ScriptableObject
 
     public int cost;
 
+    public int decCount;
+
+    public int selectCount;
+
     public List<Sprite> planetPackImages;
 }

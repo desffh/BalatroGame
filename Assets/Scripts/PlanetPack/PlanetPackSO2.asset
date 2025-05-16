@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: PlanetPackSO2
   m_EditorClassIdentifier: 
   packName: "\uBA54\uAC00 \uCC9C\uCCB4 \uD329"
-  cost: 8
+  cost: 12
+  decCount: 5
+  selectCount: 2
   planetPackImages:
   - {fileID: 21300000, guid: c13dd5463b0eeaa4382b8a970f6d36b9, type: 3}
   - {fileID: 21300000, guid: fc11fe91d13ef7d4dbc514dd0624bf4e, type: 3}

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   packName: "\uC810\uBCF4 \uCC9C\uCCB4 \uD329"
   cost: 6
+  decCount: 3
+  selectCount: 1
   planetPackImages:
   - {fileID: 21300000, guid: 658b92d26fe63e241aae2705893ce961, type: 3}
   - {fileID: 21300000, guid: f06bd3486e3fb534fbcac9d8f11b39d5, type: 3}

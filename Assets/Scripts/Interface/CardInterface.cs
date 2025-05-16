@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,29 +50,28 @@ public class JokerEffectContext
     public List<string> HandTypes; // 족보 하위 타입 문자열 리스트
 }
 
+
 // |-----------------------
 
-/// 마커 인터페이스 (상점 진입 조건으로 사용)
-public interface IShopItem { }
-
-
-// 상점 카드 인터페이스 (조커카드, 행성카드, 타로카드 가 구현) 
+// 버튼 위치를 위함
 public interface IShopCard
 {
-    public string Name { get; }
+    int cost { get; }
+    RectTransform Transform { get; } // 카드 위치
 
-    public int cost { get; }
-
-    public Sprite Icon { get; }
 }
 
-// |-----------------------
 
-/// 구매 가능 카드 (조커, 타로, 행성)
+/// 구매 가능 카드 (조커)
 public interface IBuyCard
 {
-    void OnBuy(Transform parent, MyJokerCard list, ICardSelectionHandler handler);
+    void OnBuy(Transform parent, MyJokerCard list, Action<IShopCard> onCreated);
+}
 
+
+public interface IBuyPlanetCard
+{
+    void OnBuy(Action<IShopCard> onCreated);
 }
 
 
@@ -83,19 +83,12 @@ public interface IInstantCard
 }
 
 /// 선택 가능 카드 (조커, 타로팩, 행성팩, 타로카드만)
-public interface ISelectCard
+public interface ICanBeSold
 {
     bool CanBeSold { get; }  // 판매 가능한 상태인지
     bool IsInPlayerInventory { get; } // 내 카드 영역에 있는지
 }
 
-// 카드 선택을 처리할 핸들러 (Shop이 구현)
-public interface ICardSelectionHandler
-{
-    // 매개변수로 카드 인터페이스를 받음
-    void OnCardSelected(ISelectCard card);
-    void OnCardDeselected(ISelectCard card);
-}
 
 
 /// 판매 가능한 카드 (조커, 타로)

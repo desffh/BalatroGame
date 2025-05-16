@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Pool;
 
 
 // 조커의 정보 + 스프라이트 구조체
@@ -49,8 +48,6 @@ public class JokerManager : MonoBehaviour
             spriteDict[sprite.name] = sprite; // 이름으로 매핑
         }
 
-        // |---------------------------
-
 
 
     }
@@ -61,7 +58,7 @@ public class JokerManager : MonoBehaviour
         SetupJokerBuffer();
     }
 
-    // 조커를 리스트에 할당
+    // 조커 데이터를 리스트에 할당
     public void SetupJokerBuffer()
     {
         jokerBuffer.Clear();

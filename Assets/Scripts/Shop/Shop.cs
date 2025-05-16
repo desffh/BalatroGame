@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 // 상점 관리 - 조커 추가, 타로 카드 추가, 행성 카드 추가, 바우처 추가
 
-public class Shop : MonoBehaviour, ICardSelectionHandler
+public class Shop : MonoBehaviour
 {
     [SerializeField] MyJokerCard myJokerCards; // myCards리스트를 보유한 스크립트
 
@@ -24,6 +24,10 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
     // 행성카드팩
     [SerializeField] private List<PlanetPackUI> planetPackSlots;
     [SerializeField] private List<PlanetCardPackSO> planetPackDatas;
+
+    // 타로카드팩
+    [SerializeField] private List<TaroPackUI> taroPackSlots;
+    [SerializeField] private List<TaroCardPackSO> taroPackDatas;
 
 
     // 상점 팝업 
@@ -41,15 +45,17 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
     [SerializeField] Button buyButton;
     [SerializeField] Button sellButton;
 
-    [SerializeField] private JokerCard currentTarget;
 
-    public JokerCard CurrentTarget => currentTarget;
+    // 선택 가능한 공통 인터페이스로 받기
+
+    [SerializeField] private IShopCard currentTarget;
+    public IShopCard CurrentTarget => currentTarget;
 
     // |----
 
     // 투명 패널
-    [SerializeField] GameObject emptyPanel;
-    [SerializeField] GameObject fullScreenBlocker;
+    [SerializeField] GameObject emptyPanel; // 상점
+    [SerializeField] GameObject fullScreenBlocker;// 판매
 
 
     private void Awake()
@@ -62,6 +68,8 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
     {
         ShopPanel.OnShopOpened += OpenShop;
         StageButton.OnShopCloseRequest += CloseShop;
+
+        
     }
 
     private void Start()
@@ -79,6 +87,8 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
         JokerSetting();
 
         PlanetSetting();
+
+        TaroSetting();
     }
 
     // | ----
@@ -106,10 +116,13 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
             shopJokers[i].SetJokerData(selected);
 
-            // Shop은 ICardSelectionHandler 구현체
-            shopJokers[i].SetSelectionHandler(this);
 
             shopJokers[i].gameObject.SetActive(true);
+
+            // 이벤트 등록 -> 조커 카드를 클릭했을 때 
+
+            var card = shopJokers[i];
+            card.OnClicked += OnCardSelected;
         }
 
         jokerManager.ShuffleBuffer();
@@ -124,11 +137,21 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
         }    
     }
 
+    // 타로 카드팩 정보 세팅
+    public void TaroSetting()
+    {
+        for (int i = 0; i < taroPackSlots.Count; i++)
+        {
+            taroPackSlots[i].Init(taroPackDatas[i]);
+        }
+    }
+
+
     // |----
 
 
     // 구매하기 버튼 활성화
-    public void ShowBuyButton(JokerCard target)
+    public void ShowBuyButton(IShopCard target)
     {
         OffSellButton();
 
@@ -136,20 +159,20 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
         // 위치를 조커 카드 위로 이동
         RectTransform buttonRect = buyButton.GetComponent<RectTransform>();
-        buttonRect.position = target.transform.position + new Vector3(170, 50, 0);
+        buttonRect.position = target.Transform.position + new Vector3(170, 50, 0);
 
         buyButton.gameObject.SetActive(true);
         emptyPanel.SetActive(true);
     }
 
     // 판매하기 버튼 활성화
-    public void ONSellButton(JokerCard target)
+    public void ONSellButton(IShopCard target)
     {
         OffBuyButton();
 
         // 위치를 조커 카드 위로 이동
         RectTransform buttonRect = sellButton.GetComponent<RectTransform>();
-        buttonRect.position = target.transform.position + new Vector3(165, 50, 0);
+        buttonRect.position = target.Transform.position + new Vector3(165, 50, 0);
 
         sellButton.gameObject.SetActive(true);
         fullScreenBlocker.SetActive(true);
@@ -173,9 +196,12 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
                 return;
             }
+            //// 조커 전용 콜백 전달
+            //buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, card =>
+            //{
+            //    card.OnClicked += OnCardSelected;
+            //});
 
-            // 조커카드는 생성 위치, 카드 리스트, 핸들러가 필요함
-            buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, this);
 
             OffBuyButton();
             currentTarget = null;
@@ -210,7 +236,14 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
     private void OnDisable()
     {
+        foreach (var card in shopJokers)
+        {
+            // 이벤트 해제
+            card.OnClicked -= OnCardDeselected;
+        }
+
         ShopPanel.OnShopOpened -= OpenShop;
+
         StageButton.OnShopCloseRequest -= CloseShop;
     }
 
@@ -255,43 +288,41 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
 
     // ICardSelectionHandler 구현 
 
-    public void OnCardSelected(ISelectCard card) // 카드를 클릭했을 때
+    public void OnCardSelected(IShopCard card) // 카드를 클릭했을 때
     {
-        // ISelectCard 인터페이스로 카드 판별
+        // IShopCard 인터페이스로 카드 판별
+       
+        SetTarget(card);
 
-        if (card is JokerCard target)
+        if (card is ICanBeSold sellable && sellable.IsInPlayerInventory && sellable.CanBeSold)
         {
-            // currentTarget의 설정
-            SetTarget(target);
-
-            // 이미 구매했고, 내 조커 영역에 있다면
-            if (card.IsInPlayerInventory && card.CanBeSold)
-            {
-                ONSellButton(target);
-            }
-            else
-            {
-                ShowBuyButton(target);
-            }
+            ONSellButton(card);
+        }
+        else
+        {
+            ShowBuyButton(card);
         }
     }
 
-    public void OnCardDeselected(ISelectCard card) // 투명 패널을 클릭했을 때 (버튼 숨기기)
+    public void OnCardDeselected(IShopCard card) // 투명 패널을 클릭했을 때 (버튼 숨기기)
     {
-        if (card is JokerCard target && target == currentTarget)
-        {
-            if (card.IsInPlayerInventory && card.CanBeSold)
-            {
-                OffSellButton();
-            }
-            else
-            {
-                OffBuyButton();
-            }
 
-            target.ForceUnselect();
-            ClearTarget();
+        if (card is ICanBeSold sellable && sellable.IsInPlayerInventory && sellable.CanBeSold)
+        {
+            OffSellButton();
         }
+        else
+        {
+            OffBuyButton();
+        }
+
+        if (card is JokerCard target)
+        {
+            target.ForceUnselect();
+        }
+
+        ClearTarget();
+
     }
 
     // |----
@@ -335,7 +366,7 @@ public class Shop : MonoBehaviour, ICardSelectionHandler
     // |----
 
     // 클릭된 카드인지 판별 
-    public void SetTarget(JokerCard card)
+    public void SetTarget(IShopCard card)
     {
         currentTarget = card;
     }

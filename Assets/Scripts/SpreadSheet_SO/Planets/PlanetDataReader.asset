@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab3af64c97b65f64eb8cd8e947606a18, type: 3}
+  m_Name: PlanetDataReader
+  m_EditorClassIdentifier: 
+  associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
+  associatedWorksheet: Planets
+  START_ROW_LENGTH: 2
+  END_ROW_LENGTH: 10
+  DataList:
+  - name: "\uBA85\uC655\uC131"
+    require: "\uD558\uC774\uCE74\uB4DC"
+    chip: 10
+    multiple: 1
+    image: Planet_Hi
+  - name: "\uC218\uC131"
+    require: "\uD398\uC5B4"
+    chip: 15
+    multiple: 1
+    image: Planet_Pair
+  - name: "\uCC9C\uC655\uC131"
+    require: "\uD22C \uD398\uC5B4"
+    chip: 20
+    multiple: 1
+    image: Planet_TwoPair
+  - name: "\uAE08\uC131"
+    require: "\uD2B8\uB9AC\uD50C"
+    chip: 20
+    multiple: 2
+    image: Planet_Triple
+  - name: "\uD1A0\uC131"
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8"
+    chip: 30
+    multiple: 3
+    image: Planet_Straight
+  - name: "\uBAA9\uC131"
+    require: "\uD50C\uB7EC\uC2DC"
+    chip: 15
+    multiple: 2
+    image: Planet_Flush
+  - name: "\uC9C0\uAD6C"
+    require: "\uD480\uD558\uC6B0\uC2A4"
+    chip: 25
+    multiple: 2
+    image: Planet_FullHouse
+  - name: "\uD654\uC131"
+    require: "\uD3EC\uCE74\uB4DC"
+    chip: 30
+    multiple: 3
+    image: Planet_FourCard
+  - name: "\uD574\uC655\uC131"
+    require: "\uC2A4\uD2B8\uB808\uC774\uD2B8 \uD50C\uB7EC\uC2DC"
+    chip: 40
+    multiple: 4
+    image: Planet_StrFlush

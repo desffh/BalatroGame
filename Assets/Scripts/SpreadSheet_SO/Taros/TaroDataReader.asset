@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154491ea55408e34a975497c03223651, type: 3}
+  m_Name: TaroDataReader
+  m_EditorClassIdentifier: 
+  associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
+  associatedWorksheet: Tarots
+  START_ROW_LENGTH: 2
+  END_ROW_LENGTH: 5
+  DataList:
+  - name: "\uC815\uC758"
+    require: "\uC2A4\uD398\uC774\uB4DC"
+    image: Justice
+  - name: "\uC740\uB454\uC790"
+    require: "\uD558\uD2B8"
+    image: TheHermit
+  - name: "\uC5EC\uC81C"
+    require: "\uD074\uB85C\uBC84"
+    image: TheEmpress
+  - name: "\uAD50\uD669"
+    require: "\uB2E4\uC774\uC544"
+    image: TheHierophant

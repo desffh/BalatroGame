@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 // IShopItem (마커 인터페이스) 로 묶기 
 
-public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCard, IInstantCard, ISelectCard
+public class JokerCard : MonoBehaviour, IBuyCard, ISellCard, IInstantCard, IShopCard, ICanBeSold
 {
     [SerializeField] public JokerTotalData currentData;
 
@@ -54,30 +54,18 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
 
 
     // IShopCard 구현
-
-    public string Name => data.name;
-
     public int cost => data.cost;
 
-    public Sprite Icon => sprite;
+    public RectTransform Transform => GetComponent<RectTransform>();
 
 
     // |------------------------------
 
 
-    private ICardSelectionHandler selectionHandler;
-
-    // 핸들러 셋팅
-    public void SetSelectionHandler(ICardSelectionHandler handler)
-    {
-        selectionHandler = handler;
-    }
+    public event Action <IShopCard> OnClicked; // Shop에서 구독
 
 
-    // |------------------------------
 
-
-    
     private void Awake()
     {
         jokerImage = GetComponent<Image>();
@@ -114,20 +102,20 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     // 이벤트 트리거 Enter
     public void OnEnterJoker()
     {
-        AnimationManager.Instance.OnEnterJokerCard(gameObject);
+        AnimationManager.Instance.OnEnterShopCard(gameObject);
     }
 
     // 이벤트 트리거 Exit
     public void OnExitJoker()
     {
-        AnimationManager.Instance.OnExitJokerCard(gameObject);
+        AnimationManager.Instance.OnExitShopCard(gameObject);
     }
 
     // |----
 
 
-    // IBuyCard 구현 - 구매하기 버튼을 눌렀을 때 호출 (생성 위치, 내 카드, 핸들러)
-    public void OnBuy(Transform spawnParent, MyJokerCard cardList, ICardSelectionHandler handler)
+    // IBuyCard 구현 - 구매하기 버튼을 눌렀을 때 호출 (생성 위치, 내 카드)
+    public void OnBuy(Transform spawnParent, MyJokerCard cardList, Action<IShopCard> onCreated)
     {
         // 1. 돈 차감
         StateManager.Instance.moneyViewSetting.Remove(cost);
@@ -139,10 +127,6 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
         newCard.SetJokerData(currentData); // 동적 생성된 조커에 데이터 주입
 
 
-        // 3. 핸들러 주입
-        newCard.SetSelectionHandler(handler);
-
-
         // 4. 내 카드 리스트 등록
         cardList.AddJokerCard(newCard);
 
@@ -150,6 +134,9 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
         // 5. 구매한 카드 비활성화
         DisableCard();
 
+
+        // Shop에서 이벤트 등록 -> 버튼을 위해서
+        onCreated?.Invoke(newCard); 
 
         // 6. 사운드
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
@@ -247,25 +234,9 @@ public class JokerCard : MonoBehaviour, IShopItem, IShopCard, IBuyCard, ISellCar
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        if (selectionHandler == null)
-        {
-            Debug.LogWarning("선택 핸들러가 설정되지 않음");
-            return;
-        }
-        if (isSelected) // 이미 선택된 카드라면
-        {
-            // 핸들러에 선택된 조커(ISelectCard타입)를 전달
+        isSelected = !isSelected;
 
-            selectionHandler.OnCardDeselected(this);
-
-            isSelected = false;
-        }
-        else
-        {
-            selectionHandler.OnCardSelected(this);
-
-            isSelected = true;
-        }
+        OnClicked?.Invoke(this); // 이벤트 실행 -> Shop 
     }
 
 
