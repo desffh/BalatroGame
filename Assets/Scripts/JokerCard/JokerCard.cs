@@ -59,11 +59,9 @@ public class JokerCard : MonoBehaviour, IBuyCard, ISellCard, IInstantCard, IShop
     public RectTransform Transform => GetComponent<RectTransform>();
 
 
-    // |------------------------------
-
-
     public event Action <IShopCard> OnClicked; // Shop에서 구독
 
+    // 카드를 클릭했을 때, Shop으로 이벤트 전달 -> 구매, 판매 버튼 활성화 / 비활성화
 
 
     private void Awake()

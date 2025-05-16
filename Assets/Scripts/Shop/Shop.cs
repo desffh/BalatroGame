@@ -57,6 +57,7 @@ public class Shop : MonoBehaviour
     [SerializeField] GameObject emptyPanel; // 상점
     [SerializeField] GameObject fullScreenBlocker;// 판매
 
+    [SerializeField] PlanetPackOpened planetPackOpened;
 
     private void Awake()
     {
@@ -134,6 +135,13 @@ public class Shop : MonoBehaviour
         for (int i = 0; i < planetPackSlots.Count; i++)
         {
             planetPackSlots[i].Init(planetPackDatas[i]);
+
+            PlanetCardPack cardPack = planetPackSlots[i].GetComponent<PlanetCardPack>();
+
+            // 버튼 이벤트 등록
+            cardPack.OnClicked += OnCardSelected;
+
+            planetPackOpened.Register(cardPack);
         }    
     }
 
@@ -196,11 +204,16 @@ public class Shop : MonoBehaviour
 
                 return;
             }
-            //// 조커 전용 콜백 전달
-            //buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, card =>
-            //{
-            //    card.OnClicked += OnCardSelected;
-            //});
+            
+            // OnBuy -> 조커 구매 로직 실행!
+            buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, card =>
+            {
+                if (card is IShopCard cards)
+                {
+                    // 버튼 활성화 이벤트
+                    cards.OnClicked += OnCardSelected;
+                }
+            });
 
 
             OffBuyButton();

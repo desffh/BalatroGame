@@ -23,7 +23,7 @@ public class PlanetPackUI : MonoBehaviour
     // |----
 
     
-    [SerializeField] Image packImage;
+    [SerializeField] public Image packImage;
 
     [SerializeField] TextMeshProUGUI nameText;
 

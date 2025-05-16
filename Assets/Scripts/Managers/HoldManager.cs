@@ -104,6 +104,9 @@ public class HoldManager : Singleton<HoldManager>
             joker.isCalculating = true;
             Debug.Log("조커카드 클릭 안돼요");
         }
+
+        // 타로카드도 추가해야함
+
         
         var result = PokerManager.Instance.GetPokerResult();
 
@@ -126,7 +129,7 @@ public class HoldManager : Singleton<HoldManager>
 
         if (ScoreManager.Instance.CheckStageClear(stageButton.blind.score) == false)
         {
-            Debug.Log(stageButton.blind.score);
+            //Debug.Log(stageButton.blind.score);
 
             ActionSetting.Invoke();
         }

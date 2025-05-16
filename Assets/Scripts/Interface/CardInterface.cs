@@ -59,6 +59,7 @@ public interface IShopCard
     int cost { get; }
     RectTransform Transform { get; } // 카드 위치
 
+    event Action<IShopCard> OnClicked; // 클릭 이벤트 (버튼활성화 비활성화)
 }
 
 
