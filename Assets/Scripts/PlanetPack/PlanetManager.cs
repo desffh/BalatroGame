@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 
-// 조커의 정보 + 스프라이트 구조체
+// 행성의 정보 + 스프라이트 구조체
 [System.Serializable]
 public class PlanetTotalData
 {

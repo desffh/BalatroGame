@@ -87,6 +87,38 @@ public class PokerManager : Singleton<PokerManager>
         }
     }
 
+    // 행성카드 - 족보 리셋
+    public void ResetAllUpgrades()
+    {
+        foreach (var hand in pokerHands)
+        {
+            hand.ResetUpgrade();
+        }
+    }
+
+
+
+    // 행성카드 - 족보 업그레이드 함수
+    public void ApplyPlanetUpgrade(PlanetTotalData data)
+    {
+        string targetpokerName = data.baseData.require; // 족보
+
+        foreach (var hand in pokerHands)
+        {
+            if (hand.pokerName == targetpokerName)
+            {
+                hand.ApplyUpgrade(data.baseData.chip, data.baseData.multiple);
+
+                // 런 정보 텍스트 갱신
+                RunSetting.Instance.UpgradePokerUI(targetpokerName, data.baseData.chip, data.baseData.multiple);
+
+                Debug.Log($"[행성카드] {hand.pokerName} 업그레이드: +{data.baseData.chip}, x{data.baseData.multiple}");
+                break;
+            }
+        }
+    }
+
+
     // |---
 
     // 현재 족보가 포함하는 하위 족보까지 반환
@@ -232,5 +264,6 @@ public class PokerManager : Singleton<PokerManager>
         result.PokerName = "하이카드";
         return result;
     }
+
 
 }

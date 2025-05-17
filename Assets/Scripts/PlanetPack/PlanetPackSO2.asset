@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlanetPackSO2
   m_EditorClassIdentifier: 
   packName: "\uBA54\uAC00 \uCC9C\uCCB4 \uD329"
-  cost: 12
+  cost: 8
   decCount: 5
   selectCount: 2
   planetPackImages:

@@ -22,7 +22,7 @@ public class TaroPackUI : MonoBehaviour
     // |----
 
 
-    [SerializeField] Image packImage;
+    [SerializeField] public Image packImage;
 
     [SerializeField] TextMeshProUGUI nameText;
 

@@ -7,8 +7,24 @@ using UnityEngine;
 public class Triple : IPokerHandle
 {
     public string pokerName => "트리플";
-    public int plus => 30;
-    public int multiple => 3;
+    
+    // 기본 데이터 
+    private int basePlus = 30;
+    private int baseMultiple = 3;
+
+    // 업그레이드 시 추가
+    private int upgradePlus = 0;
+    private int upgradeMultiple = 0;
+
+    public int plus => basePlus + upgradePlus;
+    public int multiple => baseMultiple + upgradeMultiple;
+
+    // 행성카드를 사용하면 추가
+    public void ApplyUpgrade(int plusData, int multipleData)
+    {
+        upgradePlus += plusData;
+        upgradeMultiple += multipleData;
+    }
 
 
     public void PokerHandle(List<Card> cards, List<int> saveNum)
@@ -36,5 +52,9 @@ public class Triple : IPokerHandle
             }
         }
     }
-
+    public void ResetUpgrade()
+    {
+        upgradePlus = 0;
+        upgradeMultiple = 0;
+    }
 }

@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 
 
 // 포커 족보 인터페이스
-public interface IPokerHandle
+public interface IPokerHandle : IPlanetUpgrade
 {
     void PokerHandle(List<Card> cards, List<int> saveNum);
     string pokerName { get; }
@@ -14,6 +14,14 @@ public interface IPokerHandle
     int plus {  get;}
     int multiple { get;}
 }
+
+public interface IPlanetUpgrade
+{
+    void ApplyUpgrade(int plusData, int multipleData);
+
+    void ResetUpgrade();
+}
+
 
 // |------------------------------------------------------
 

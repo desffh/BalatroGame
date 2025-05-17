@@ -10,6 +10,10 @@ public class GameReset : MonoBehaviour
 {
     [SerializeField] JokerManager jokerManager;
 
+    [SerializeField] PlanetManager planetManager;
+
+    [SerializeField] TaroManager taroManager;
+
     [SerializeField] StageButton stageButton;
 
     public void GameResets()
@@ -30,8 +34,22 @@ public class GameReset : MonoBehaviour
         
         // 조커 셔플
         jokerManager.ShuffleBuffer();
-        
+
+        planetManager.SetupPlanetBuffer();
+
+        planetManager.ShuffleBuffer();
+
+        taroManager.SetupTaroBuffer();
+
+        taroManager.ShuffleBuffer();
+
+        PokerManager.Instance.ResetAllUpgrades(); // 행성카드 효과 초기화
+
+
         jokerManager.MyJokerReset();
+
         ScoreManager.Instance.ResetMaxScore();
+
+        RunSetting.Instance.ResetSetting(); // 런 정보 리셋
     }
 }

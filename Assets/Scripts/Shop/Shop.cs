@@ -58,6 +58,7 @@ public class Shop : MonoBehaviour
     [SerializeField] GameObject fullScreenBlocker;// 판매
 
     [SerializeField] PlanetPackOpened planetPackOpened;
+    [SerializeField] TaroPackOpened TaroPackOpened;
 
     private void Awake()
     {
@@ -136,11 +137,14 @@ public class Shop : MonoBehaviour
         {
             planetPackSlots[i].Init(planetPackDatas[i]);
 
+            planetPackSlots[i].gameObject.SetActive(true);
+
             PlanetCardPack cardPack = planetPackSlots[i].GetComponent<PlanetCardPack>();
 
             // 버튼 이벤트 등록
             cardPack.OnClicked += OnCardSelected;
 
+            // 카드 구매 시 호출 될 이벤트
             planetPackOpened.Register(cardPack);
         }    
     }
@@ -151,15 +155,24 @@ public class Shop : MonoBehaviour
         for (int i = 0; i < taroPackSlots.Count; i++)
         {
             taroPackSlots[i].Init(taroPackDatas[i]);
+
+            taroPackSlots[i].gameObject.SetActive(true);
+
+            TaroCardPack cardpack = taroPackSlots[i].GetComponent<TaroCardPack>();
+
+            cardpack.OnClicked += OnCardSelected;
+
+            TaroPackOpened.Register(cardpack);
         }
     }
+    
 
 
-    // |----
+// |----
 
 
-    // 구매하기 버튼 활성화
-    public void ShowBuyButton(IShopCard target)
+// 구매하기 버튼 활성화
+public void ShowBuyButton(IShopCard target)
     {
         OffSellButton();
 
@@ -242,9 +255,21 @@ public class Shop : MonoBehaviour
         {
             if (shopJokers[i].gameObject.activeSelf == true)
             {
+                // 조커 데이터 반환
+
                 jokerManager.PushData(shopJokers[i].currentData);
             }
         }
+
+        // 행성 이벤트 해제
+        foreach (var pack in planetPackSlots)
+        {
+            PlanetCardPack cardPack = pack.GetComponent<PlanetCardPack>();
+
+            planetPackOpened.Unregister(cardPack);
+
+        }
+
     }
 
     private void OnDisable()
@@ -258,6 +283,8 @@ public class Shop : MonoBehaviour
         ShopPanel.OnShopOpened -= OpenShop;
 
         StageButton.OnShopCloseRequest -= CloseShop;
+
+
     }
 
     // |----
