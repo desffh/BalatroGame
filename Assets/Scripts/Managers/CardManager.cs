@@ -9,7 +9,6 @@ using TMPro;
 using Unity.VisualScripting;
 using System.Runtime.Serialization.Formatters;
 using static UnityEngine.UI.Image;
-using UnityEditor.U2D.Aseprite;
 using JetBrains.Annotations;
 
 

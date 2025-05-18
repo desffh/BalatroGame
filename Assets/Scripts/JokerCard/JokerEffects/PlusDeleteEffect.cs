@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+
 
 // 일반 조커 : 버리기 횟수 추가 카드
 public class PlusDeleteEffect : IJokerEffect, IExitEffect, IResettableEffect
