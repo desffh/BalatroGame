@@ -49,6 +49,7 @@ public class PlanetCard : MonoBehaviour
             Debug.Log("행성 카드 데이터 없음");
             return;
         }
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ClickCard");
 
         // selectCount의 수와 비교하여 더 선택해야하는 지, 종료해야하는 지 판별
 

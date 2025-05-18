@@ -1,6 +1,7 @@
 using DG.Tweening;
 using JetBrains.Annotations;
 using System;
+using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -399,7 +400,7 @@ public class HoldManager : Singleton<HoldManager>
                         card.itemdata.id == effect.requireNumber)
                     {
                         savenumberCheck_Taro[i] = true;
-                        return baseId + card.EffectiveId;
+                        return baseId + card.bonusChipByTaro;
                     }
                 }
 
@@ -453,6 +454,7 @@ public class HoldManager : Singleton<HoldManager>
     public GameObject SaveNumber(int saveNumber, int finalScore)
     {
         var selectedCards = pokerManager.cardData.SelectCards;
+
 
         for (int i = 0; i < selectedCards.Count; i++)
         {

@@ -64,6 +64,7 @@ public class TaroCard : MonoBehaviour
             Debug.Log("타로 카드 데이터 없음");
             return;
         }
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ClickCard");
 
         // 0. 카드 상호작용 끄기
         OffRaycast();

@@ -34,7 +34,7 @@ public class PlusDeleteEffect : IJokerEffect, IExitEffect, IResettableEffect
 
         AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
-
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
 
         ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
 

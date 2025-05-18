@@ -27,6 +27,8 @@ public class ChipBonusEffect : IJokerEffect
         {
             context.StateManager.multiplyChipSetting.AddPlus(bonus);
 
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
+
             AnimationManager.Instance.PlayJokerCardAnime(context.MyJoker.gameObject);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");

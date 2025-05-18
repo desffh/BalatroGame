@@ -31,7 +31,7 @@ public class StageManager : Singleton<StageManager>, IRoundEntySetting
     // 각 라운드 정보를 담은 BlindRound
     private List<List<BlindRound>> blindRoundsPerEnty = new();
 
-    private int [] baseScores = { 300, 800, 1800, 3800, 7800, 17000};
+    private int [] baseScores = { 300, 800, 1800, 3800, 7800, 16000};
     
     
     // 테스트용 스코어

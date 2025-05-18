@@ -26,9 +26,9 @@ public class NormalBonusEffect : IJokerEffect
 
         stateManager.multiplyChipSetting.AddMultiply(bonus);
 
-        AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);           
-        
+        AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
 
         ShowJokerRankText showJokerRankText = myJoker.GetComponent<ShowJokerRankText>();
         showJokerRankText.OnSettingRank(myJoker.currentData.baseData.multiple);

@@ -38,6 +38,7 @@ public class UpgradeEffect : IJokerEffect
             Debug.Log("현재 조커의 누적 칩 : " + bonus);
 
             stateManager.multiplyChipSetting.AddPlus(bonus);
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
 
             AnimationManager.Instance.PlayJokerCardAnime(myJoker.gameObject);
 

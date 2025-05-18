@@ -25,6 +25,8 @@ public class HandTypeBonusEffect : IJokerEffect
         {
             context.StateManager.multiplyChipSetting.AddMultiply(bonus);
 
+            ServiceLocator.Get<IAudioService>().PlaySFX("Sound-CheckCard");
+
             AnimationManager.Instance.PlayJokerCardAnime(context.MyJoker.gameObject);
 
             Debug.Log($"[조커: {targetType}] 족보 일치 → 배수 +{bonus}");
