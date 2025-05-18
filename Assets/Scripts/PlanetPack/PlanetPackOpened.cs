@@ -87,6 +87,8 @@ public class PlanetPackOpened : MonoBehaviour
 
     private void PackOpened(PlanetCardPack pack)
     {
+        currentCards.Clear();
+
         selectedCount = 0;
 
         count = pack.planetPackUI.decCount;

@@ -64,6 +64,7 @@ MonoBehaviour:
   spriteCards: {fileID: 0}
   Collider2D: {fileID: 7758442722237426489}
   debuffImage: {fileID: 3327669868245264364}
+  taroImage: {fileID: 2258515382232632240}
   spriteNameToLoad: 
   originPRS:
     pos: {x: 0, y: 0, z: 0}
@@ -72,6 +73,7 @@ MonoBehaviour:
   checkCard: 0
   isInUse: 0
   cardPopup: {fileID: 4610209607889900206}
+  bonusChipByTaro: 0
   isAnimating: 0
 --- !u!114 &-982333530242807510
 MonoBehaviour:

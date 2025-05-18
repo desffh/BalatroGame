@@ -286,11 +286,38 @@ public class CardManager : Singleton<CardManager>
             // 동적 생성된카드 오브젝트
             Card card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
 
-            card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
+
+            ItemData popped = PopItem();
+
+            card.Setup(popped); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
 
 
+            if (PokerManager.Instance.GetActiveTaroEffects().Count == 0)
+            {
+                card.OffTaroImage(); // 타로 이미지 비활성화 (이 메서드는 Card 클래스에 있어야 함)
+
+            }
+            else
+            {
+                // 타로 효과 체크
+                foreach (var effect in PokerManager.Instance.GetActiveTaroEffects())
+                {
+                    if (effect.IsMatch(card))
+                    {
+                        card.bonusChipByTaro += effect.chipBonus;
+
+                        card.OnTaroImage();
+
+                        Debug.Log($"[타로 효과 발동] {effect.requireSuit} {effect.requireNumber} → 칩 +{effect.chipBonus}");
+
+                        break;
+                    }
+                }
+
+            }
             // !!!!보스라면 디버프 이미지를 호출!!!!
             DebuffSetting(cardObject);
+
 
 
 
@@ -351,10 +378,7 @@ public class CardManager : Singleton<CardManager>
                 // 디버프 이미지 활성화
                 dubuffCard.OndebuffImage();
             }
-            //else
-            //{
-            //    card.OffdebuffImage();
-            //}
+
         }
         else
         {
@@ -666,7 +690,11 @@ public class CardManager : Singleton<CardManager>
 
         foreach (var card in distinctUsedCards)
         {
-            pools.Release(card);
+            pools.Release(card); // 풀에 반납
+
+            // 타로 상태 끄기
+            card.bonusChipByTaro = 0;
+            card.OffTaroImage(); // 타로 이미지 끄기
         }
 
         usedCards.Clear();

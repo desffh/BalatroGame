@@ -39,9 +39,12 @@ public class GameReset : MonoBehaviour
 
         planetManager.ShuffleBuffer();
 
+
         taroManager.SetupTaroBuffer();
 
         taroManager.ShuffleBuffer();
+
+        PokerManager.Instance.ClearTaroEffects(); // 타로 카드 효과 초기화
 
         PokerManager.Instance.ResetAllUpgrades(); // 행성카드 효과 초기화
 

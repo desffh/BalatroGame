@@ -87,6 +87,8 @@ public class TaroPackOpened : MonoBehaviour
 
     private void PackOpened(TaroCardPack pack)
     {
+        currentCards.Clear();
+
         selectedCount = 0;
 
         count = pack.taroPackUI.decCount;
@@ -112,7 +114,7 @@ public class TaroPackOpened : MonoBehaviour
 
             taroCards[i].GetComponent<Image>().sprite = data.image;
 
-            int random = Random.Range(1, 15);
+            int random = taroCards[i].GetRandomNumber();
 
             taroCards[i].GetComponent<TaroCardPopup>().
                 Initialize(data.baseData.name, data.baseData.require, random, 30);
@@ -173,13 +175,15 @@ public class TaroPackOpened : MonoBehaviour
     // |----
 
     // 구매버튼 누르면 호출 (이벤트 등록)
-    public void UpgradeTextSetting(TaroTotalData planetData)
+    public void UpgradeTextSetting(TaroCard card)
     {
-        Debug.Log($"[Upgrade] {planetData.baseData.require} 선택됨. 현재 선택 수: {selectedCount}");
+        var data = card.GetData();
+        var random = card.RandomNumber;
+
 
         upgradeText.gameObject.SetActive(true);
 
-        upgradeText.text = $"<color=#FF0000>{planetData.baseData.require}</color> 업그레이드 완료!";
+        upgradeText.text = $"<color=#FF0000>{data.baseData.require}{random}</color> 카드 업그레이드 완료!";
 
         AnimationManager.Instance.ShowTextAnime(upgradeText);
 
@@ -188,7 +192,7 @@ public class TaroPackOpened : MonoBehaviour
         if (selectedCount == currentPack.taroPackUI.selectCount)
         {
             Debug.Log("선택 완료! 카드팩 종료");
-            EndPlanetPack(); // 팩 이벤트 종료 처리
+            EndTaroPack(); // 팩 이벤트 종료 처리
         }
     }
 
@@ -244,7 +248,7 @@ public class TaroPackOpened : MonoBehaviour
         });
     }
 
-    private void EndPlanetPack()
+    private void EndTaroPack()
     {
         StartCoroutine(EndPackWithDelay());
     }

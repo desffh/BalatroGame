@@ -5772,6 +5772,7 @@ MonoBehaviour:
   plus: 0
   multiple: 0
   pokerName: 
+  random: 0
 --- !u!224 &388971794 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1317404604692558282, guid: f6c3641725c196d4699130ba9cbc3bc2, type: 3}
@@ -13987,6 +13988,7 @@ MonoBehaviour:
   selectButton: {fileID: 1875891174}
   upgradeText: {fileID: 1307574735}
   selectedCount: 0
+  random: 0
 --- !u!4 &988103680
 Transform:
   m_ObjectHideFlags: 0
@@ -20987,7 +20989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jokerManager: {fileID: 725096965}
   planetManager: {fileID: 1663013055}
-  taroManager: {fileID: 0}
+  taroManager: {fileID: 2143273949}
   stageButton: {fileID: 1422452429}
 --- !u!4 &1367090332
 Transform:

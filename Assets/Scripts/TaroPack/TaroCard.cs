@@ -6,6 +6,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+public class TaroEffect
+{
+    public string requireSuit; // 문양
+    public int requireNumber;  // 랜덤 1 ~ 14
+    public int chipBonus = 30; // 칩 수
+
+    public bool IsMatch(Card card)
+    {
+        return card.itemdata.suit == requireSuit && card.itemdata.id == requireNumber;
+    }
+}
+
+
 public class TaroCard : MonoBehaviour
 {
     [SerializeField] private Image cardImage;
@@ -17,7 +30,12 @@ public class TaroCard : MonoBehaviour
 
     public event Action<TaroCard> OnCardSelected; // 카드가 클릭되면 호출되는 이벤트
 
-    public event Action<TaroTotalData> OnSelectButtonClick; // 선택하기 버튼 클릭 시 호출되는 이벤트 
+    public event Action<TaroCard> OnSelectButtonClick; // 선택하기 버튼 클릭 시 호출되는 이벤트 
+
+
+
+    public int RandomNumber { get; private set; }
+
 
     private void Awake()
     {
@@ -28,6 +46,8 @@ public class TaroCard : MonoBehaviour
     public void SetData(TaroTotalData data)
     {
         taroData = data;
+
+        RandomNumber = UnityEngine.Random.Range(2, 15);
 
         if (cardImage != null && data != null)
         {
@@ -52,14 +72,21 @@ public class TaroCard : MonoBehaviour
 
 
         // 2. 능력 적용
+        PokerManager.Instance.AddTaroEffect(taroData, RandomNumber);
 
         // 3. 텍스트 띄우기
-        OnSelectButtonClick.Invoke(taroData);
+        OnSelectButtonClick.Invoke(this);
 
         // 4. 카드 비활성화
         gameObject.SetActive(false);
 
 
+    }
+
+    // 랜덤 숫자 반환
+    public int GetRandomNumber()
+    {
+        return RandomNumber;
     }
 
     // 카드 클릭 시 호출 (이벤트 트리거)
@@ -79,6 +106,10 @@ public class TaroCard : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
     }
 
+    public TaroTotalData GetData()
+    {
+        return taroData;
+    }
 
 
     public void ResetCard(Vector3 startPos)
@@ -86,6 +117,7 @@ public class TaroCard : MonoBehaviour
         transform.DOKill();
         transform.position = startPos;
         transform.localScale = Vector3.one; // 커졌던 스케일 초기화
+        RandomNumber = 0;
         gameObject.SetActive(false);
     }
 }

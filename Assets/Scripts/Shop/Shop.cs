@@ -269,6 +269,14 @@ public void ShowBuyButton(IShopCard target)
             planetPackOpened.Unregister(cardPack);
 
         }
+        // 타로 이벤트 해제
+        foreach (var pack in taroPackSlots)
+        {
+            TaroCardPack cardPack = pack.GetComponent<TaroCardPack>();
+
+            TaroPackOpened.Unregister(cardPack);
+
+        }
 
     }
 

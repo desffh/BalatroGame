@@ -37,6 +37,9 @@ public class Card : CardComponent
     // 카드 디버프 이미지
     [SerializeField] GameObject debuffImage;
 
+    // 카드 타로 이미지
+    [SerializeField] GameObject taroImage;
+
     public string spriteNameToLoad;
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
@@ -50,6 +53,10 @@ public class Card : CardComponent
 
     [SerializeField] CardPopup cardPopup;
 
+    public int bonusChipByTaro = 0; // 타로로 인해 추가된 칩 수
+
+    // 실제 점수에 사용될 ID (디버프나 타로 포함)
+    public int EffectiveId => itemdata.id + bonusChipByTaro;
 
 
     // |------------------------------
@@ -90,7 +97,7 @@ public class Card : CardComponent
 
     public void PopupText()
     {
-        cardPopup.Initialize(itemdata.name, itemdata.id);
+        cardPopup.Initialize(itemdata.name, EffectiveId);
     }
 
     // |------------------------------
@@ -119,6 +126,8 @@ public class Card : CardComponent
     // 카드 정보, 스프라이트 셋팅 (버퍼에서 카드를 뽑을 때 마다)
     public void Setup(ItemData item)
     {
+        bonusChipByTaro = 0;
+
         // 구조체에 itemdata 저장
         this.itemdata = new ItemData()
         { 
@@ -129,6 +138,8 @@ public class Card : CardComponent
             inherenceID = item.inherenceID,
         };
 
+        // 타로 효과는 따로 저장
+        bonusChipByTaro = 0; // 항상 초기화
 
         // 스프라이트 이름 가져오기
         string spriteName = item.front;
@@ -304,5 +315,19 @@ public class Card : CardComponent
     public void OffdebuffImage()
     {
         debuffImage.SetActive(false);
+    }
+
+    // 타로 이미지 활성화
+    public void OnTaroImage()
+    {
+        if (taroImage != null)
+            taroImage.SetActive(true);
+    }
+
+    // 타로 이미지 비활성화
+    public void OffTaroImage()
+    {
+        if (taroImage != null)
+            taroImage.SetActive(false);
     }
 }

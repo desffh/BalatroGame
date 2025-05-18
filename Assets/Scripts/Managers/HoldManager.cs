@@ -382,6 +382,39 @@ public class HoldManager : Singleton<HoldManager>
         return saveNumber;
     }
 
+    // 타로 적용하기
+    public int ApplyTaroEffectScore(int baseId)
+    {
+        var selectedCards = pokerManager.cardData.SelectCards;
+
+        for (int i = 0; i < selectedCards.Count; i++)
+        {
+            var card = selectedCards[i];
+
+            if (!savenumberCheck_Taro[i] && card.itemdata.id == baseId)
+            {
+                foreach (var effect in PokerManager.Instance.GetActiveTaroEffects())
+                {
+                    if (card.itemdata.suit == effect.requireSuit &&
+                        card.itemdata.id == effect.requireNumber)
+                    {
+                        savenumberCheck_Taro[i] = true;
+                        return baseId + card.EffectiveId;
+                    }
+                }
+
+                // 타로 효과 없더라도 체크한 걸로 처리
+                savenumberCheck_Taro[i] = true;
+                return baseId;
+            }
+        }
+
+        return baseId;
+    }
+
+
+
+
     public void Calculate()
     {
         if (Num.Count > 0)
@@ -390,18 +423,17 @@ public class HoldManager : Singleton<HoldManager>
             int saveNumber = Num.Dequeue();
 
 
-            // 디버프 적용: 문양이 조건에 부합하면 점수 0으로 대체
-            int finalScore = ApplyBossDebuff(saveNumber);
+            // 1. 디버프 먼저 적용
+            int debuffedScore = ApplyBossDebuff(saveNumber);  // 결과가 0
+
+            // 2. 디버프가 아닌 경우에만 타로 효과 적용
+            int finalScore = (debuffedScore > 0) ? ApplyTaroEffectScore(debuffedScore) : 0;
 
             // 값 더하기 (MVP)
             StateManager.Instance.multiplyChipSetting.AddPlus(finalScore);
             
             // 애니메이션 호출
-            animationManager.PlayCardAnime(SaveNumber(saveNumber));
-
-            // 애니메이션이 끝나기 전까지는 텍스트가 업데이트 되지 않기 때문에 텍스트 업데이트 이후에 로직 설정
-            if (animationManager.moveTween != null && animationManager.moveTween.IsPlaying()) return;
-
+            animationManager.PlayCardAnime(SaveNumber(saveNumber, finalScore));
         }
      
     }
@@ -414,29 +446,13 @@ public class HoldManager : Singleton<HoldManager>
     // -> 안돼. 인덱스 기반으로 처리하면 saveNum에 들어가지 않은 애들도 애니메이션 나옴
     private GameObject game;
 
-    private bool[] savenumberCheck = new bool[5];
+    private bool[] savenumberCheck = new bool[5]; // 디버프용
+    private bool[] savenumberCheck_Taro = new bool[5];   // 타로용
 
     // 매개변수로 saveNum의 값 들어옴
-    public GameObject SaveNumber(int saveNumber)
+    public GameObject SaveNumber(int saveNumber, int finalScore)
     {
         var selectedCards = pokerManager.cardData.SelectCards;
-
-        // 현재 블라인드 기준
-        int blindIndex = StageManager.Instance.GetCurrentBlindIndex();
-        
-        BlindRound currentDebuff = StageManager.Instance.GetBlindAtCurrentEnty(blindIndex);
-
-
-        ICardDebuff cardDebuff = null;
-
-        // 보스인지 아닌지 체크
-        if (currentDebuff != null && currentDebuff.isBoss && currentDebuff.bossDebuff != null &&
-            currentDebuff.bossDebuff is ICardDebuff debuff)
-        {
-            cardDebuff = debuff;
-        }
-
-        // |---
 
         for (int i = 0; i < selectedCards.Count; i++)
         {
@@ -447,17 +463,8 @@ public class HoldManager : Singleton<HoldManager>
                 savenumberCheck[i] = true;
                 game = card.gameObject;
 
-                int finalScore = saveNumber;
-
-                // 보스 디버프가 null이 아니라면 -> 현재 보스 블라인드!!
-                if (currentDebuff != null && cardDebuff != null && cardDebuff.ApplyDebuff(card))
-                {
-                    finalScore = 0;
-                    Debug.Log($"[디버프 적용] {card.itemdata.suit}{card.itemdata.id} → 점수: 0");
-                }
-
                 ShowRankText = card.GetComponent<ShowRankText>();
-                ShowRankText.OnSettingRank(finalScore);
+                ShowRankText.OnSettingRank(finalScore);  // 계산된 점수 직접 표시
 
                 ServiceLocator.Get<IAudioServicePitch>().PlaySFXPitch("Sound-CheckCard");
                 return game;
@@ -472,12 +479,14 @@ public class HoldManager : Singleton<HoldManager>
 
 
 
+
     // 애니메이션 판단여부 bool배열 초기화
     public void CheckReset()
     {
         for(int i = 0; i < 5; i++)
         {
             savenumberCheck[i] = false;
+            savenumberCheck_Taro[i] = false;
         }
     }
 

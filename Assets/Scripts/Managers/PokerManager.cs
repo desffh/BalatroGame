@@ -1,10 +1,8 @@
 using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 
@@ -26,7 +24,8 @@ public class PokerManager : Singleton<PokerManager>
 
     [SerializeField] HandCardPoints deleteCardPoint;
 
-
+    // 타로 카드 능력 저장
+    private List<TaroEffect> activeTaroEffects = new List<TaroEffect>();
 
 
     [SerializeField] public CardData cardData;
@@ -120,6 +119,40 @@ public class PokerManager : Singleton<PokerManager>
 
 
     // |---
+
+    public int random;
+
+    // 타로 카드
+    public void AddTaroEffect(TaroTotalData data, int random)
+    {
+        var effect = new TaroEffect
+        {
+            requireSuit = data.baseData.require,
+            requireNumber = random,
+        };
+
+        activeTaroEffects.Add(effect);
+        Debug.Log($"[타로 효과 등록] 문양: {effect.requireSuit}, 숫자: {effect.requireNumber}");
+    }
+
+
+    public List<TaroEffect> GetActiveTaroEffects()
+    {
+        return activeTaroEffects;
+    }
+
+    // 타로 카드 초기화
+    public void ClearTaroEffects()
+    {
+        activeTaroEffects.Clear();
+    }
+
+
+
+
+
+
+
 
     // 현재 족보가 포함하는 하위 족보까지 반환
     public List<string> GetContainedHandTypes()

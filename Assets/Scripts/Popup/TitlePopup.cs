@@ -15,6 +15,9 @@ public class TitlePopup : MonoBehaviour
 
     [SerializeField] GameObject GuidePanel;
 
+    [SerializeField] GameObject CreditPanel;
+
+
     private void Start()
     {
         OptionPanel.SetActive(false);
@@ -120,5 +123,23 @@ public class TitlePopup : MonoBehaviour
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
         GuidePanel.SetActive(false);
+    }
+
+
+    // Å©·¹µ÷ ¹öÆ°
+
+    public void CreditButtonClick()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        CreditPanel.SetActive(true);
+    }
+
+
+    public void DeleteCreditClick()
+    {
+        ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
+
+        CreditPanel.SetActive(false);
     }
 }

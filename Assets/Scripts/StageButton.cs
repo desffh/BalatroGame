@@ -197,8 +197,8 @@ public class StageButton : MonoBehaviour
     {
         ServiceLocator.Get<IAudioService>().PlaySFX("Sound-ButtonClick");
 
-        // 다음 라운드가 스몰 블라인드라면 
-        if (stageManager.GetRound() % 3 == 0)
+        // 다음 라운드가 스몰, 빅 블라인드라면 
+        if (stageManager.GetRound() % 3 <= 1)
         {
             ServiceLocator.Get<IAudioService>().PlayBGM("MainTheme-Title", true);
             

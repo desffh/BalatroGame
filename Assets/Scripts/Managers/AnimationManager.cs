@@ -84,7 +84,10 @@ public class AnimationManager : Singleton<AnimationManager>
         Transform t = cardPrefabs.transform;
 
         // 기존 Tween 제거
-        t.DOKill();
+        if (moveTween != null && moveTween.IsActive())
+        {
+            moveTween.Kill();
+        }
 
         // Sequence 생성
         Sequence seq = DOTween.Sequence();
@@ -96,6 +99,12 @@ public class AnimationManager : Singleton<AnimationManager>
         // 동시에 스케일 변경
         seq.Join(t.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f));
         seq.Append(t.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f));
+
+        // 자동으로 죽이지 않도록 설정 (중요!)
+        seq.SetAutoKill(false);
+
+        // Play (명시적으로!)
+        seq.Play();
 
         // moveTween에 저장
         moveTween = seq;
