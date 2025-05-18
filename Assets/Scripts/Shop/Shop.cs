@@ -207,6 +207,14 @@ public void ShowBuyButton(IShopCard target)
     {
         if (currentTarget is IBuyCard buyer)
         {
+            // 조커 카드 제한 조건 (ICanBeSold = 조커 카드만 가짐)
+            if (buyer is ICanBeSold && myJokerCards.myCards.Count >= 5)
+            {
+                Debug.Log("조커 카드는 최대 5장까지만 보유할 수 있습니다.");
+                jokerPanel.OnOverJokerCount(); // 최대 개수 알림
+                return;
+            }
+
             // 돈 확인
             if (StateManager.Instance.moneyViewSetting.GetMoney() < currentTarget.cost)
             {
@@ -217,7 +225,7 @@ public void ShowBuyButton(IShopCard target)
                 return;
             }
             
-            // OnBuy -> 조커 구매 로직 실행!
+            // OnBuy -> 카드 구매 로직 실행!
             buyer.OnBuy(jokerPacksTransform.transform, myJokerCards, card =>
             {
                 if (card is IShopCard cards)
