@@ -79,17 +79,19 @@ public class AnimationManager : Singleton<AnimationManager>
     }
     public Tween moveTween;
 
-    public void PlayCardAnime(GameObject cardPrefabs)
+    public Tween PlayCardAnime(GameObject cardPrefabs)
     {
         Transform t = cardPrefabs.transform;
 
-        // 기존 Tween 제거
-        if (moveTween != null && moveTween.IsActive())
-        {
-            moveTween.Kill();
-        }
+       // // 기존 Tween 제거
+       // if (moveTween != null && moveTween.IsActive())
+       // {
+       //     moveTween.Kill();
+       // }
+        
+        t.DOKill();
 
-        // Sequence 생성
+        //Sequence 생성
         Sequence seq = DOTween.Sequence();
 
         // 1단계: 회전 (작은 각도로 튕기는 느낌)
@@ -108,6 +110,8 @@ public class AnimationManager : Singleton<AnimationManager>
 
         // moveTween에 저장
         moveTween = seq;
+
+        return seq;
     }
 
     // 카드에 마우스가 들어왔을 때

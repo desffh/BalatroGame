@@ -15,7 +15,7 @@ MonoBehaviour:
   associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
   associatedWorksheet: BossDebuff
   START_ROW_LENGTH: 2
-  END_ROW_LENGTH: 8
+  END_ROW_LENGTH: 9
   DataList:
   - blindname: "\uC790\uADF9"
     debuffname: Goad
@@ -71,5 +71,13 @@ MonoBehaviour:
     require: 
     requireNum: 1
     blindImage: BossBlind_Tooth
-    blindInfo: "\uD50C\uB808\uC774\uD55C \uCE74\uB4DC\uB9C8\uB2E4 <color=#ff9d00>$1</color>
-      \uC744 \uC783\uC2B5\uB2C8\uB2E4."
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uC9DD\uC218</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"
+  - blindname: "\uB208"
+    debuffname: Eye
+    money: 5
+    require: 
+    requireNum: 2
+    blindImage: BossBlind_Eye
+    blindInfo: "\uBAA8\uB4E0 <color=#FF0000>\uD640\uC218</color> \uCE74\uB4DC\uAC00
+      \uB514\uBC84\uD504 \uB429\uB2C8\uB2E4. (\uCE69 0\uCC98\uB9AC)"

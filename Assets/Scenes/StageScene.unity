@@ -30813,6 +30813,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4edab0ce0efe81a488cf3d7a5c814830, type: 2}
   - {fileID: 11400000, guid: e9ade2f0deec8ff4b98dde4fd2cd25aa, type: 2}
   - {fileID: 11400000, guid: 058f2109b4c051843bfcbf2b66cf2fb7, type: 2}
+  - {fileID: 11400000, guid: 8fb3aab8bd2a6b24fbbba2d3d5924324, type: 2}
+  - {fileID: 11400000, guid: aa861c8c43d7a5948b0648c5e0a77459, type: 2}
   bossDataReader: {fileID: 11400000, guid: 885ab068adb6a054fa46c694a4e62315, type: 2}
   currentEntyIndex: 0
   currentBlindIndex: 0

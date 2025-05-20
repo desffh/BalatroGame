@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272b8c3468873044cac463b091039656, type: 3}
   m_Name: HandDeleteSO
   m_EditorClassIdentifier: 
-  hand: 0
-  delete: 0
+  hand: 3
+  delete: 4

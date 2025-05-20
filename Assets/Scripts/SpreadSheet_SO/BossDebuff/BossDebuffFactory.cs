@@ -5,13 +5,14 @@ using UnityEngine;
 
 public enum BossDebuffType
 {
-    Club,
     Goad,
+    Head,
     Water,
     Needle,
-    Head,
+    Window,
+    Club,
     Tooth,
-    Window
+    Eye
 }
 
 
@@ -26,6 +27,9 @@ public static class BossDebuffFactory
             { BossDebuffType.Window, data => new DiaDebuff() },
             { BossDebuffType.Water, data => new DeleteDebuff() },
             { BossDebuffType.Needle, data => new HandDebuff() },
+            { BossDebuffType.Tooth, data => new EvenDebuff() },
+            { BossDebuffType.Eye, data => new OddDebuff() },
+
 
     };
 
