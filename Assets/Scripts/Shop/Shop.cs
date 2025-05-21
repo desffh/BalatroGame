@@ -327,13 +327,13 @@ public void ShowBuyButton(IShopCard target)
     // 리롤 버튼
     public void Reroll()
     {
-        if (StateManager.Instance.moneyViewSetting.GetMoney() < 5)
+        if (StateManager.Instance.moneyViewSetting.GetMoney() < 2)
         {
             jokerPanel.OnNoReroll();
             return;
         }
 
-        StateManager.Instance.moneyViewSetting.Remove(5);
+        StateManager.Instance.moneyViewSetting.Remove(2);
 
         CloseShop();
         OpenShop();

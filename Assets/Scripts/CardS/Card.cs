@@ -17,6 +17,9 @@ using UnityEngine.EventSystems;
 // Card에 들어갈 스크립트
 public class Card : CardComponent
 {
+    // 개별로 트윈 저장 (애니메이션)
+    public Tween myTween;
+
     // SetUp 함수로 뽑은 카드의 구조체 정보를 받아와서 저장
     public ItemData itemdata;
 

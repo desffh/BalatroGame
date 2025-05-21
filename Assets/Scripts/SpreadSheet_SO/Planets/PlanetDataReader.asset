@@ -18,7 +18,7 @@ MonoBehaviour:
   END_ROW_LENGTH: 10
   DataList:
   - name: "\uBA85\uC655\uC131"
-    require: "\uD558\uC774\uCE74\uB4DC"
+    require: "\uD558\uC774 \uCE74\uB4DC"
     chip: 10
     multiple: 1
     image: Planet_Hi
@@ -48,12 +48,12 @@ MonoBehaviour:
     multiple: 2
     image: Planet_Flush
   - name: "\uC9C0\uAD6C"
-    require: "\uD480\uD558\uC6B0\uC2A4"
+    require: "\uD480 \uD558\uC6B0\uC2A4"
     chip: 25
     multiple: 2
     image: Planet_FullHouse
   - name: "\uD654\uC131"
-    require: "\uD3EC\uCE74\uB4DC"
+    require: "\uD3EC \uCE74\uB4DC"
     chip: 30
     multiple: 3
     image: Planet_FourCard

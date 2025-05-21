@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TaroPackSO1
   m_EditorClassIdentifier: 
   packName: "\uC810\uBCF4 \uC544\uB974\uCE74\uB098 \uD329"
-  cost: 6
+  cost: 3
   decCount: 3
   selectCount: 1
   planetPackImages:

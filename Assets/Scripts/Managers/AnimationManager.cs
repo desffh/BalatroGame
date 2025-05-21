@@ -77,18 +77,14 @@ public class AnimationManager : Singleton<AnimationManager>
             });
         });
     }
-    public Tween moveTween;
 
+    // 카드 계산 애니메이션 (칩 추가시, 조커 능력에 의한 추가 시)
     public Tween PlayCardAnime(GameObject cardPrefabs)
     {
         Transform t = cardPrefabs.transform;
 
-       // // 기존 Tween 제거
-       // if (moveTween != null && moveTween.IsActive())
-       // {
-       //     moveTween.Kill();
-       // }
-        
+        Card card = cardPrefabs.GetComponent<Card>();
+
         t.DOKill();
 
         //Sequence 생성
@@ -108,8 +104,7 @@ public class AnimationManager : Singleton<AnimationManager>
         // Play (명시적으로!)
         seq.Play();
 
-        // moveTween에 저장
-        moveTween = seq;
+        card.myTween = seq;
 
         return seq;
     }
